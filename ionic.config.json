@@ -1,0 +1,7 @@
+{
+  "name": "octagon",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
