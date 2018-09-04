@@ -8,6 +8,8 @@ import { daysInMonth } from './date-math';
  */
 export class Month {
   days: Day[] = [];
+  previous: Month;
+  next: Month;
 
   constructor(
     public readonly yearNumber: number,
