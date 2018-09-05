@@ -8,5 +8,14 @@ export class Settings {
     /**
      * Day of the week considered the first day.
      */
-    firstDayOfWeek: DayOfWeek = DayOfWeek.Sunday;
+    firstDayOfWeek: DayOfWeek;
+
+    /**
+     * Gets the default settings.
+     */
+    static getDefault(): Settings {
+        return { 
+            firstDayOfWeek: DayOfWeek.Sunday
+        }
+    }
 }
