@@ -8,6 +8,14 @@ export class Day {
         public yearNumber: number,
         public monthNumber: number,
         public dayNumber: number,
-        public checkings: Checking[]
+        public checkings: Checking[],
+        private saveCb: () => void
     ) {}
+
+    /**
+     * Saves the checkings of the day.
+     */
+    save(): void {
+        this.saveCb();
+    }
 }
