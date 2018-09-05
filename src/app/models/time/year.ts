@@ -1,6 +1,4 @@
 import { Month } from './month';
-import { Checking } from './checking';
-import { create2dArray } from '../array/array-extensions';
 import { TimeStorageService } from '../../services/time-storage.service';
 import { Observable, forkJoin } from 'rxjs';
 
