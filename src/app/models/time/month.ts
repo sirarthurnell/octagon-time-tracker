@@ -2,6 +2,7 @@ import { Day } from './day';
 import { Checking } from './checking';
 import { create2dArray } from '../array/array-extensions';
 import { daysInMonth } from './date-math';
+import { DayOfWeek } from './day-of-week';
 
 /**
  * Represents a month.
@@ -14,6 +15,7 @@ export class Month {
   constructor(
     public readonly yearNumber: number,
     public readonly monthNumber: number,
+    private readonly firstDayOfWeek: DayOfWeek,
     public readonly checkings: Checking[]
   ) {
     this.createDays();

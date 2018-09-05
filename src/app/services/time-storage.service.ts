@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, from } from 'rxjs';
+import { Observable, from, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Month } from '../models/time/month';
 import { SettingsService } from './settings.service';
@@ -31,14 +31,20 @@ export class TimeStorageService {
    * @param month Month to recover.
    */
   getMonth(year: number, month: number): Observable<Month> {
-    return from(this.storage.get(this.createMonthKey(year, month))).pipe(
-      map(
-        checkings =>
-          checkings
-            ? new Month(year, month, checkings)
-            : new Month(year, month, [])
-      )
+    const settings$ = this.settings.getSettings();
+    const checkings$ = from(this.storage.get(this.createMonthKey(year, month)));
+    const month$ = zip(settings$, checkings$).pipe(
+      map(both => {
+        const settings = both[0];
+        const checkings = both[1];
+
+        return checkings
+          ? new Month(year, month, settings.firstDayOfWeek, checkings)
+          : new Month(year, month, settings.firstDayOfWeek, []);
+      })
     );
+
+    return month$;
   }
 
   /**

@@ -1,4 +1,4 @@
-import { DayOfWeek } from "../time/day-of-week";
+import { DayOfWeek } from '../time/day-of-week';
 
 /**
  * Configurable settings.
@@ -14,8 +14,8 @@ export class Settings {
      * Gets the default settings.
      */
     static getDefault(): Settings {
-        return { 
+        return {
             firstDayOfWeek: DayOfWeek.Sunday
-        }
+        };
     }
 }
