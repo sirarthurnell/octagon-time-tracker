@@ -1,16 +1,17 @@
 import { Day } from './day';
 import { Checking } from './checking';
 import { create2dArray } from '../array/array-extensions';
-import { DateMath } from './date-math';
+import { DateOperations } from './date-operations';
 import { DayOfWeek } from './day-of-week';
 import { Week } from './week';
 import { TimeStorageService } from '../../services/time-storage.service';
+import { CheckingOperations } from './checking-operations';
+import * as moment from 'moment';
 
 /**
  * Represents a month.
  */
 export class Month {
-
   /**
    * Gets the days of the month.
    */
@@ -80,7 +81,10 @@ export class Month {
    * Creates the days of the month.
    */
   private createDays(): void {
-    const daysCount = DateMath.daysInMonth(this.yearNumber, this.monthNumber);
+    const daysCount = DateOperations.daysInMonth(
+      this.yearNumber,
+      this.monthNumber
+    );
     const daysCheckings: Checking[][] = create2dArray(daysCount);
     const saveCb = () => this.save();
 
@@ -92,7 +96,13 @@ export class Month {
     for (let i = 0; i < daysCount; i++) {
       const currentDayCheckings = daysCheckings[i];
       this._days.push(
-        new Day(this.yearNumber, this.monthNumber, i + 1, currentDayCheckings, saveCb)
+        new Day(
+          this.yearNumber,
+          this.monthNumber,
+          i + 1,
+          currentDayCheckings,
+          saveCb
+        )
       );
     }
   }
@@ -103,7 +113,7 @@ export class Month {
   private createWeeks(): void {
     const weeksAsDays = this.createWeeksAsDays();
     const weeks = this.toWeekArray(weeksAsDays);
-    this._weeks.push(...weeks);
+    weeks.forEach(week => this._weeks.push(week));
   }
 
   /**
@@ -112,14 +122,17 @@ export class Month {
    */
   private createWeeksAsDays(): Day[][] {
     const firstDay = 1;
-    const lastDay = DateMath.daysInMonth(this.yearNumber, this.monthNumber);
-    const startOffset = DateMath.weekStartOffset(
+    const lastDay = DateOperations.daysInMonth(
+      this.yearNumber,
+      this.monthNumber
+    );
+    const startOffset = DateOperations.weekStartOffset(
       this.yearNumber,
       this.monthNumber,
       firstDay,
       this.firstDayOfWeek
     );
-    const endOffset = DateMath.weekStartOffset(
+    const endOffset = DateOperations.weekStartOffset(
       this.yearNumber,
       this.monthNumber,
       lastDay,
@@ -135,21 +148,27 @@ export class Month {
       totalDays = totalDays.concat(this.next._days);
     }
 
-    const beginIndex = this.previous ? this.previous._days.length - startOffset : 0;
-    const endIndex = this.next ? this._days.length + endOffset : this._days.length;
+    const beginIndex = this.previous
+      ? this.previous._days.length - startOffset
+      : 0;
+    const endIndex = this.next
+      ? this._days.length + endOffset
+      : this._days.length;
 
-    const weekCount = DateMath.weeksInMonth(this.yearNumber, this.monthNumber, this.firstDayOfWeek);
+    const weekCount = DateOperations.weeksInMonth(
+      this.yearNumber,
+      this.monthNumber,
+      this.firstDayOfWeek
+    );
     const daysInWeeks: Day[][] = create2dArray<Day>(weekCount);
     let currentWeek: Day[] = [];
     for (let i = beginIndex, j = 0; i < endIndex; i++, j++) {
-
       if (j % 7 === 0) {
         daysInWeeks[j] = currentWeek;
         currentWeek = [];
       } else {
         currentWeek.push(totalDays[i]);
       }
-
     }
 
     return daysInWeeks;
@@ -165,7 +184,9 @@ export class Month {
 
     let weekNumber = 0;
     for (const weekAsDays of days) {
-      weeks.push(new Week(this.yearNumber, this.monthNumber, weekNumber, weekAsDays));
+      weeks.push(
+        new Week(this.yearNumber, this.monthNumber, weekNumber, weekAsDays)
+      );
       weekNumber++;
     }
 
@@ -188,11 +209,11 @@ export class Month {
     const newCheckingsState = [] as Checking[];
 
     for (const day of this.days) {
-      newCheckingsState.push(...day.checkings);
+      day.checkings.forEach(checking => newCheckingsState.push(checking));
     }
 
     this.checkingsOfMonth.splice(0, this.checkingsOfMonth.length);
-    this.checkingsOfMonth.push(...newCheckingsState);
+    newCheckingsState.forEach(checking => this.checkingsOfMonth.push(checking));
   }
 
   /**
@@ -200,5 +221,13 @@ export class Month {
    */
   private invalidateWeeks(): void {
     this._weeks = null;
+  }
+
+  /**
+   * Calculates the total time worked
+   * during the current day.
+   */
+  calculateTotalTime(): moment.Duration {
+    return CheckingOperations.sumDuration(this.checkings);
   }
 }

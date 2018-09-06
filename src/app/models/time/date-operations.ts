@@ -3,7 +3,7 @@ import { DayOfWeek } from './day-of-week';
 /**
  * Contains operations with dates.
  */
-export class DateMath {
+export class DateOperations {
 
   private constructor() {}
 
@@ -41,13 +41,13 @@ export class DateMath {
    */
   static weeksInMonth(year: number, month: number, firstDayOfWeek: DayOfWeek): number {
     const firstDay = 1;
-    const startOffset = DateMath.weekStartOffset(year, month, firstDay, firstDayOfWeek);
-    const daysCount = DateMath.daysInMonth(year, month);
+    const startOffset = DateOperations.weekStartOffset(year, month, firstDay, firstDayOfWeek);
+    const daysCount = DateOperations.daysInMonth(year, month);
 
     if (startOffset === 0 && daysCount % 7 === 0) {
         return 4;
     } else {
-        return DateMath.countFirstDayOfWeekTimeInMonth(year, month, firstDayOfWeek) + 1;
+        return DateOperations.countFirstDayOfWeekTimeInMonth(year, month, firstDayOfWeek) + 1;
     }
   }
 
@@ -59,7 +59,7 @@ export class DateMath {
    * @param firstDayOfWeek First day of the week.
    */
   private static countFirstDayOfWeekTimeInMonth(year: number, month: number, firstDayOfWeek: DayOfWeek): number {
-      const daysInMonth = DateMath.daysInMonth(year, month);
+      const daysInMonth = DateOperations.daysInMonth(year, month);
       let firstsCount = 0;
 
       for (let day = 1; day <= daysInMonth; day++) {

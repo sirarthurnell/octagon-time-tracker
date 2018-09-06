@@ -2,6 +2,9 @@ import { Month } from './month';
 import { TimeStorageService } from '../../services/time-storage.service';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { Checking } from './checking';
+import { CheckingOperations } from './checking-operations';
 
 /**
  * Represents a year.
@@ -72,5 +75,22 @@ export class Year {
       currentMonth.previous = months[i - 1];
       currentMonth.next = months[i + 1];
     }
+  }
+
+  /**
+   * Calculates the total time worked
+   * this current year.
+   */
+  calculateTotalTime(): moment.Duration {
+    return CheckingOperations.sumDuration(this.getTotalCheckings());
+  }
+
+  /**
+   * Get all the checkings from the months of the year.
+   */
+  private getTotalCheckings(): Checking[] {
+    let totalCheckings: Checking[] = [];
+    this.months.forEach(month => totalCheckings = totalCheckings.concat(month.checkings));
+    return totalCheckings;
   }
 }
