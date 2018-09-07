@@ -1,6 +1,7 @@
 import { Checking } from './checking';
 import * as moment from 'moment';
 import { CheckingOperations } from './checking-operations';
+import { TimeStorageService } from '../../services/time-storage.service';
 
 /**
  * Represents a day.
@@ -11,7 +12,7 @@ export class Day {
         public monthNumber: number,
         public dayNumber: number,
         readonly checkings: Checking[],
-        private saveCb: () => void
+        private saveCb: (timeStorageService: TimeStorageService) => void
     ) {}
 
     /**
@@ -24,8 +25,9 @@ export class Day {
 
     /**
      * Saves the checkings of the day.
+     * @param timeStorageService Storage.
      */
-    save(): void {
-        this.saveCb();
+    save(timeStorageService: TimeStorageService): void {
+        this.saveCb(timeStorageService);
     }
 }

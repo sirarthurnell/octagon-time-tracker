@@ -49,8 +49,8 @@ export class TimeStorageService {
         const checkings = this.fromStoredToCheckings(both[1]);
 
         return checkings
-          ? new Month(this, year, month, settings.firstDayOfWeek, checkings)
-          : new Month(this, year, month, settings.firstDayOfWeek, []);
+          ? new Month(year, month, settings.firstDayOfWeek, checkings)
+          : new Month(year, month, settings.firstDayOfWeek, []);
       })
     );
 

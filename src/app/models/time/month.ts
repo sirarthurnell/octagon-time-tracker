@@ -68,7 +68,6 @@ export class Month {
   }
 
   constructor(
-    private timeStorageService: TimeStorageService,
     public readonly yearNumber: number,
     public readonly monthNumber: number,
     public readonly firstDayOfWeek: DayOfWeek,
@@ -86,7 +85,7 @@ export class Month {
       this.monthNumber
     );
     const daysCheckings: Checking[][] = create2dArray(daysCount);
-    const saveCb = () => this.save();
+    const saveCb = (timeStorageService: TimeStorageService) => this.save(timeStorageService);
 
     for (const checking of this.checkingsOfMonth) {
       const dayIndex = checking.dateTime.getDate() - 1;
@@ -196,10 +195,10 @@ export class Month {
   /**
    * Saves the month to storage.
    */
-  private save(): void {
+  private save(timeStorageService: TimeStorageService): void {
     this.updateCheckings();
     this.invalidateWeeks();
-    this.timeStorageService.saveMonth(this);
+    timeStorageService.saveMonth(this);
   }
 
   /**
@@ -212,8 +211,8 @@ export class Month {
       day.checkings.forEach(checking => newCheckingsState.push(checking));
     }
 
-    this.checkingsOfMonth.splice(0, this.checkingsOfMonth.length);
-    newCheckingsState.forEach(checking => this.checkingsOfMonth.push(checking));
+    this.checkingsOfMonth.splice(0, this.checkingsOfMonth.length); // Clear.
+    newCheckingsState.forEach(checking => this.checkingsOfMonth.push(checking)); // Dump.
   }
 
   /**
