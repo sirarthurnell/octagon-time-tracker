@@ -19,10 +19,12 @@ export class TimeStorageService {
    * Saves the specified month.
    * @param month Month to save.
    */
-  saveMonth(month: Month): void {
-    this.storage.set(
-      this.createMonthKey(month.yearNumber, month.monthNumber),
-      JSON.stringify(this.checkingsToStorable(month.checkings))
+  saveMonth(month: Month): Observable<any> {
+    return from(
+      this.storage.set(
+        this.createMonthKey(month.yearNumber, month.monthNumber),
+        JSON.stringify(this.checkingsToStorable(month.checkings))
+      )
     );
   }
 
@@ -46,7 +48,10 @@ export class TimeStorageService {
     const month$ = zip(settings$, checkings$).pipe(
       map(both => {
         const settings = both[0];
-        const checkings = this.fromStoredToCheckings(both[1]);
+        const stored = both[1]
+          ? (JSON.parse(both[1]) as StorableChecking[])
+          : [];
+        const checkings = this.fromStoredToCheckings(stored);
 
         return checkings
           ? new Month(year, month, settings.firstDayOfWeek, checkings)
