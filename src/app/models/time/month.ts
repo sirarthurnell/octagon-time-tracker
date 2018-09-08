@@ -112,7 +112,7 @@ export class Month {
   private createWeeks(): void {
     const weeksAsDays = this.createWeeksAsDays();
     const weeks = this.toWeekArray(weeksAsDays);
-    weeks.forEach(week => this._weeks.push(week));
+    this._weeks = weeks;
   }
 
   /**
@@ -120,6 +120,8 @@ export class Month {
    * arrays of days.
    */
   private createWeeksAsDays(): Day[][] {
+    const daysInWeekCount = 7;
+    const daysInWeekUpperIndex = daysInWeekCount - 1;
     const firstDay = 1;
     const lastDay = DateOperations.daysInMonth(
       this.yearNumber,
@@ -143,15 +145,19 @@ export class Month {
       totalDays = totalDays.concat(this.previous._days);
     }
 
+    totalDays = totalDays.concat(this._days);
+
     if (this.next) {
       totalDays = totalDays.concat(this.next._days);
     }
 
-    const beginIndex = this.previous
-      ? this.previous._days.length - startOffset
+    const previousDaysLength = this._previous ? this._previous._days.length : 0;
+    const beginIndexInclusive = this.previous
+      ? previousDaysLength - startOffset
       : 0;
-    const endIndex = this.next
-      ? this._days.length + endOffset
+
+    const endIndexExclusive = this.next
+      ? previousDaysLength + this._days.length + (daysInWeekUpperIndex - endOffset)
       : this._days.length;
 
     const weekCount = DateOperations.weeksInMonth(
@@ -160,14 +166,14 @@ export class Month {
       this.firstDayOfWeek
     );
     const daysInWeeks: Day[][] = create2dArray<Day>(weekCount);
-    let currentWeek: Day[] = [];
-    for (let i = beginIndex, j = 0; i < endIndex; i++, j++) {
-      if (j % 7 === 0) {
-        daysInWeeks[j] = currentWeek;
-        currentWeek = [];
-      } else {
-        currentWeek.push(totalDays[i]);
-      }
+    let weekIndex = -1;
+    let dayOfWeekIndex = 0;
+    for (let totalDaysIndex = beginIndexInclusive, i = 0; totalDaysIndex < endIndexExclusive; totalDaysIndex++, i++) {
+
+      dayOfWeekIndex = i % 7;
+      weekIndex = dayOfWeekIndex === 0 ? weekIndex + 1 : weekIndex;
+      daysInWeeks[weekIndex][dayOfWeekIndex] = totalDays[totalDaysIndex];
+
     }
 
     return daysInWeeks;

@@ -4,7 +4,8 @@ import { Observable, from, zip } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Month } from '../models/time/month';
 import { SettingsService } from './settings.service';
-import { Checking, StorableChecking } from '../models/time/checking';
+import { Checking } from '../models/time/checking';
+import { StorableChecking } from '../models/storage/StorableChecking';
 
 /**
  * Service to save time related entities.
@@ -34,7 +35,7 @@ export class TimeStorageService {
    * @param checkings Checkings to convert.
    */
   private checkingsToStorable(checkings: Checking[]): StorableChecking[] {
-    return checkings.map(checking => checking.toStorable());
+    return checkings.map(checking => StorableChecking.toStorable(checking));
   }
 
   /**
@@ -68,7 +69,7 @@ export class TimeStorageService {
    * @param stored Stored checkings.
    */
   private fromStoredToCheckings(stored: StorableChecking[]): Checking[] {
-    return stored.map(storable => Checking.fromStorable(storable));
+    return stored.map(storable => StorableChecking.fromStorable(storable));
   }
 
   /**

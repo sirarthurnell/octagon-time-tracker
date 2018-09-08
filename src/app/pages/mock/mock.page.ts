@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { TWO_MONTHS_TWO_CHECKINGS } from '../../mock/mock-data';
+import { ONE_MONTH_EMPTY } from '../../mock/mock-data';
 import { Month } from '../../models/time/month';
 import { TimeStorageService } from '../../services/time-storage.service';
+import { Week } from '../../models/time/week';
+import { Year } from '../../models/time/year';
 
 @Component({
   selector: 'app-mock',
@@ -12,13 +14,37 @@ import { TimeStorageService } from '../../services/time-storage.service';
 export class MockPage implements OnInit {
   private readonly MONTHS_IN_YEAR = 12;
 
+  year: Year;
+
   months: Month[] = [];
+  weeks: Week[] = [];
 
   constructor(private timeStorageService: TimeStorageService) {}
 
   ngOnInit() {
-    this.saveData(TWO_MONTHS_TWO_CHECKINGS).subscribe(_ =>
-      this.recoverData(2018).subscribe(months => (this.months = months))
+    this.showOneMonth();
+    this.showOneYear();
+  }
+
+  /**
+   * Shows data about one year.
+   */
+  private showOneYear(): void {
+    Year.getYear(this.timeStorageService, 2018).subscribe(year => {
+      this.year = year;
+      this.weeks = this.year.months[0].weeks;
+    });
+  }
+
+  /**
+   * Shows data about one month.
+   */
+  private showOneMonth(): void {
+    this.saveData(ONE_MONTH_EMPTY).subscribe(_ =>
+      this.recoverData(2018).subscribe(months => {
+        this.months = months;
+        this.weeks = months.length > 0 ? months[0].weeks : [];
+      })
     );
   }
 

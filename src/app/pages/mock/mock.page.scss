@@ -1,0 +1,15 @@
+.month,
+.month__week,
+.month__day {
+  border: 1px solid black;
+}
+
+.month {
+  box-sizing: border-box;
+  margin: 1rem;
+}
+
+.year {
+  display: flex;
+  flex-wrap: wrap;
+}
