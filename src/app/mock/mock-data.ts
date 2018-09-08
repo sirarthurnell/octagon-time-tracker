@@ -9,11 +9,11 @@ export const TWO_MONTHS_TWO_CHECKINGS: Month[] = [
   new Month(2018, 0, DayOfWeek.Sunday, [
     new Checking(new Date(2018, 0, 1, 10), CheckingDirection.In),
     new Checking(new Date(2018, 0, 1, 11), CheckingDirection.Out)
-  ]),
+  ], {}),
   new Month(2018, 1, DayOfWeek.Sunday, [
     new Checking(new Date(2018, 1, 28, 11), CheckingDirection.In),
     new Checking(new Date(2018, 1, 28, 12), CheckingDirection.Out)
-  ])
+  ], {})
 ];
 
 /**
@@ -25,7 +25,7 @@ export const EMPTY: Month[] = [];
  * One month empty.
  */
 export const ONE_MONTH_EMPTY: Month[] = [
-  new Month(2018, 0, DayOfWeek.Sunday, [])
+  new Month(2018, 0, DayOfWeek.Sunday, [], {})
 ];
 
 /**
@@ -34,5 +34,5 @@ export const ONE_MONTH_EMPTY: Month[] = [
 export const ONE_MONTH_ONE_CHECKING: Month[] = [
   new Month(2018, 0, DayOfWeek.Sunday, [
     new Checking(new Date(2018, 0, 1, 10), CheckingDirection.In)
-  ])
+  ], {1: { absence: 'doctor', tag: '' }})
 ];

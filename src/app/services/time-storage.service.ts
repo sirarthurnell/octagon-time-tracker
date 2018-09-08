@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators';
 import { Month } from '../models/time/month';
 import { SettingsService } from './settings.service';
 import { Checking } from '../models/time/checking';
-import { StorableChecking } from '../models/storage/StorableChecking';
+import { StorableChecking } from '../models/storage/storable-checking';
+import { StorableMonth } from '../models/storage/storable-month';
 
 /**
  * Service to save time related entities.
@@ -24,18 +25,9 @@ export class TimeStorageService {
     return from(
       this.storage.set(
         this.createMonthKey(month.yearNumber, month.monthNumber),
-        JSON.stringify(this.checkingsToStorable(month.checkings))
+        JSON.stringify(StorableMonth.toStorable(month))
       )
     );
-  }
-
-  /**
-   * Convert an array of checkings to their storable
-   * version.
-   * @param checkings Checkings to convert.
-   */
-  private checkingsToStorable(checkings: Checking[]): StorableChecking[] {
-    return checkings.map(checking => StorableChecking.toStorable(checking));
   }
 
   /**
@@ -45,18 +37,18 @@ export class TimeStorageService {
    */
   getMonth(year: number, month: number): Observable<Month> {
     const settings$ = this.settings.getSettings();
-    const checkings$ = from(this.storage.get(this.createMonthKey(year, month)));
-    const month$ = zip(settings$, checkings$).pipe(
+    const storedMonth$ = from(this.storage.get(this.createMonthKey(year, month)));
+    const month$ = zip(settings$, storedMonth$).pipe(
       map(both => {
         const settings = both[0];
         const stored = both[1]
-          ? (JSON.parse(both[1]) as StorableChecking[])
-          : [];
-        const checkings = this.fromStoredToCheckings(stored);
+          ? (JSON.parse(both[1]) as StorableMonth) : null;
 
-        return checkings
-          ? new Month(year, month, settings.firstDayOfWeek, checkings)
-          : new Month(year, month, settings.firstDayOfWeek, []);
+        if (stored) {
+          return StorableMonth.fromStorable(year, month, settings.firstDayOfWeek, stored);
+        } else {
+          return new Month(year, month, settings.firstDayOfWeek, [], {});
+        }
       })
     );
 

@@ -7,6 +7,7 @@ import { Week } from './week';
 import { TimeStorageService } from '../../services/time-storage.service';
 import { CheckingOperations } from './checking-operations';
 import * as moment from 'moment';
+import { DayInfo } from './day-info';
 
 /**
  * Represents a month.
@@ -61,17 +62,20 @@ export class Month {
   }
 
   /**
-   * Checkings of the month.
+   * Total checkings of the month.
    */
   get checkings(): Checking[] {
-    return [].concat(this.checkingsOfMonth);
+    let checkings = [] as Checking[];
+    this.days.forEach(day => checkings = checkings.concat(day.checkings));
+    return checkings;
   }
 
   constructor(
     public readonly yearNumber: number,
     public readonly monthNumber: number,
     public readonly firstDayOfWeek: DayOfWeek,
-    private readonly checkingsOfMonth: Checking[]
+    private readonly checkingsOfMonth: Checking[],
+    private dayInfos: { [day: number]: DayInfo } = {}
   ) {
     this.createDays();
   }
@@ -85,7 +89,8 @@ export class Month {
       this.monthNumber
     );
     const daysCheckings: Checking[][] = create2dArray(daysCount);
-    const saveCb = (timeStorageService: TimeStorageService) => this.save(timeStorageService);
+    const saveCb = (timeStorageService: TimeStorageService) =>
+      this.save(timeStorageService);
 
     for (const checking of this.checkingsOfMonth) {
       const dayIndex = checking.dateTime.getDate() - 1;
@@ -94,15 +99,23 @@ export class Month {
 
     for (let i = 0; i < daysCount; i++) {
       const currentDayCheckings = daysCheckings[i];
-      this._days.push(
-        new Day(
-          this.yearNumber,
-          this.monthNumber,
-          i + 1,
-          currentDayCheckings,
-          saveCb
-        )
+      const dayNumber = i + 1;
+      let dayInfo;
+
+      if (this.dayInfos[dayNumber]) {
+        dayInfo = this.dayInfos[dayNumber];
+      }
+
+      const newDay = new Day(
+        this.yearNumber,
+        this.monthNumber,
+        dayNumber,
+        currentDayCheckings,
+        saveCb,
+        dayInfo
       );
+
+      this._days.push(newDay);
     }
   }
 
@@ -157,7 +170,9 @@ export class Month {
       : 0;
 
     const endIndexExclusive = this.next
-      ? previousDaysLength + this._days.length + (daysInWeekUpperIndex - endOffset)
+      ? previousDaysLength +
+        this._days.length +
+        (daysInWeekUpperIndex - endOffset)
       : this._days.length;
 
     const weekCount = DateOperations.weeksInMonth(
@@ -168,12 +183,14 @@ export class Month {
     const daysInWeeks: Day[][] = create2dArray<Day>(weekCount);
     let weekIndex = -1;
     let dayOfWeekIndex = 0;
-    for (let totalDaysIndex = beginIndexInclusive, i = 0; totalDaysIndex < endIndexExclusive; totalDaysIndex++, i++) {
-
+    for (
+      let totalDaysIndex = beginIndexInclusive, i = 0;
+      totalDaysIndex < endIndexExclusive;
+      totalDaysIndex++, i++
+    ) {
       dayOfWeekIndex = i % 7;
       weekIndex = dayOfWeekIndex === 0 ? weekIndex + 1 : weekIndex;
       daysInWeeks[weekIndex][dayOfWeekIndex] = totalDays[totalDaysIndex];
-
     }
 
     return daysInWeeks;
@@ -202,23 +219,8 @@ export class Month {
    * Saves the month to storage.
    */
   private save(timeStorageService: TimeStorageService): void {
-    this.updateCheckings();
     this.invalidateWeeks();
     timeStorageService.saveMonth(this);
-  }
-
-  /**
-   * Updates the month checkings.
-   */
-  private updateCheckings(): void {
-    const newCheckingsState = [] as Checking[];
-
-    for (const day of this.days) {
-      day.checkings.forEach(checking => newCheckingsState.push(checking));
-    }
-
-    this.checkingsOfMonth.splice(0, this.checkingsOfMonth.length); // Clear.
-    newCheckingsState.forEach(checking => this.checkingsOfMonth.push(checking)); // Dump.
   }
 
   /**

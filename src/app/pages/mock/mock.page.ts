@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
-import { ONE_MONTH_EMPTY } from '../../mock/mock-data';
+import { ONE_MONTH_EMPTY, TWO_MONTHS_TWO_CHECKINGS, ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
 import { Month } from '../../models/time/month';
 import { TimeStorageService } from '../../services/time-storage.service';
 import { Week } from '../../models/time/week';
@@ -40,7 +40,7 @@ export class MockPage implements OnInit {
    * Shows data about one month.
    */
   private showOneMonth(): void {
-    this.saveData(ONE_MONTH_EMPTY).subscribe(_ =>
+    this.saveData(ONE_MONTH_ONE_CHECKING).subscribe(_ =>
       this.recoverData(2018).subscribe(months => {
         this.months = months;
         this.weeks = months.length > 0 ? months[0].weeks : [];
