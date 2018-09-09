@@ -5,6 +5,7 @@ import { Month } from '../../models/time/month';
 import { TimeStorageService } from '../../services/time-storage.service';
 import { Week } from '../../models/time/week';
 import { Year } from '../../models/time/year';
+import { StorableMonth } from '../../models/storage/storable-month';
 
 @Component({
   selector: 'app-mock',
@@ -15,8 +16,7 @@ export class MockPage implements OnInit {
   private readonly MONTHS_IN_YEAR = 12;
 
   year: Year;
-
-  months: Month[] = [];
+  storableMonths: StorableMonth[] = [];
   weeks: Week[] = [];
 
   constructor(private timeStorageService: TimeStorageService) {}
@@ -32,6 +32,7 @@ export class MockPage implements OnInit {
   private showOneYear(): void {
     Year.getYear(this.timeStorageService, 2018).subscribe(year => {
       this.year = year;
+      this.storableMonths = this.year.months.map(month => StorableMonth.toStorable(month));
       this.weeks = this.year.months[0].weeks;
     });
   }
@@ -42,7 +43,6 @@ export class MockPage implements OnInit {
   private showOneMonth(): void {
     this.saveData(ONE_MONTH_ONE_CHECKING).subscribe(_ =>
       this.recoverData(2018).subscribe(months => {
-        this.months = months;
         this.weeks = months.length > 0 ? months[0].weeks : [];
       })
     );

@@ -2,7 +2,6 @@ import { DayOfWeek } from '../time/day-of-week';
 import { Month } from '../time/month';
 import { StorableChecking } from './storable-checking';
 import { StorableDayInfo } from './storable-day-info';
-import { Checking } from '../time/checking';
 
 /**
  * Represents a month in a storable format.
