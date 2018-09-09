@@ -4,7 +4,8 @@ import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Checking } from './checking';
-import { CheckingOperations } from './checking-operations';
+import { TimeCalculation } from './time-calculation';
+import { Day } from './day';
 
 /**
  * Represents a year.
@@ -82,15 +83,15 @@ export class Year {
    * this current year.
    */
   calculateTotalTime(): moment.Duration {
-    return CheckingOperations.sumDuration(this.getTotalCheckings());
+    return TimeCalculation.sumDaysDuration(this.getDays());
   }
 
   /**
-   * Get all the checkings from the months of the year.
+   * Gets all the days of the year.
    */
-  private getTotalCheckings(): Checking[] {
-    let totalCheckings: Checking[] = [];
-    this.months.forEach(month => totalCheckings = totalCheckings.concat(month.checkings));
-    return totalCheckings;
+  private getDays(): Day[] {
+    let totalDays: Day[] = [];
+    this.months.forEach(month => totalDays = totalDays.concat(month.days));
+    return totalDays;
   }
 }

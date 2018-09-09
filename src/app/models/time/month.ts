@@ -5,9 +5,10 @@ import { DateOperations } from './date-operations';
 import { DayOfWeek } from './day-of-week';
 import { Week } from './week';
 import { TimeStorageService } from '../../services/time-storage.service';
-import { CheckingOperations } from './checking-operations';
+import { TimeCalculation } from './time-calculation';
 import * as moment from 'moment';
 import { DayInfo } from './day-info';
+import { Observable } from 'rxjs';
 
 /**
  * Represents a month.
@@ -44,6 +45,7 @@ export class Month {
 
   set previous(previous: Month) {
     this._previous = previous;
+    this.setFirstPreviousDay();
     this.invalidateWeeks();
   }
 
@@ -58,6 +60,7 @@ export class Month {
 
   set next(next: Month) {
     this._next = next;
+    this.setLastNextDay();
     this.invalidateWeeks();
   }
 
@@ -78,6 +81,7 @@ export class Month {
     private dayInfos: { [day: number]: DayInfo } = {}
   ) {
     this.createDays();
+    this.setPreviousNextDays();
   }
 
   /**
@@ -116,6 +120,61 @@ export class Month {
       );
 
       this._days.push(newDay);
+    }
+  }
+
+  /**
+   * Sets the previous next relationships between
+   * the days of the month.
+   */
+  private setPreviousNextDays(): void {
+    // First day treatement.
+    this.setFirstPreviousDay();
+    const firstDay = this.days[0];
+    const secondDay = this.days[1];
+    firstDay.next = secondDay;
+
+    // Days in the middle treatement
+    for (let i = 1; i < this.days.length - 1; i++) {
+      const currentDay = this.days[i];
+      currentDay.previous = this.days[i - 1];
+      currentDay.next = this.days[i + 1];
+    }
+
+    // Last day treatement.
+    const lastDay = this.days[this.days.length - 1];
+    const beforeLastDay = this.days[this.days.length - 2];
+    lastDay.previous = beforeLastDay;
+    this.setLastNextDay();
+  }
+
+  /**
+   * Sets the previous day of the first
+   * day of the current month.
+   */
+  private setFirstPreviousDay(): void {
+    const firstDayCurrentMonth = this.days[0];
+
+    if (this.previous) {
+      const lastDayPreviousMonth = this.previous.days[this.previous.days.length - 1];
+      firstDayCurrentMonth.previous = lastDayPreviousMonth;
+    } else {
+      firstDayCurrentMonth.previous = undefined;
+    }
+  }
+
+  /**
+   * Sets the next day of the last day
+   * of the current month.
+   */
+  private setLastNextDay(): void {
+    const lastDayCurrentMonth = this.days[this.days.length - 1];
+
+    if (this.next) {
+      const firstDayNextMonth = this.next.days[0];
+      lastDayCurrentMonth.next = firstDayNextMonth;
+    } else {
+      lastDayCurrentMonth.next = undefined;
     }
   }
 
@@ -218,9 +277,9 @@ export class Month {
   /**
    * Saves the month to storage.
    */
-  private save(timeStorageService: TimeStorageService): void {
+  private save(timeStorageService: TimeStorageService): Observable<any> {
     this.invalidateWeeks();
-    timeStorageService.saveMonth(this);
+    return timeStorageService.saveMonth(this);
   }
 
   /**
@@ -235,6 +294,6 @@ export class Month {
    * during the current day.
    */
   calculateTotalTime(): moment.Duration {
-    return CheckingOperations.sumDuration(this.checkings);
+    return TimeCalculation.sumDaysDuration(this.days);
   }
 }

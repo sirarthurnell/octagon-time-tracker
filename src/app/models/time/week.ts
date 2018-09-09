@@ -1,6 +1,6 @@
 import { Day } from './day';
 import * as moment from 'moment';
-import { CheckingOperations } from './checking-operations';
+import { TimeCalculation } from './time-calculation';
 import { Checking } from './checking';
 
 /**
@@ -26,15 +26,6 @@ export class Week {
    * during the current day.
    */
   calculateTotalTime(): moment.Duration {
-    return CheckingOperations.sumDuration(this.getTotalCheckings());
-  }
-
-  /**
-   * Get all the checkings from the days of the week.
-   */
-  private getTotalCheckings(): Checking[] {
-    let totalCheckings: Checking[] = [];
-    this.days.forEach(day => totalCheckings = totalCheckings.concat(day.checkings));
-    return totalCheckings;
+    return TimeCalculation.sumDaysDuration(this.days);
   }
 }
