@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MockPage } from './mock.page';
+import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MockPage]
+  declarations: [
+    MockPage,
+    TimeGaugeComponent
+  ]
 })
 export class MockPageModule {}
