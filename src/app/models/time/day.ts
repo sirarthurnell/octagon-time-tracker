@@ -34,7 +34,7 @@ export class Day {
    * during the current day.
    */
   calculateTotalTime(): moment.Duration {
-    return TimeCalculation.sumDayDuration(this);
+    return TimeCalculation.sumWorkingTime(this);
   }
 
   /**

@@ -1,3 +1,5 @@
 <svg class="view-box" viewBox="0 0 100 100">
-  <path #path fill="none" stroke="#446688" [attr.stroke-width]="strokeWidth"/>
+  <ng-container *ngFor="let path of pathData">
+    <path fill="none" [attr.class]="path.className" [attr.stroke-width]="strokeWidth" [attr.d]="path.d"/>
+  </ng-container>
 </svg>

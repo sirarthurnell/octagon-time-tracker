@@ -11,9 +11,38 @@ export class TimeCalculation {
    * the checkings of one day.
    * @param day Day.
    */
-  static sumDayDuration(day: Day): moment.Duration {
+  static sumWorkingTime(day: Day): moment.Duration {
     const correctedCheckings = TimeCalculation.adjustBeginningAndEndOfDay(day);
     return TimeCalculation.sumCheckings(correctedCheckings);
+  }
+
+  /**
+   * Calculates the rest time.
+   * @param day Day.
+   */
+  static sumRestTime(day: Day): moment.Duration {
+    const correctedCheckings = TimeCalculation.adjustBeginningAndEndOfDay(day);
+    const inverted = TimeCalculation.invertCheckings(correctedCheckings);
+    const restTime = TimeCalculation.sumCheckings(inverted);
+    return restTime;
+  }
+
+  /**
+   * Makes checkings with direction IN become
+   * checkings with direction OUT and viceversa.
+   * @param checkings Checkings to invert.
+   */
+  private static invertCheckings(checkings: Checking[]): Checking[] {
+    const inverted = JSON.parse(JSON.stringify(checkings));
+    inverted.forEach(checking => {
+      if (checking.direction === CheckingDirection.In) {
+        checking.direction = CheckingDirection.Out;
+      } else if (checking.direction === CheckingDirection.Out) {
+        checking.direction = CheckingDirection.In;
+      }
+    });
+
+    return inverted;
   }
 
   /**
@@ -22,7 +51,7 @@ export class TimeCalculation {
    * @param day Day to adjust.
    */
   private static adjustBeginningAndEndOfDay(day: Day): Checking[] {
-    let correctedCheckings = day.checkings;
+    let correctedCheckings = TimeCalculation.orderAscending(day.checkings);
 
     if (correctedCheckings.length === 0) {
       return correctedCheckings;
@@ -119,7 +148,7 @@ export class TimeCalculation {
    */
   static sumDaysDuration(days: Day[]): moment.Duration {
     const totalDuration = moment.duration();
-    days.forEach(day => totalDuration.add(TimeCalculation.sumDayDuration(day)));
+    days.forEach(day => totalDuration.add(TimeCalculation.sumWorkingTime(day)));
     return totalDuration;
   }
 
@@ -133,9 +162,8 @@ export class TimeCalculation {
     let lastIn: Checking;
     let lastOut: Checking;
     const totalDuration = moment.duration();
-    const orderedCheckings = TimeCalculation.orderAscending(checkings);
 
-    for (const checking of orderedCheckings) {
+    for (const checking of checkings) {
       switch (checking.direction) {
         case CheckingDirection.In:
           if (lastDirection === CheckingDirection.In) {
