@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-title>Mock</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <!-- Gauge component -->
+  <h1>Gauge</h1>
+  <time-gauge></time-gauge>
+
+  <hr>
+
+  <!-- Weeks of one year -->
+  <h1>Weeks of one year</h1>
+  <div class="year">
+
+    <table *ngFor="let month of year?.months"
+           class="month">
+      <tr *ngFor="let week of month.weeks"
+          class="month__week">
+        <td *ngFor="let day of week.days"
+            class="month__day">
+          {{ day.dayNumber }}
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <!-- Weeks of one month -->
+  <h1>Weeks of one month</h1>
+  <table class="month">
+    <tr *ngFor="let week of weeks"
+        class="month__week">
+      <td *ngFor="let day of week.days"
+          class="month__day">
+        {{ day.dayNumber }}
+      </td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- JSON -->
+  <div>Results JSON:</div>
+  <div> {{ storableMonths | json }} </div>
+</ion-content>

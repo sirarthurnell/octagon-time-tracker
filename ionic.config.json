@@ -1,7 +1,7 @@
 {
-  "name": "octagon",
+  "name": "octagon-time-tracker",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular"
+  "type": "ionic-angular"
 }
