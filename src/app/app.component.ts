@@ -11,9 +11,15 @@ export class MyApp {
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
+
+      // Ionic bug with the status
+      // bar on Android.
+      if(platform.is('android')) {
+        statusBar.styleBlackOpaque();
+      } else {
+        statusBar.styleDefault();
+      }
+
       splashScreen.hide();
     });
   }
