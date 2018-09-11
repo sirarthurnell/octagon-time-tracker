@@ -28,6 +28,7 @@ interface PathData {
   styleUrls: ['./time-gauge.component.scss']
 })
 export class TimeGaugeComponent implements OnInit {
+  @Input() resolution = 1000;
   @Input() strokeWidth = 20;
   @Input() radius = 50;
   @Input() workingTimeClass = 'time-gauge__working-time';
@@ -35,6 +36,7 @@ export class TimeGaugeComponent implements OnInit {
 
   private centerXY = 50;
 
+  boxDimesion = 100;
   innerGradientStart = 100 * (this.radius - this.strokeWidth) / this.radius;
 
   /**
@@ -95,9 +97,9 @@ export class TimeGaugeComponent implements OnInit {
    */
   private createPathData(interval: AngleInterval, className: string): PathData {
     const d = ArcCommands.createArcCommands(
-      this.centerXY,
-      this.centerXY,
-      this.radius - this.strokeWidth / 2,
+      this.centerXY * this.resolution,
+      this.centerXY * this.resolution,
+      this.radius * this.resolution - this.strokeWidth * this.resolution / 2,
       interval.startAngle,
       interval.endAngle
     );
