@@ -35,6 +35,8 @@ export class TimeGaugeComponent implements OnInit {
 
   private centerXY = 50;
 
+  innerGradientStart = 100 * (this.radius - this.strokeWidth) / this.radius;
+
   /**
    * Data of all the paths to draw.
    */

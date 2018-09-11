@@ -1,5 +1,18 @@
 <svg class="view-box" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="inset">
+      <stop [attr.offset]="innerGradientStart + '%'" stop-color="transparent"/>
+      <stop [attr.offset]="innerGradientStart + '%'" stop-color="rgba(0, 0, 0, 0.2)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="bevel">
+      <stop [attr.offset]="innerGradientStart + '%'" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(255, 255, 255, 0.5)"/>
+    </radialGradient>
+  </defs>
+  <circle fill="url(#inset)" cx="50" cy="50" [attr.r]="radius"/>
   <ng-container *ngFor="let path of pathData">
     <path fill="none" [attr.class]="path.className" [attr.stroke-width]="strokeWidth" [attr.d]="path.d"/>
   </ng-container>
+  <circle fill="url(#bevel)" cx="50" cy="50" [attr.r]="radius"/>
 </svg>
