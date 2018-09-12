@@ -2,7 +2,7 @@
   <ion-content>
     <ion-list>
       <ion-list-header>
-        Time
+        {{ title }}
       </ion-list-header>
       <button ion-item menuClose (click)="navigateTo(page)" *ngFor="let page of pages">
         <ion-icon [name]="page.icon" item-start></ion-icon>

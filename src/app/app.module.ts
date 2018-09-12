@@ -6,7 +6,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
 import { SettingsProvider } from '../providers/settings/settings';
 import { StateProvider } from '../providers/state/state';
 import { TimeStorageProvider } from '../providers/time-storage/time-storage';
@@ -14,7 +13,6 @@ import { TimeStorageProvider } from '../providers/time-storage/time-storage';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
   ],
   imports: [
     BrowserModule,
@@ -24,7 +22,6 @@ import { TimeStorageProvider } from '../providers/time-storage/time-storage';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
   ],
   providers: [
     StatusBar,
