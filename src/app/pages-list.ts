@@ -11,6 +11,7 @@ export interface PageData {
  * Pages of the application.
  */
 export const PAGES_LIST: PageData[] = [
+  { name: 'MockPage', caption: 'Mock', icon: 'settings' },
   { name: 'CurrentDayPage', caption: 'Current day', icon: 'timer' },
   { name: 'DayPage', caption: 'Day', icon: 'clock' },
   { name: 'WeekPage', caption: 'Week', icon: 'calendar' },
