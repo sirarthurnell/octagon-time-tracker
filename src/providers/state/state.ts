@@ -55,6 +55,13 @@ export class StateProvider {
     this._month = month;
     this._week = week;
     this._day = day;
+
+    console.log('State changed', {
+      year,
+      month,
+      week,
+      day
+    });
   }
 
 }
