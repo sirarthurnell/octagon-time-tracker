@@ -9,5 +9,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <time-gauge [day]=day></time-gauge>
+
+  <ng-container *ngIf="day">
+    <time-gauge [day]=day></time-gauge>
+  </ng-container>
+
 </ion-content>

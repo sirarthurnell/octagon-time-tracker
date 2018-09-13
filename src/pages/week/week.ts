@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Week } from '../../models/time/week';
+import { Subscription } from 'rxjs';
 
 /**
  * Shows info about the specified week.
@@ -18,8 +19,16 @@ export class WeekPage {
    */
   week: Week;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.week = this.state.week;
+  private weekSubscription: Subscription;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
+
+  ionViewWillLoad() {
+    this.weekSubscription = this.state.week$.subscribe(week => (this.week = week));
+  }
+
+  ionViewWillUnload() {
+    this.weekSubscription.unsubscribe();
   }
 
 }

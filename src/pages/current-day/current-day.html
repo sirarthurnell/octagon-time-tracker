@@ -9,7 +9,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <time-gauge [day]=day></time-gauge>
-  <button ion-button>Check IN</button>
-  <button ion-button>Check OUT</button>
+
+  <ng-container *ngIf="day">
+    <time-gauge [day]=day></time-gauge>
+    <button ion-button>Check IN</button>
+    <button ion-button>Check OUT</button>
+  </ng-container>
+
 </ion-content>

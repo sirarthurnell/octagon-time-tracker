@@ -10,12 +10,16 @@
 </ion-header>
 <ion-content padding>
 
-  <table class="week">
-    <tr>
-      <td class="week__day" *ngFor="let day of week.days">
-        {{ day.dayNumber }}
-      </td>
-    </tr>
-  </table>
+  <ng-container *ngIf="week">
+
+    <table class="week">
+      <tr>
+        <td class="week__day" *ngFor="let day of week.days">
+          {{ day.dayNumber }}
+        </td>
+      </tr>
+    </table>
+
+  </ng-container>
 
 </ion-content>

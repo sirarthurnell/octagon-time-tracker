@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
+import { Subscription } from 'rxjs';
 
 /**
  * Shows info about the specified month.
@@ -18,8 +19,16 @@ export class MonthPage {
    */
   month: Month;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.month = this.state.month;
+  private monthSubscription: Subscription;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
+
+  ionViewWillLoad() {
+    this.monthSubscription = this.state.month$.subscribe(month => (this.month = month));
+  }
+
+  ionViewWillUnload() {
+    this.monthSubscription.unsubscribe();
   }
 
 }

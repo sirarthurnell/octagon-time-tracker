@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Year } from '../../models/time/year';
+import { Subscription } from 'rxjs';
 
 /**
  * Shows info about the specified year.
@@ -18,8 +19,16 @@ export class YearPage {
    */
   year: Year;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.year = this.state.year;
+  private yearSubscription: Subscription;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
+
+  ionViewWillLoad() {
+    this.yearSubscription = this.state.year$.subscribe(year => (this.year = year));
+  }
+
+  ionViewWillUnload() {
+    this.yearSubscription.unsubscribe();
   }
 
 }

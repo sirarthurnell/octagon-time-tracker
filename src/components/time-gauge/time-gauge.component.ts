@@ -49,8 +49,11 @@ export class TimeGaugeComponent implements OnInit {
 
   @Input()
   set day(day: Day) {
-    this._day = day;
-    this.plotDay();
+    if (day) {
+      this._day = day;
+      this.plotDay();
+      console.log('day plotted', day);
+    }
   }
 
   radius = 50;
@@ -65,11 +68,11 @@ export class TimeGaugeComponent implements OnInit {
   pathData: PathData[] = [];
 
   ngOnInit() {
-    if (this.day) {
-      this.plotDay();
-    } else {
-      this.plotOneHour();
-    }
+    // if (this.day) {
+    //   this.plotDay();
+    // } else {
+    //   this.plotOneHour();
+    // }
   }
 
   /**
