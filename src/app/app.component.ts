@@ -34,7 +34,7 @@ export class MyApp {
         statusBar.styleDefault();
       }
 
-      // Load state.
+      // Load saved state into memory.
       const today = new Date();
       Year.getYear(storage, today.getFullYear()).subscribe(year => {
         const month = year.months[today.getMonth()];
@@ -43,6 +43,7 @@ export class MyApp {
         state.setCurrent(year, month, week, day);
         splashScreen.hide();
       });
+
     });
   }
 
