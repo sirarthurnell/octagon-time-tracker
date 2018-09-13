@@ -9,5 +9,13 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  Content
+
+  <table class="week">
+    <tr>
+      <td class="week__day" *ngFor="let day of week.days">
+        {{ day.dayNumber }}
+      </td>
+    </tr>
+  </table>
+
 </ion-content>
