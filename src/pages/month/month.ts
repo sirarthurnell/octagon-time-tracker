@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Month } from '../../models/time/month';
+import { StateProvider } from '../../providers/state/state';
 
 /**
- * Generated class for the MonthPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Shows info about the specified month.
  */
-
 @IonicPage()
 @Component({
   selector: 'page-month',
@@ -15,11 +13,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class MonthPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  /**
+   * Month to show.
+   */
+  month: Month;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MonthPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
+    this.month = state.month;
   }
 
 }

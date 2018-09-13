@@ -12,12 +12,13 @@ import { Day } from '../../models/time/day';
   templateUrl: 'current-day.html',
 })
 export class CurrentDayPage {
+
   /**
    * Day to show.
    */
   day: Day;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, state: StateProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
     this.day = state.day;
   }
 

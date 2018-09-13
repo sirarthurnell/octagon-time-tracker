@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { StateProvider } from '../../providers/state/state';
+import { Week } from '../../models/time/week';
 
 /**
- * Generated class for the WeekPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Shows info about the specified week.
  */
-
 @IonicPage()
 @Component({
   selector: 'page-week',
@@ -15,11 +13,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class WeekPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  /**
+   * Week to show.
+   */
+  week: Week;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad WeekPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
+    this.week = state.week;
   }
 
 }

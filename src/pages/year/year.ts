@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { StateProvider } from '../../providers/state/state';
+import { Year } from '../../models/time/year';
 
 /**
- * Generated class for the YearPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Shows info about the specified year.
  */
-
 @IonicPage()
 @Component({
   selector: 'page-year',
@@ -15,11 +13,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class YearPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  /**
+   * Year to show.
+   */
+  year: Year;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad YearPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
+    this.year = state.year;
   }
 
 }
