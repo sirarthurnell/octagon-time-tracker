@@ -7,13 +7,24 @@ import { Day } from './day';
  */
 export class TimeCalculation {
   /**
+   * Sums up the duration of an array of days.
+   * @param days Days.
+   */
+  static sumDaysDuration(days: Day[]): moment.Duration {
+    const totalDuration = moment.duration();
+    days.forEach(day => totalDuration.add(TimeCalculation.sumWorkingTime(day)));
+    return totalDuration;
+  }
+
+  /**
    * Sums up the duration calculated from all
    * the checkings of one day.
    * @param day Day.
    */
   static sumWorkingTime(day: Day): moment.Duration {
-    const correctedCheckings = TimeCalculation.adjustBeginningAndEndOfDay(day);
-    return TimeCalculation.sumCheckings(correctedCheckings);
+    const adjusted = TimeCalculation.adjustCheckings(day);
+    const workingTime = TimeCalculation.sumCheckings(adjusted);
+    return workingTime;
   }
 
   /**
@@ -21,8 +32,8 @@ export class TimeCalculation {
    * @param day Day.
    */
   static sumRestTime(day: Day): moment.Duration {
-    const correctedCheckings = TimeCalculation.adjustBeginningAndEndOfDay(day);
-    const inverted = TimeCalculation.invertCheckings(correctedCheckings);
+    const adjusted = TimeCalculation.adjustCheckings(day);
+    const inverted = TimeCalculation.invertCheckings(adjusted);
     const restTime = TimeCalculation.sumCheckings(inverted);
     return restTime;
   }
@@ -50,14 +61,16 @@ export class TimeCalculation {
    * account at the beginning and the end of the day.
    * @param day Day to adjust.
    */
-  private static adjustBeginningAndEndOfDay(day: Day): Checking[] {
+  static adjustCheckings(day: Day): Checking[] {
     let correctedCheckings = TimeCalculation.orderAscending(day.checkings);
+    correctedCheckings = TimeCalculation.removeDuplicates(correctedCheckings);
 
     if (correctedCheckings.length === 0) {
       return correctedCheckings;
     } else {
       correctedCheckings = TimeCalculation.adjustBeginningOfDay(day, correctedCheckings);
       correctedCheckings = TimeCalculation.adjustEndOfDay(day, correctedCheckings);
+      correctedCheckings = TimeCalculation.removeStrange(correctedCheckings);
       return correctedCheckings;
     }
   }
@@ -67,21 +80,14 @@ export class TimeCalculation {
    * @param day Day.
    * @param correctedCheckings Corrected checkings so far.
    */
-  private static adjustEndOfDay(
-    day: Day,
-    correctedCheckings: Checking[]
-  ): Checking[] {
+  private static adjustEndOfDay(day: Day, correctedCheckings: Checking[]): Checking[] {
     const lastChecking = correctedCheckings[correctedCheckings.length - 1];
-    const isLastCheckingDirectionIn =
-      lastChecking.direction === CheckingDirection.In;
-    const thereIsNextDayFirstChecking =
-      day.next && day.next.checkings.length > 0;
+    const isLastCheckingDirectionIn = lastChecking.direction === CheckingDirection.In;
+    const thereIsNextDayFirstChecking = day.next && day.next.checkings.length > 0;
     const nextDayFirstChecking = thereIsNextDayFirstChecking
-      ? day.next.checkings[0]
+      ? TimeCalculation.orderAscending(day.next.checkings)[0]
       : null;
-    const isNextDayFirstCheckingDirectionOut =
-      thereIsNextDayFirstChecking &&
-      nextDayFirstChecking.direction === CheckingDirection.Out;
+    const isNextDayFirstCheckingDirectionOut = thereIsNextDayFirstChecking && nextDayFirstChecking.direction === CheckingDirection.Out;
     if (isLastCheckingDirectionIn && isNextDayFirstCheckingDirectionOut) {
       correctedCheckings.push(
         new Checking(
@@ -107,17 +113,14 @@ export class TimeCalculation {
    * @param day Day.
    * @param correctedCheckings Corrected checkings so far.
    */
-  private static adjustBeginningOfDay(
-    day: Day,
-    correctedCheckings: Checking[]
-  ): Checking[] {
+  private static adjustBeginningOfDay(day: Day, correctedCheckings: Checking[]): Checking[] {
     const firstChecking = correctedCheckings[0];
     const isFirstCheckingDirectionOut =
     firstChecking.direction === CheckingDirection.Out;
     const thereIsPreviousDayLastChecking =
       day.previous && day.previous.checkings.length > 0;
     const previousDayLastChecking = thereIsPreviousDayLastChecking
-      ? day.previous.checkings[day.previous.checkings.length - 1]
+      ? TimeCalculation.orderAscending(day.previous.checkings)[day.previous.checkings.length - 1]
       : null;
     const isPreviousDayLastCheckingDirectionIn =
       thereIsPreviousDayLastChecking &&
@@ -143,25 +146,64 @@ export class TimeCalculation {
   }
 
   /**
-   * Sums up the duration of an array of days.
-   * @param days Days.
-   */
-  static sumDaysDuration(days: Day[]): moment.Duration {
-    const totalDuration = moment.duration();
-    days.forEach(day => totalDuration.add(TimeCalculation.sumWorkingTime(day)));
-    return totalDuration;
-  }
-
-  /**
    * Sums up all the duration between the
    * specified checkings.
    * @param checkings Checkings to sum.
    */
   private static sumCheckings(checkings: Checking[]): moment.Duration {
-    let lastDirection: CheckingDirection;
     let lastIn: Checking;
     let lastOut: Checking;
     const totalDuration = moment.duration();
+
+    for (const checking of checkings) {
+      switch (checking.direction) {
+        case CheckingDirection.In:
+          lastIn = checking;
+          break;
+
+        case CheckingDirection.Out:
+          lastOut = checking;
+
+          const currentDuration = moment(lastOut.dateTime).diff(
+            lastIn.dateTime
+          );
+          totalDuration.add(currentDuration);
+
+          break;
+      }
+    }
+
+    return totalDuration;
+  }
+
+  /**
+   * Remove strange elements at the beginning
+   * and the end.
+   * @param checkings Checkings.
+   */
+  private static removeStrange(checkings: Checking[]): Checking[] {
+    const strangeRemoved = [].concat(checkings);
+
+    if (strangeRemoved.length > 0 && strangeRemoved[0].direction === CheckingDirection.Out) {
+      strangeRemoved.splice(0, 1);
+    }
+
+    if (strangeRemoved.length > 0 && strangeRemoved[strangeRemoved.length - 1].direction === CheckingDirection.In) {
+      strangeRemoved.pop();
+    }
+
+    return strangeRemoved;
+  }
+
+  /**
+   * Removes duplicated checkings (maximizes intervals).
+   * @param checkings Checkings to clean.
+   */
+  private static removeDuplicates(checkings: Checking[]): Checking[] {
+    let lastDirection: CheckingDirection;
+    let lastIn: Checking;
+    let lastOut: Checking;
+    const duplicatesRemoved = [] as Checking[];
 
     for (const checking of checkings) {
       switch (checking.direction) {
@@ -182,24 +224,22 @@ export class TimeCalculation {
             lastOut = checking;
             lastDirection = CheckingDirection.Out;
 
-            const currentDuration = moment(lastOut.dateTime).diff(
-              lastIn.dateTime
-            );
-            totalDuration.add(currentDuration);
+            duplicatesRemoved.push(lastIn);
+            duplicatesRemoved.push(lastOut);
           }
 
           break;
       }
     }
 
-    return totalDuration;
+    return duplicatesRemoved;
   }
 
   /**
    * Order the specified checkings in ascending order.
    * @param checkings Checkings to order.
    */
-  static orderAscending(checkings: Checking[]): Checking[] {
+  private static orderAscending(checkings: Checking[]): Checking[] {
     const ordered: Checking[] = [].concat(checkings);
 
     ordered.sort((checking1, checking2) => {

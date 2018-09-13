@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ArcCommands } from '../../models/svg/arc-commands';
+import { Day } from '../../models/time/day';
+import { TimeCalculation } from '../../models/time/time-calculation';
 
 /**
  * Represents an interval between
@@ -27,16 +29,35 @@ interface PathData {
   templateUrl: 'time-gauge.component.html'
 })
 export class TimeGaugeComponent implements OnInit {
-  @Input() resolution = 1000;
-  @Input() strokeWidth = 20;
-  @Input() radius = 50;
-  @Input() workingTimeClass = 'time-gauge__working-time';
-  @Input() restingTimeClass = 'time-gauge__resting-time';
+  @Input()
+  resolution = 1000;
+  @Input()
+  strokeWidth = 20;
+  @Input()
+  workingTimeClass = 'time-gauge__working-time';
+  @Input()
+  restingTimeClass = 'time-gauge__resting-time';
 
-  private centerXY = 50;
+  /**
+   * Gets or sets the day to plot.
+   */
+  private _day: Day;
 
+  get day(): Day {
+    return this._day;
+  }
+
+  @Input()
+  set day(day: Day) {
+    this._day = day;
+    this.plotDay();
+  }
+
+  radius = 50;
   boxDimesion = 100;
   innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
+
+  private centerXY = 50;
 
   /**
    * Data of all the paths to draw.
@@ -44,9 +65,17 @@ export class TimeGaugeComponent implements OnInit {
   pathData: PathData[] = [];
 
   ngOnInit() {
-    this.plotOneHour();
+    if (this.day) {
+      this.plotDay();
+    } else {
+      this.plotOneHour();
+    }
   }
 
+  /**
+   * Plots only one hour (in order to show
+   * something when there's no day set).
+   */
   private plotOneHour(): void {
     const today = new Date();
     const midnight = new Date(
@@ -62,6 +91,20 @@ export class TimeGaugeComponent implements OnInit {
     midnightPlusOneHour.setHours(1);
 
     this.plotTime(midnight, midnightPlusOneHour, this.workingTimeClass);
+  }
+
+  /**
+   * Plots the stablished day.
+   */
+  private plotDay(): void {
+    const checkings = TimeCalculation.adjustCheckings(this.day);
+
+    for (let i = 0; i < checkings.length; i += 2) {
+      const startTime = checkings[i].dateTime;
+      const endTime = checkings[i + 1].dateTime;
+
+      this.plotTime(startTime, endTime, this.workingTimeClass);
+    }
   }
 
   /**
