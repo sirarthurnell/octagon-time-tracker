@@ -10,7 +10,7 @@ import { PageData, PAGES_LIST } from './pages-list';
 export class MyApp {
   @ViewChild('navigation')
   nav: NavController;
-  rootPage: any = 'DayPage';
+  rootPage: any = 'CurrentDayPage';
 
   pages = PAGES_LIST;
 

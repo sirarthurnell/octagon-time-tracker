@@ -49,10 +49,12 @@ export class TimeGaugeComponent implements OnInit {
 
   @Input()
   set day(day: Day) {
+    this._day = day;
+
     if (day) {
-      this._day = day;
       this.plotDay();
-      console.log('day plotted', day);
+    } else {
+      this.clear();
     }
   }
 
@@ -68,32 +70,39 @@ export class TimeGaugeComponent implements OnInit {
   pathData: PathData[] = [];
 
   ngOnInit() {
-    // if (this.day) {
-    //   this.plotDay();
-    // } else {
-    //   this.plotOneHour();
-    // }
+    if (this.day) {
+      this.plotDay();
+    } else {
+      this.clear();
+    }
   }
 
   /**
    * Plots only one hour (in order to show
    * something when there's no day set).
    */
-  private plotOneHour(): void {
-    const today = new Date();
-    const midnight = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      0,
-      0,
-      0,
-      0
-    );
-    const midnightPlusOneHour = new Date(midnight.valueOf());
-    midnightPlusOneHour.setHours(1);
+  // private plotOneHour(): void {
+  //   const today = new Date();
+  //   const midnight = new Date(
+  //     today.getFullYear(),
+  //     today.getMonth(),
+  //     today.getDate(),
+  //     0,
+  //     0,
+  //     0,
+  //     0
+  //   );
+  //   const midnightPlusOneHour = new Date(midnight.valueOf());
+  //   midnightPlusOneHour.setHours(1);
 
-    this.plotTime(midnight, midnightPlusOneHour, this.workingTimeClass);
+  //   this.plotTime(midnight, midnightPlusOneHour, this.workingTimeClass);
+  // }
+
+  /**
+   * Clears the graph.
+   */
+  private clear(): void {
+    this.pathData = [];
   }
 
   /**
