@@ -19,7 +19,7 @@ export class WeekPage {
   week: Week;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.week = state.week;
+    this.week = this.state.week;
   }
 
 }

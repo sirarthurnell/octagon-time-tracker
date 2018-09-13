@@ -19,7 +19,7 @@ export class YearPage {
   year: Year;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.year = state.year;
+    this.year = this.state.year;
   }
 
 }

@@ -19,7 +19,7 @@ export class MonthPage {
   month: Month;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.month = state.month;
+    this.month = this.state.month;
   }
 
 }

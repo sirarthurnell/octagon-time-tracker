@@ -19,6 +19,6 @@ export class DayPage {
   day: Day;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {
-    this.day = state.day;
+    this.day = this.state.day;
   }
 }
