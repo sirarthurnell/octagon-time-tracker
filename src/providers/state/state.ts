@@ -17,25 +17,29 @@ export class StateProvider {
   /**
    * Gets the current year.
    */
-  private _yearSubject: BehaviorSubject<Year>;
+  private year: Year;
+  private yearSubject: BehaviorSubject<Year>;
   year$: Observable<Year>;
 
   /**
    * Gets the current month.
    */
-  private _monthSubject: BehaviorSubject<Month>;
+  private month: Month;
+  private monthSubject: BehaviorSubject<Month>;
   month$: Observable<Month>;
 
   /**
    * Gets the current week.
    */
-  private _weekSubject: BehaviorSubject<Week>;
+  private week: Week;
+  private weekSubject: BehaviorSubject<Week>;
   week$: Observable<Week>;
 
   /**
    * Gets the current day.
    */
-  private _daySubject: BehaviorSubject<Day>;
+  private day: Day;
+  private daySubject: BehaviorSubject<Day>;
   day$: Observable<Day>;
 
   constructor(platform: Platform, storage: TimeStorageProvider) {
@@ -50,7 +54,7 @@ export class StateProvider {
           currentWeek => currentWeek.days.indexOf(day) > -1
         )[0];
 
-        this.setCurrent(year, month, week, day);
+        this.init(year, month, week, day);
       });
     });
   }
@@ -59,17 +63,17 @@ export class StateProvider {
    * Creates the subjects.
    */
   private createSubjects() {
-    this._yearSubject = new BehaviorSubject<Year>(null);
-    this.year$ = this._yearSubject.asObservable();
+    this.yearSubject = new BehaviorSubject<Year>(null);
+    this.year$ = this.yearSubject.asObservable();
 
-    this._monthSubject = new BehaviorSubject<Month>(null);
-    this.month$ = this._monthSubject.asObservable();
+    this.monthSubject = new BehaviorSubject<Month>(null);
+    this.month$ = this.monthSubject.asObservable();
 
-    this._weekSubject = new BehaviorSubject<Week>(null);
-    this.week$ = this._weekSubject.asObservable();
+    this.weekSubject = new BehaviorSubject<Week>(null);
+    this.week$ = this.weekSubject.asObservable();
 
-    this._daySubject = new BehaviorSubject<Day>(null);
-    this.day$ = this._daySubject.asObservable();
+    this.daySubject = new BehaviorSubject<Day>(null);
+    this.day$ = this.daySubject.asObservable();
   }
 
   /**
@@ -79,17 +83,46 @@ export class StateProvider {
    * @param week Current week.
    * @param day Current day.
    */
-  setCurrent(year: Year, month?: Month, week?: Week, day?: Day): void {
-    this._yearSubject.next(year);
-    this._monthSubject.next(month);
-    this._weekSubject.next(week);
-    this._daySubject.next(day);
+  private init(year: Year, month?: Month, week?: Week, day?: Day): void {
+    this.setYear(year);
+    this.monthSubject.next(month);
+    this.weekSubject.next(week);
+    this.daySubject.next(day);
+  }
 
-    console.log('State changed', {
-      year,
-      month,
-      week,
-      day
-    });
+  /**
+   * Sets the current year.
+   * @param year Year.
+   */
+  setYear(year: Year): void {
+    this.year = year;
+    this.yearSubject.next(this.year);
+  }
+
+  /**
+   * Sets the current month.
+   * @param month Month.
+   */
+  setMonth(month: Month): void {
+    this.month = month;
+    this.monthSubject.next(this.month);
+  }
+
+  /**
+   * Sets the current week.
+   * @param week Week.
+   */
+  setWeek(week: Week): void {
+    this.week = week;
+    this.weekSubject.next(week);
+  }
+
+  /**
+   * Sets the current day.
+   * @param day Day.
+   */
+  setDay(day: Day): void {
+    this.day = day;
+    this.daySubject.next(day);
   }
 }

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Year } from '../../models/time/year';
 import { Subscription } from 'rxjs';
+import { Month } from '../../models/time/month';
 
 /**
  * Shows info about the specified year.
@@ -29,6 +30,14 @@ export class YearPage {
 
   ionViewWillUnload() {
     this.yearSubscription.unsubscribe();
+  }
+
+  /**
+   * Go to the month page.
+   * @param month Month to show.
+   */
+  showMonth(month: Month): void {
+
   }
 
 }
