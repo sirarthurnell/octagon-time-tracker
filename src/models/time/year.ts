@@ -1,11 +1,11 @@
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { map } from 'rxjs/operators';
+import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { Day } from './day';
 import { Month } from './month';
 import { TimeCalculation } from './time-calculation';
-import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
-import { Observable } from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
 
 /**
  * Represents a year.
@@ -71,7 +71,7 @@ export class Year {
    * @param months Months.
    */
   private static setPreviousNext(months: Month[]): void {
-    for (let i = 1; i < this.MONTH_COUNT; i++) {
+    for (let i = 1; i <= this.MONTH_COUNT; i++) {
       const currentMonth = months[i];
       currentMonth.previous = months[i - 1];
       currentMonth.next = months[i + 1];
