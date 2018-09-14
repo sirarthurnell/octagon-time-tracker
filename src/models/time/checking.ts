@@ -2,6 +2,7 @@
  * Direction of the time mark.
  */
 export enum CheckingDirection {
+  NotSet = 0,
   In,
   Out
 }

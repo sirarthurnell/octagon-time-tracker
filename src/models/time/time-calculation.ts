@@ -70,7 +70,6 @@ export class TimeCalculation {
     } else {
       correctedCheckings = TimeCalculation.adjustBeginningOfDay(day, correctedCheckings);
       correctedCheckings = TimeCalculation.adjustEndOfDay(day, correctedCheckings);
-      correctedCheckings = TimeCalculation.removeStrange(correctedCheckings);
       return correctedCheckings;
     }
   }
@@ -119,12 +118,12 @@ export class TimeCalculation {
     firstChecking.direction === CheckingDirection.Out;
     const thereIsPreviousDayLastChecking =
       day.previous && day.previous.checkings.length > 0;
-    const previousDayLastChecking = thereIsPreviousDayLastChecking
-      ? TimeCalculation.orderAscending(day.previous.checkings)[day.previous.checkings.length - 1]
+    const isPreviousDayLastCheckingDirectionIn = thereIsPreviousDayLastChecking
+      ? TimeCalculation.getFromEndWithDirection(
+          TimeCalculation.orderAscending(day.previous.checkings),
+          CheckingDirection.In
+        )
       : null;
-    const isPreviousDayLastCheckingDirectionIn =
-      thereIsPreviousDayLastChecking &&
-      previousDayLastChecking.direction === CheckingDirection.In;
     if (isFirstCheckingDirectionOut && isPreviousDayLastCheckingDirectionIn) {
       correctedCheckings.unshift(
         new Checking(
@@ -143,6 +142,31 @@ export class TimeCalculation {
     }
 
     return correctedCheckings;
+  }
+
+  /**
+   * Gets the last checking from the end
+   * with the specified direction.
+   * @param checkings Checkings.
+   * @param direction Direction.
+   * @returns Checking with the specified direction or
+   * null if there's no such checking.
+   */
+  private static getFromEndWithDirection(checkings: Checking[], direction: CheckingDirection): Checking {
+    let lastDirection = direction;
+    let lastChecking: Checking;
+
+    for (let i = checkings.length - 1; i >= 0; i--) {
+      const currentChecking = checkings[i];
+
+      if(currentChecking.direction !== lastDirection) {
+        return lastChecking;
+      }
+
+      lastChecking = currentChecking;
+    }
+
+    return null;
   }
 
   /**
@@ -177,32 +201,11 @@ export class TimeCalculation {
   }
 
   /**
-   * Remove strange elements at the beginning
-   * and the end.
-   * @param checkings Checkings.
-   */
-  private static removeStrange(checkings: Checking[]): Checking[] {
-    const strangeRemoved = [].concat(checkings);
-
-    if (strangeRemoved.length > 0 && strangeRemoved[0].direction === CheckingDirection.Out) {
-      strangeRemoved.splice(0, 1);
-    }
-
-    if (strangeRemoved.length > 0 && strangeRemoved[strangeRemoved.length - 1].direction === CheckingDirection.In) {
-      strangeRemoved.pop();
-    }
-
-    return strangeRemoved;
-  }
-
-  /**
-   * Removes duplicated checkings (maximizes intervals).
+   * Removes duplicated checkings.
    * @param checkings Checkings to clean.
    */
   private static removeDuplicates(checkings: Checking[]): Checking[] {
-    let lastDirection: CheckingDirection;
-    let lastIn: Checking;
-    let lastOut: Checking;
+    let lastDirection: CheckingDirection = CheckingDirection.NotSet;
     const duplicatesRemoved = [] as Checking[];
 
     for (const checking of checkings) {
@@ -211,7 +214,7 @@ export class TimeCalculation {
           if (lastDirection === CheckingDirection.In) {
             continue;
           } else {
-            lastIn = checking;
+            duplicatesRemoved.push(checking);
             lastDirection = CheckingDirection.In;
           }
 
@@ -221,11 +224,8 @@ export class TimeCalculation {
           if (lastDirection === CheckingDirection.Out) {
             continue;
           } else {
-            lastOut = checking;
+            duplicatesRemoved.push(checking);
             lastDirection = CheckingDirection.Out;
-
-            duplicatesRemoved.push(lastIn);
-            duplicatesRemoved.push(lastOut);
           }
 
           break;
