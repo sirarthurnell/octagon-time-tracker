@@ -6,8 +6,9 @@ import { Year } from '../../models/time/year';
 import { Platform } from 'ionic-angular';
 import { TimeStorageProvider } from '../time-storage/time-storage';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
+import { of } from 'rxjs/observable/of';
 
 /**
  * Contains the new state of the application
@@ -25,7 +26,7 @@ export class StateChanged {
       month: null,
       week: null,
       day: null
-    }
+    };
   }
 }
 
@@ -41,7 +42,9 @@ export class StateProvider {
     return new Date();
   }
 
-  private _changeSubject = new BehaviorSubject<StateChanged>(StateChanged.empty());
+  private _changeSubject = new BehaviorSubject<StateChanged>(
+    StateChanged.empty()
+  );
   change$ = this._changeSubject.asObservable();
 
   /**
@@ -73,7 +76,7 @@ export class StateProvider {
    */
   private _daySnapshot: Day;
   get daySnapshot(): Day {
-    return this.daySnapshot;
+    return this._daySnapshot;
   }
 
   constructor(platform: Platform, private storage: TimeStorageProvider) {
@@ -101,48 +104,88 @@ export class StateProvider {
   /**
    * Sets today as the current state.
    */
-  setToday(): Observable<any> {
+  setToday(): Observable<StateChanged> {
     return this.setByDate(this.TODAY);
+  }
+
+  /**
+   * Sets the state to reflect the specified
+   * month, but preserving the year, day and week
+   * (if possible).
+   * @param month New month.
+   */
+  setMonth(month: Month): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        month.yearNumber,
+        month.monthNumber,
+        this.daySnapshot.dayNumber
+      )
+    );
+  }
+
+  /**
+   * Sets the state to reflect the specified week.
+   * @param month Month that includes the week.
+   * @param day Day that indentifies the week.
+   */
+  setWeek(day: Day): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        day.yearNumber,
+        day.monthNumber,
+        day.dayNumber
+      )
+    );
+  }
+
+  /**
+   * Sets the state to reflect the day specified.
+   * @param day Day to set.
+   */
+  setDay(day: Day): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        day.yearNumber,
+        day.monthNumber,
+        day.dayNumber
+      )
+    );
   }
 
   /**
    * Sets the state specified by date.
    * @param date Date to set.
    */
-  setByDate(date: Date): Observable<any> {
-    let observable: Observable<any> = empty();
+  setByDate(date: Date): Observable<StateChanged> {
+    let observable: Observable<StateChanged> = empty();
 
     if (date.getFullYear() !== this.yearSnapshot.yearNumber) {
-
       observable = Year.getYear(this.storage, date.getFullYear()).pipe(
         tap(newYear => {
           const year = this.changeYear(newYear);
           const month = this.changeMonth(date.getMonth(), year.months);
           const day = this.changeDay(date.getDate(), month.days);
           this.changeWeek(day, month);
-
-          this.emitChange();
-        })
+        }),
+        map(_ => this.emitChange())
       );
-
     } else if (date.getMonth() !== this.monthSnapshot.monthNumber) {
-
       const month = this.changeMonth(date.getMonth(), this.yearSnapshot.months);
       const day = this.changeDay(date.getDate(), month.days);
       this.changeWeek(day, month);
 
-      this.emitChange();
-
+      observable = of(this.emitChange());
     } else if (date.getDate() !== this.daySnapshot.dayNumber) {
-
       const day = this.changeDay(date.getDate(), this.monthSnapshot.days);
       const newWeek = this.monthSnapshot.getWeek(day);
       if (newWeek !== this._weekSnapshot) {
         this.changeWeek(day, this.monthSnapshot);
       }
 
-      this.emitChange();
-
+      observable = of(this.emitChange());
+    } else {
+      observable = of(this.emitChange());
     }
 
     return observable;
@@ -203,12 +246,15 @@ export class StateProvider {
   /**
    * Emits a change in the state.
    */
-  private emitChange(): void {
-    this._changeSubject.next({
+  private emitChange(): StateChanged {
+    const newState: StateChanged = {
       year: this._yearSnapshot,
       month: this._monthSnapshot,
       week: this._weekSnapshot,
       day: this._daySnapshot
-    });
+    };
+
+    this._changeSubject.next(newState);
+    return newState;
   }
 }

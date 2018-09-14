@@ -11,10 +11,9 @@ import { Month } from '../../models/time/month';
 @IonicPage()
 @Component({
   selector: 'page-year',
-  templateUrl: 'year.html',
+  templateUrl: 'year.html'
 })
 export class YearPage {
-
   /**
    * Year to show.
    */
@@ -22,10 +21,16 @@ export class YearPage {
 
   private changeSubscription: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private state: StateProvider
+  ) {}
 
   ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(change => (this.year = change.year));
+    this.changeSubscription = this.state.change$.subscribe(
+      change => (this.year = change.year)
+    );
   }
 
   ionViewWillUnload() {
@@ -37,7 +42,8 @@ export class YearPage {
    * @param month Month to show.
    */
   showMonth(month: Month): void {
-
+    this.state
+      .setMonth(month)
+      .subscribe(_ => this.navCtrl.setRoot('MonthPage'));
   }
-
 }

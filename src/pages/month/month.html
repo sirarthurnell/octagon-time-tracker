@@ -13,7 +13,7 @@
   <ng-container *ngIf="month">
     <table class="month">
       <tr *ngFor="let week of month.weeks" class="month__week">
-        <td *ngFor="let day of week.days" class="month__day">
+        <td *ngFor="let day of week.days" class="month__day" (click)="showWeek(day)">
           {{ day.dayNumber }}
         </td>
       </tr>

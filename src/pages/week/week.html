@@ -14,7 +14,7 @@
 
     <table class="week">
       <tr>
-        <td class="week__day" *ngFor="let day of week.days">
+        <td class="week__day" *ngFor="let day of week.days" (click)="showDay(day)">
           {{ day.dayNumber }}
         </td>
       </tr>

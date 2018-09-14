@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Subscription } from 'rxjs';
+import { Day } from '../../models/time/day';
 import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
-import { Subscription } from 'rxjs';
 
 /**
  * Shows info about the specified month.
@@ -31,4 +32,13 @@ export class MonthPage {
     this.changeSubscription.unsubscribe();
   }
 
+  /**
+   * Go to the week page.
+   * @param day Day of the week to show.
+   */
+  showWeek(day: Day): void {
+    this.state
+      .setWeek(day)
+      .subscribe(_ => this.navCtrl.setRoot('WeekPage'));
+  }
 }

@@ -14,7 +14,7 @@
 
     <div class="year">
 
-      <table *ngFor="let month of year?.months" class="month">
+      <table *ngFor="let month of year?.months" class="month" (click)="showMonth(month)">
         <tr *ngFor="let week of month.weeks" class="month__week">
           <td *ngFor="let day of week.days" class="month__day">
             {{ day.dayNumber }}

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Week } from '../../models/time/week';
 import { Subscription } from 'rxjs';
+import { Day } from '../../models/time/day';
 
 /**
  * Shows info about the specified week.
@@ -10,10 +11,9 @@ import { Subscription } from 'rxjs';
 @IonicPage()
 @Component({
   selector: 'page-week',
-  templateUrl: 'week.html',
+  templateUrl: 'week.html'
 })
 export class WeekPage {
-
   /**
    * Week to show.
    */
@@ -21,14 +21,29 @@ export class WeekPage {
 
   private changeSubscription: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private state: StateProvider
+  ) {}
 
   ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(change => (this.week = change.week));
+    this.changeSubscription = this.state.change$.subscribe(
+      change => (this.week = change.week)
+    );
   }
 
   ionViewWillUnload() {
     this.changeSubscription.unsubscribe();
   }
 
+  /**
+   * Go to the day page.
+   * @param day Day to show.
+   */
+  showDay(day: Day): void {
+    this.state
+      .setDay(day)
+      .subscribe(_ => this.navCtrl.setRoot('DayPage'));
+  }
 }
