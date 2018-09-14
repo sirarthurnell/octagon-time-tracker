@@ -6,123 +6,209 @@ import { Year } from '../../models/time/year';
 import { Platform } from 'ionic-angular';
 import { TimeStorageProvider } from '../time-storage/time-storage';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { empty } from 'rxjs/observable/empty';
+
+/**
+ * Contains the new state of the application
+ * after a change.
+ */
+export class StateChanged {
+  year: Year;
+  month: Month;
+  week: Week;
+  day: Day;
+
+  static empty(): StateChanged {
+    return {
+      year: null,
+      month: null,
+      week: null,
+      day: null
+    }
+  }
+}
 
 /**
  * Keeps the current state of the application.
  */
 @Injectable()
 export class StateProvider {
-  readonly TODAY = new Date();
+  /**
+   * Gets the current computed day.
+   */
+  private get TODAY(): Date {
+    return new Date();
+  }
+
+  private _changeSubject = new BehaviorSubject<StateChanged>(StateChanged.empty());
+  change$ = this._changeSubject.asObservable();
 
   /**
    * Gets the current year.
    */
-  private year: Year;
-  private yearSubject: BehaviorSubject<Year>;
-  year$: Observable<Year>;
+  private _yearSnapshot: Year;
+  get yearSnapshot(): Year {
+    return this._yearSnapshot;
+  }
 
   /**
    * Gets the current month.
    */
-  private month: Month;
-  private monthSubject: BehaviorSubject<Month>;
-  month$: Observable<Month>;
+  private _monthSnapshot: Month;
+  get monthSnapshot(): Month {
+    return this._monthSnapshot;
+  }
 
   /**
    * Gets the current week.
    */
-  private week: Week;
-  private weekSubject: BehaviorSubject<Week>;
-  week$: Observable<Week>;
+  private _weekSnapshot: Week;
+  get weekSnapshot(): Week {
+    return this._weekSnapshot;
+  }
 
   /**
    * Gets the current day.
    */
-  private day: Day;
-  private daySubject: BehaviorSubject<Day>;
-  day$: Observable<Day>;
+  private _daySnapshot: Day;
+  get daySnapshot(): Day {
+    return this.daySnapshot;
+  }
 
-  constructor(platform: Platform, storage: TimeStorageProvider) {
-    this.createSubjects();
-
+  constructor(platform: Platform, private storage: TimeStorageProvider) {
     platform.ready().then(() => {
-      // Load saved state into memory.
-      Year.getYear(storage, this.TODAY.getFullYear()).subscribe(year => {
-        const month = year.months[this.TODAY.getMonth()];
-        const day = month.days[this.TODAY.getDate() + 1];
-        const week = month.weeks.filter(
-          currentWeek => currentWeek.days.indexOf(day) > -1
-        )[0];
-
-        this.init(year, month, week, day);
-      });
+      Year.getYear(this.storage, this.TODAY.getFullYear()).subscribe(year =>
+        this.init(year)
+      );
     });
   }
 
   /**
-   * Creates the subjects.
+   * Initializes the state with the
+   * specified year.
+   * @param newYear Year.
    */
-  private createSubjects() {
-    this.yearSubject = new BehaviorSubject<Year>(null);
-    this.year$ = this.yearSubject.asObservable();
+  private init(newYear: Year): void {
+    const year = this.changeYear(newYear);
+    const month = this.changeMonth(this.TODAY.getMonth(), year.months);
+    const day = this.changeDay(this.TODAY.getDate(), month.days);
+    this.changeWeek(day, month);
 
-    this.monthSubject = new BehaviorSubject<Month>(null);
-    this.month$ = this.monthSubject.asObservable();
-
-    this.weekSubject = new BehaviorSubject<Week>(null);
-    this.week$ = this.weekSubject.asObservable();
-
-    this.daySubject = new BehaviorSubject<Day>(null);
-    this.day$ = this.daySubject.asObservable();
+    this.emitChange();
   }
 
   /**
-   * Sets the current state.
-   * @param year Current year.
-   * @param month Current month.
-   * @param week Current week.
-   * @param day Current day.
+   * Sets today as the current state.
    */
-  private init(year: Year, month?: Month, week?: Week, day?: Day): void {
-    this.setYear(year);
-    this.monthSubject.next(month);
-    this.weekSubject.next(week);
-    this.daySubject.next(day);
+  setToday(): Observable<any> {
+    return this.setByDate(this.TODAY);
   }
 
   /**
-   * Sets the current year.
+   * Sets the state specified by date.
+   * @param date Date to set.
+   */
+  setByDate(date: Date): Observable<any> {
+    let observable: Observable<any> = empty();
+
+    if (date.getFullYear() !== this.yearSnapshot.yearNumber) {
+
+      observable = Year.getYear(this.storage, date.getFullYear()).pipe(
+        tap(newYear => {
+          const year = this.changeYear(newYear);
+          const month = this.changeMonth(date.getMonth(), year.months);
+          const day = this.changeDay(date.getDate(), month.days);
+          this.changeWeek(day, month);
+
+          this.emitChange();
+        })
+      );
+
+    } else if (date.getMonth() !== this.monthSnapshot.monthNumber) {
+
+      const month = this.changeMonth(date.getMonth(), this.yearSnapshot.months);
+      const day = this.changeDay(date.getDate(), month.days);
+      this.changeWeek(day, month);
+
+      this.emitChange();
+
+    } else if (date.getDate() !== this.daySnapshot.dayNumber) {
+
+      const day = this.changeDay(date.getDate(), this.monthSnapshot.days);
+      const newWeek = this.monthSnapshot.getWeek(day);
+      if (newWeek !== this._weekSnapshot) {
+        this.changeWeek(day, this.monthSnapshot);
+      }
+
+      this.emitChange();
+
+    }
+
+    return observable;
+  }
+
+  /**
+   * Changes the year.
    * @param year Year.
    */
-  setYear(year: Year): void {
-    this.year = year;
-    this.yearSubject.next(this.year);
+  private changeYear(year: Year): Year {
+    this._yearSnapshot = year;
+    return year;
   }
 
   /**
-   * Sets the current month.
-   * @param month Month.
+   * Changes the month by month number.
+   * @param monthNumber Number of the new month.
+   * @param months Months where the new month is.
    */
-  setMonth(month: Month): void {
-    this.month = month;
-    this.monthSubject.next(this.month);
+  private changeMonth(monthNumber: number, months: Month[]): Month {
+    const month = months[monthNumber];
+    this._monthSnapshot = month;
+
+    return month;
   }
 
   /**
-   * Sets the current week.
-   * @param week Week.
+   * Changes the current day by number.
+   * @param dayNumber Day number.
+   * @param days Days where the new day is.
    */
-  setWeek(week: Week): void {
-    this.week = week;
-    this.weekSubject.next(week);
+  private changeDay(dayNumber: number, days: Day[]): Day {
+    const candidateDays = days.filter(day => day.dayNumber === dayNumber);
+
+    let day: Day;
+    if (candidateDays.length > 0) {
+      day = candidateDays[0];
+    } else {
+      day = days[days.length - 1];
+    }
+
+    this._daySnapshot = day;
+    return day;
   }
 
   /**
-   * Sets the current day.
-   * @param day Day.
+   * Changes the current week by day.
+   * @param day Day included in the new week.
+   * @param month Month where the new weeks is.
    */
-  setDay(day: Day): void {
-    this.day = day;
-    this.daySubject.next(day);
+  private changeWeek(day: Day, month: Month): Week {
+    const week = month.weeks.filter(week => week.days.indexOf(day) > -1)[0];
+    this._weekSnapshot = week;
+
+    return week;
+  }
+
+  /**
+   * Emits a change in the state.
+   */
+  private emitChange(): void {
+    this._changeSubject.next({
+      year: this._yearSnapshot,
+      month: this._monthSnapshot,
+      week: this._weekSnapshot,
+      day: this._daySnapshot
+    });
   }
 }

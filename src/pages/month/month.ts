@@ -19,16 +19,16 @@ export class MonthPage {
    */
   month: Month;
 
-  private monthSubscription: Subscription;
+  private changeSubscription: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
 
   ionViewWillLoad() {
-    this.monthSubscription = this.state.month$.subscribe(month => (this.month = month));
+    this.changeSubscription = this.state.change$.subscribe(change => (this.month = change.month));
   }
 
   ionViewWillUnload() {
-    this.monthSubscription.unsubscribe();
+    this.changeSubscription.unsubscribe();
   }
 
 }

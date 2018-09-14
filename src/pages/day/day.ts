@@ -18,7 +18,7 @@ export class DayPage {
    */
   day: Day;
 
-  private daySubscription: Subscription;
+  private changeSubscription: Subscription;
 
   constructor(
     public navCtrl: NavController,
@@ -27,10 +27,10 @@ export class DayPage {
   ) {}
 
   ionViewWillLoad() {
-    this.daySubscription = this.state.day$.subscribe(day => (this.day = day));
+    this.changeSubscription = this.state.change$.subscribe(change => (this.day = change.day));
   }
 
   ionViewWillUnload() {
-    this.daySubscription.unsubscribe();
+    this.changeSubscription.unsubscribe();
   }
 }

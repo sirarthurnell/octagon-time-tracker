@@ -19,16 +19,16 @@ export class WeekPage {
    */
   week: Week;
 
-  private weekSubscription: Subscription;
+  private changeSubscription: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
 
   ionViewWillLoad() {
-    this.weekSubscription = this.state.week$.subscribe(week => (this.week = week));
+    this.changeSubscription = this.state.change$.subscribe(change => (this.week = change.week));
   }
 
   ionViewWillUnload() {
-    this.weekSubscription.unsubscribe();
+    this.changeSubscription.unsubscribe();
   }
 
 }

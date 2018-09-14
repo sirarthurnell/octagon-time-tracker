@@ -290,6 +290,16 @@ export class Month {
   }
 
   /**
+   * Gets the week where the specified
+   * day is.
+   * @param day Day.
+   */
+  getWeek(day: Day): Week {
+    const week = this.weeks.filter(week => week.days.indexOf(day) > -1)[0];
+    return week;
+  }
+
+  /**
    * Calculates the total time worked
    * during the current day.
    */

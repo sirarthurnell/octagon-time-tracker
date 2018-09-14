@@ -20,16 +20,16 @@ export class YearPage {
    */
   year: Year;
 
-  private yearSubscription: Subscription;
+  private changeSubscription: Subscription;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private state: StateProvider) {}
 
   ionViewWillLoad() {
-    this.yearSubscription = this.state.year$.subscribe(year => (this.year = year));
+    this.changeSubscription = this.state.change$.subscribe(change => (this.year = change.year));
   }
 
   ionViewWillUnload() {
-    this.yearSubscription.unsubscribe();
+    this.changeSubscription.unsubscribe();
   }
 
   /**
