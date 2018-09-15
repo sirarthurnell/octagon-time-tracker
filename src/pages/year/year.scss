@@ -72,20 +72,20 @@ $year-selector-height: 40px;
   }
 }
 
-.custom-grid {
+.year-grid {
   height: calc(100% - #{$year-selector-height});
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-}
 
-.custom-row {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
+  &__row {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
 
-.custom-col {
-  display: flex;
-  justify-content: center;
+  &__col {
+    display: flex;
+    justify-content: center;
+  }
 }
