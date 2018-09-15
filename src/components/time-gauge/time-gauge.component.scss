@@ -1,3 +1,15 @@
+@import '../../scss/variables';
+
 .view-box {
   width: 100%;
+}
+
+.time-gauge {
+  &__working-time {
+    stroke: $time-gauge-working-color;
+  }
+
+  &__resting-time {
+    stroke: $time-gauge-resting-color;
+  }
 }

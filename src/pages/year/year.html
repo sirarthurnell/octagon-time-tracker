@@ -12,19 +12,7 @@
 <ion-content>
   <ng-container *ngIf="year">
     <!-- Year selector -->
-    <div class="year-selector">
-      <div class="year-selector__previous">
-        <button class="nav-button">
-          <ion-icon name="arrow-back"></ion-icon>
-        </button>
-      </div>
-      <div class="year-selector__current">{{ year.yearNumber }} </div>
-      <div class="year-selector__next">
-        <button class="nav-button">
-          <ion-icon name="arrow-forward"></ion-icon>
-        </button>
-      </div>
-    </div>
+    <previous-next [text]="year.yearNumber"></previous-next>
 
     <!-- Months grid -->
     <div class="year-grid">

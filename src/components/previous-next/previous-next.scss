@@ -1,0 +1,27 @@
+@import '../../scss/variables';
+
+.selector {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: $previous-next-height;
+
+  &__previous {
+    justify-self: flex-start;
+  }
+
+  &__next {
+    justify-self: flex-end;
+  }
+}
+
+.nav-button {
+  border: 1px solid black;
+  background: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
