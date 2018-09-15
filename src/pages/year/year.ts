@@ -8,6 +8,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { create2dArray } from '../../models/array/array-extensions';
 import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
 import { MONTH_NAMES } from '../../text-items/months';
+import { Day } from '../../models/time/day';
 
 /**
  * Shows info about the specified year.
@@ -53,6 +54,20 @@ export class YearPage {
   }
 
   /**
+   * Sets the previous year.
+   */
+  setPrevious(): void {
+    this.state.setPreviousYear().subscribe(change => (this.year = change.year));
+  }
+
+  /**
+   * Sets the next year.
+   */
+  setNext(): void {
+    this.state.setNextYear().subscribe(change => (this.year = change.year));
+  }
+
+  /**
    * Gets the name of the days.
    */
   getDaysOfWeek(): DayOfWeek[] {
@@ -89,5 +104,38 @@ export class YearPage {
     }
 
     return monthRows;
+  }
+
+  /**
+   * Checks if the day specified is the day
+   * selected by the user.
+   * @param day Day to check.
+   */
+  isSelectedDay(day: Day): boolean {
+    return this.state.isSelectedDay(day);
+  }
+
+  /**
+   * Checks if the day specified is the current day.
+   * @param day Day to check.
+   */
+  isToday(day: Day): boolean {
+    return this.state.isToday(day);
+  }
+
+  /**
+   * Checks if the month specified is the current month.
+   * @param month Month to check.
+   */
+  isThisMonth(month: Month): boolean {
+    return this.state.isThisMonth(month);
+  }
+
+  /**
+   * Checks if the year specified is the current year.
+   * @param year Year to check.
+   */
+  isThisYear(year: Year): boolean {
+    return this.state.isThisYear(year);
   }
 }

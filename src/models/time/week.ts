@@ -21,6 +21,20 @@ export class Week {
   ) {}
 
   /**
+   * Gets the first day of the week.
+   */
+  getFirstDay(): Day {
+    return this.days[0];
+  }
+
+  /**
+   * Gets the last day of the week.
+   */
+  getLastDay(): Day {
+    return this.days[this.days.length - 1];
+  }
+
+  /**
    * Checks if the day specified is from the
    * month of this week.
    * @param day Day to check.

@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PreviousNextComponent {
   @Input() text = '';
+  @Input() textClass = '';
   @Output() previous = new EventEmitter();
   @Output() next = new EventEmitter();
 

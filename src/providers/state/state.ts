@@ -38,7 +38,7 @@ export class StateProvider {
   /**
    * Gets the current computed day.
    */
-  private get TODAY(): Date {
+  public get TODAY(): Date {
     return new Date();
   }
 
@@ -102,10 +102,106 @@ export class StateProvider {
   }
 
   /**
+   * Checks if the day specified is the day
+   * selected by the user.
+   * @param day Day to check.
+   */
+  isSelectedDay(day: Day): boolean {
+    return day.dayNumber === this.daySnapshot.dayNumber;
+  }
+
+  /**
+   * Checks if the day specified is the current day.
+   * @param day Day to check.
+   */
+  isToday(day: Day): boolean {
+    return (
+      day.yearNumber === this.yearSnapshot.yearNumber &&
+      day.monthNumber === this.monthSnapshot.monthNumber &&
+      day.dayNumber === this.TODAY.getDate()
+    );
+  }
+
+  /**
+   * Checks if the month specified is the current month.
+   * @param month Month to check.
+   */
+  isThisMonth(month: Month): boolean {
+    return (
+      month.yearNumber === this.TODAY.getFullYear() &&
+      month.monthNumber === this.TODAY.getMonth()
+    );
+  }
+
+  /**
+   * Checks if the year specified is the current year.
+   * @param year Year to check.
+   */
+  isThisYear(year: Year): boolean {
+    return year.yearNumber === this.TODAY.getFullYear();
+  }
+
+  /**
    * Sets today as the current state.
    */
   setToday(): Observable<StateChanged> {
     return this.setByDate(this.TODAY);
+  }
+
+  /**
+   * Sets the next year.
+   */
+  setNextYear(): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        this.yearSnapshot.yearNumber + 1,
+        this.monthSnapshot.monthNumber,
+        this.daySnapshot.dayNumber
+      )
+    );
+  }
+
+  /**
+   * Sets the previous year.
+   */
+  setPreviousYear(): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        this.yearSnapshot.yearNumber - 1,
+        this.monthSnapshot.monthNumber,
+        this.daySnapshot.dayNumber
+      )
+    );
+  }
+
+  /**
+   * Sets the state to reflect the specified
+   * year, but preserving month, day and week
+   * (if possible).
+   * @param year New year.
+   */
+  setYear(year: Year): Observable<StateChanged> {
+    return this.setByDate(
+      new Date(
+        year.yearNumber,
+        this.monthSnapshot.monthNumber,
+        this.daySnapshot.dayNumber
+      )
+    );
+  }
+
+  /**
+   * Sets the previous month.
+   */
+  setPreviousMonth(): Observable<StateChanged> {
+    return this.setMonth(this.monthSnapshot.previous);
+  }
+
+  /**
+   * Sets the next month.
+   */
+  setNextMonth(): Observable<StateChanged> {
+    return this.setMonth(this.monthSnapshot.next);
   }
 
   /**
@@ -116,12 +212,22 @@ export class StateProvider {
    */
   setMonth(month: Month): Observable<StateChanged> {
     return this.setByDate(
-      new Date(
-        month.yearNumber,
-        month.monthNumber,
-        this.daySnapshot.dayNumber
-      )
+      new Date(month.yearNumber, month.monthNumber, this.daySnapshot.dayNumber)
     );
+  }
+
+  /**
+   * Sets the previous week.
+   */
+  setPreviousWeek(): Observable<StateChanged> {
+    return this.setDay(this.weekSnapshot.getFirstDay().previous);
+  }
+
+  /**
+   * Sets the next week.
+   */
+  setNextWeek(): Observable<StateChanged> {
+    return this.setDay(this.weekSnapshot.getLastDay().next);
   }
 
   /**
@@ -131,12 +237,22 @@ export class StateProvider {
    */
   setWeek(day: Day): Observable<StateChanged> {
     return this.setByDate(
-      new Date(
-        day.yearNumber,
-        day.monthNumber,
-        day.dayNumber
-      )
+      new Date(day.yearNumber, day.monthNumber, day.dayNumber)
     );
+  }
+
+  /**
+   * Sets the previous day.
+   */
+  setPreviousDay(): Observable<StateChanged> {
+    return this.setDay(this.daySnapshot.previous);
+  }
+
+  /**
+   * Sets the next day.
+   */
+  setNextDay(): Observable<StateChanged> {
+    return this.setDay(this.daySnapshot.next);
   }
 
   /**
@@ -145,11 +261,7 @@ export class StateProvider {
    */
   setDay(day: Day): Observable<StateChanged> {
     return this.setByDate(
-      new Date(
-        day.yearNumber,
-        day.monthNumber,
-        day.dayNumber
-      )
+      new Date(day.yearNumber, day.monthNumber, day.dayNumber)
     );
   }
 

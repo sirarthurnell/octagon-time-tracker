@@ -1,0 +1,13 @@
+/*
+  Touchable link.
+*/
+.touch-link {
+  text-decoration: none;
+  color: initial;
+  transition: all 0.2s;
+  display: block;
+
+  &:active {
+    background: $touch-link-background-color;
+  }
+}

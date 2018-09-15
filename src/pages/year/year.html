@@ -12,7 +12,11 @@
 <ion-content>
   <ng-container *ngIf="year">
     <!-- Year selector -->
-    <previous-next [text]="year.yearNumber"></previous-next>
+    <previous-next [text]="year.yearNumber"
+                   (previous)="setPrevious()"
+                   (next)="setNext()"
+                   [textClass]="isThisYear(year) ? 'current-time--inverted' : ''"
+                   ></previous-next>
 
     <!-- Months grid -->
     <div class="year-grid">
@@ -24,12 +28,15 @@
              *ngFor="let month of monthRow">
 
           <!-- Month -->
-          <a href="javascript:void(0)" (click)="showMonth(month)" class="touch-link">
+          <a href="javascript:void(0)"
+             (click)="showMonth(month)"
+             class="touch-link">
             <table class="month">
               <thead>
                 <tr>
                   <td colspan="7"
-                      class="month__name">{{ getMonthName(month) }}</td>
+                      class="month__name"
+                      [class.current-time]="isThisMonth(month)">{{ getMonthName(month) }}</td>
                 </tr>
               </thead>
               <tr>
@@ -43,7 +50,8 @@
                 <td *ngFor="let day of week.days"
                     class="month__day"
                     [class.month__day--sunday]="day.isSunday()"
-                    [class.month__day--saturday]="day.isSaturday()">
+                    [class.month__day--saturday]="day.isSaturday()"
+                    [class.current-time]="isToday(day)">
                   {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
                 </td>
               </tr>

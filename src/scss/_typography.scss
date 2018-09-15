@@ -1,0 +1,21 @@
+@import './colors';
+
+/*
+  Current point in time.
+*/
+.current-time {
+  background-color: $current-point-time-background-color !important;
+  color: $current-point-time-color !important;
+
+  &--inverted {
+    background-color: transparent;
+    color: $current-point-time-background-color;
+  }
+}
+
+/*
+  Selected day.
+*/
+.selected-day {
+  border: 1px solid $current-point-time-background-color !important;
+}
