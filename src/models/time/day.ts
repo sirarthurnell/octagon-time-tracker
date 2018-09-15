@@ -30,6 +30,22 @@ export class Day {
   ) {}
 
   /**
+   * Checks if the current day is Saturday.
+   */
+  isSaturday(): boolean {
+    const date = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
+    return date.getDay() === 6;
+  }
+
+  /**
+   * Checks if the current day is Sunday.
+   */
+  isSunday(): boolean {
+    const date = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
+    return date.getDay() === 0;
+  }
+
+  /**
    * Calculates the total time worked
    * during the current day.
    */

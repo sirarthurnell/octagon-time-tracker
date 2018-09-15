@@ -14,11 +14,21 @@ export class Week {
   }
 
   constructor(
-    yearNumber: number,
-    monthNumber: number,
-    weekNumber: number,
+    public yearNumber: number,
+    public monthNumber: number,
+    public weekNumber: number,
     private daysOfWeek: Day[]
   ) {}
+
+  /**
+   * Checks if the day specified is from the
+   * month of this week.
+   * @param day Day to check.
+   */
+  isFromPreviusNextMonth(day: Day): boolean {
+    const differentMonth = day.monthNumber !== this.monthNumber;
+    return differentMonth;
+  }
 
   /**
    * Calculates the total time worked

@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { MyApp } from './app.component';
 import { SettingsProvider } from '../providers/settings/settings';
@@ -26,6 +27,7 @@ import { TimeStorageProvider } from '../providers/time-storage/time-storage';
   providers: [
     StatusBar,
     SplashScreen,
+    ScreenOrientation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SettingsProvider,
     StateProvider,
