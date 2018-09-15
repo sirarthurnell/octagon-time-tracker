@@ -1,3 +1,14 @@
+.touch-link {
+  text-decoration: none;
+  color: initial;
+  transition: all 0.2s;
+  display: block;
+
+  &:active {
+    background: gainsboro;
+  }
+}
+
 .month {
   border: none;
   font-size: 1.5vw;
@@ -52,8 +63,9 @@
 
   &__row {
     display: flex;
-    justify-content: space-evenly;
     flex-wrap: wrap;
+    justify-content: space-around;
+    justify-content: space-evenly; // Not supported by the emulator.
   }
 
   &__col {

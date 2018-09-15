@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { Month } from '../../models/time/month';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { create2dArray } from '../../models/array/array-extensions';
+import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
+import { MONTH_NAMES } from '../../text-items/months';
 
 /**
  * Shows info about the specified year.
@@ -53,16 +55,8 @@ export class YearPage {
   /**
    * Gets the name of the days.
    */
-  getDaysOfWeek(): { name: string; type: string }[] {
-    return [
-      { name: 'S', type: 'sunday' },
-      { name: 'M', type: 'normal' },
-      { name: 'T', type: 'normal' },
-      { name: 'W', type: 'normal' },
-      { name: 'T', type: 'normal' },
-      { name: 'F', type: 'normal' },
-      { name: 'S', type: 'saturday' }
-    ];
+  getDaysOfWeek(): DayOfWeek[] {
+    return DAYS_OF_WEEK;
   }
 
   /**
@@ -70,22 +64,7 @@ export class YearPage {
    * @param month Month.
    */
   getMonthName(month: Month): string {
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-
-    return monthNames[month.monthNumber];
+    return MONTH_NAMES[month.monthNumber];
   }
 
   /**

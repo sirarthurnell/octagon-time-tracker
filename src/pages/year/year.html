@@ -24,30 +24,32 @@
              *ngFor="let month of monthRow">
 
           <!-- Month -->
-          <table class="month"
-                 (click)="showMonth(month)">
-            <thead>
+          <a href="javascript:void(0)" (click)="showMonth(month)" class="touch-link">
+            <table class="month">
+              <thead>
+                <tr>
+                  <td colspan="7"
+                      class="month__name">{{ getMonthName(month) }}</td>
+                </tr>
+              </thead>
               <tr>
-                <td colspan="7"
-                    class="month__name">{{ getMonthName(month) }}</td>
+                <td *ngFor="let dayOfWeek of getDaysOfWeek()"
+                    class="month__day-of-week"
+                    [class.month__day--sunday]="dayOfWeek.type == 'sunday'"
+                    [class.month__day--saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
               </tr>
-            </thead>
-            <tr>
-              <td *ngFor="let dayOfWeek of getDaysOfWeek()"
-                  class="month__day-of-week"
-                  [class.month__day--sunday]="dayOfWeek.type == 'sunday'"
-                  [class.month__day--saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
-            </tr>
-            <tr *ngFor="let week of month.weeks"
-                class="month__week">
-              <td *ngFor="let day of week.days"
-                  class="month__day"
-                  [class.month__day--sunday]="day.isSunday()"
-                  [class.month__day--saturday]="day.isSaturday()">
-                {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
-              </td>
-            </tr>
-          </table>
+              <tr *ngFor="let week of month.weeks"
+                  class="month__week">
+                <td *ngFor="let day of week.days"
+                    class="month__day"
+                    [class.month__day--sunday]="day.isSunday()"
+                    [class.month__day--saturday]="day.isSaturday()">
+                  {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
+                </td>
+              </tr>
+            </table>
+          </a>
+
 
         </div>
 
