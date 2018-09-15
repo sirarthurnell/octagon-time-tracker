@@ -2,7 +2,7 @@
 
   <!-- Previous -->
   <div class="selector__previous">
-    <button class="nav-button">
+    <button class="nav-button" (click)="emitPrevious()">
       <ion-icon name="arrow-back"></ion-icon>
     </button>
   </div>
@@ -12,7 +12,7 @@
 
   <!-- Next -->
   <div class="selector__next">
-    <button class="nav-button">
+    <button class="nav-button" (click)="emitNext()">
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </div>
