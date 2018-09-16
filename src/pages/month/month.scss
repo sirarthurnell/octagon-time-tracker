@@ -29,5 +29,9 @@
     &--sunday {
       color: $sunday-color;
     }
+
+    &--other-month {
+      opacity: 0.25;
+    }
   }
 }

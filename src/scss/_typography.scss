@@ -17,5 +17,5 @@
   Selected day.
 */
 .selected-day {
-  border: 1px solid $current-point-time-background-color !important;
+  background-color: lighten($touch-link-background-color, 10%);
 }

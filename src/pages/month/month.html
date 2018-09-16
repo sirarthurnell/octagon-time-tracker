@@ -42,14 +42,16 @@
               class="month__day"
               [class.month__day--sunday]="day.isSunday()"
               [class.month__day--saturday]="day.isSaturday()"
-              [class.selected-day]="isSelectedDay(day)"
+              [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"
+              [class.selected-day]="isSelectedDay(day) && !week.isFromPreviusNextMonth(day)"
               [class.current-time]="isToday(day)">
 
             <!-- Day link -->
             <a href="javascript:void(0)"
                (click)="showWeek(day)"
-               class="touch-link">
-              {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
+               class="touch-link"
+               >
+              {{ day.dayNumber }}
             </a>
 
 
