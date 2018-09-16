@@ -116,8 +116,8 @@ export class StateProvider {
    */
   isToday(day: Day): boolean {
     return (
-      day.yearNumber === this.yearSnapshot.yearNumber &&
-      day.monthNumber === this.monthSnapshot.monthNumber &&
+      day.yearNumber === this.TODAY.getFullYear() &&
+      day.monthNumber === this.TODAY.getMonth() &&
       day.dayNumber === this.TODAY.getDate()
     );
   }

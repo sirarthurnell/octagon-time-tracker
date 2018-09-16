@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
@@ -9,16 +10,58 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-
+  <!-- Container rendered when year exists -->
   <ng-container *ngIf="month">
-    <table class="month">
-      <tr *ngFor="let week of month.weeks" class="month__week">
-        <td *ngFor="let day of week.days" class="month__day" (click)="showWeek(day)">
-          {{ day.dayNumber }}
-        </td>
-      </tr>
-    </table>
+
+
+    <!-- Month selector -->
+    <previous-next #previousNext
+                   [text]="getMonthName()"
+                   (previous)="setPrevious()"
+                   (next)="setNext()"
+                   [textClass]="isThisMonth() ? 'current-time--inverted month__name' : 'month__name'">
+
+
+      <!-- Month -->
+      <table class="month">
+
+
+        <!-- Day of week names -->
+        <tr>
+          <td *ngFor="let dayOfWeek of getDaysOfWeek()"
+              class="month__day-of-week"
+              [class.month__day--sunday]="dayOfWeek.type == 'sunday'"
+              [class.month__day--saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+        </tr>
+
+
+        <!-- Actual day number -->
+        <tr *ngFor="let week of month.weeks"
+            class="month__week">
+          <td *ngFor="let day of week.days"
+              class="month__day"
+              [class.month__day--sunday]="day.isSunday()"
+              [class.month__day--saturday]="day.isSaturday()"
+              [class.selected-day]="isSelectedDay(day)"
+              [class.current-time]="isToday(day)">
+
+            <!-- Day link -->
+            <a href="javascript:void(0)"
+               (click)="showWeek(day)"
+               class="touch-link">
+              {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
+            </a>
+
+
+          </td>
+        </tr>
+
+
+      </table>
+
+
+    </previous-next>
+
+
   </ng-container>
-
-
 </ion-content>

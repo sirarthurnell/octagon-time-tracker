@@ -117,15 +117,6 @@ export class YearPage {
   }
 
   /**
-   * Checks if the day specified is the day
-   * selected by the user.
-   * @param day Day to check.
-   */
-  isSelectedDay(day: Day): boolean {
-    return this.state.isSelectedDay(day);
-  }
-
-  /**
    * Checks if the day specified is the current day.
    * @param day Day to check.
    */
