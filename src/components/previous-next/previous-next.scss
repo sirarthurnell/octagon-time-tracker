@@ -25,3 +25,7 @@
   justify-content: center;
   align-items: center;
 }
+
+.dynamic-content {
+  height: calc(100% - #{$previous-next-height});
+}

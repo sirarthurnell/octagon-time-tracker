@@ -45,7 +45,8 @@
 }
 
 .year-grid {
-  height: calc(100% - #{$previous-next-height});
+  // height: calc(100% - #{$previous-next-height});
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
