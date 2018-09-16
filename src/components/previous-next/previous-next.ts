@@ -11,14 +11,11 @@ import * as $ from 'jquery';
 export class PreviousNextComponent {
   @ViewChild('dynamicContent')
   dynamicContent: ElementRef;
-  @Input()
-  text = '';
-  @Input()
-  textClass = '';
-  @Output()
-  previous = new EventEmitter();
-  @Output()
-  next = new EventEmitter();
+  @Input() text = '';
+  @Input() textClass = '';
+  @Input() enableAnimations = true;
+  @Output() previous = new EventEmitter();
+  @Output() next = new EventEmitter();
 
   nextButtonDisabled = false;
   previousButtonDisabled = false;
@@ -30,16 +27,20 @@ export class PreviousNextComponent {
    * Performs the next animation.
    */
   animateNext(): void {
-    this.prepareDom();
-    this.performAnimation('translate--right', 'translate--left');
+    if (this.enableAnimations) {
+      this.prepareDom();
+      this.performAnimation('translate--right', 'translate--left');
+    }
   }
 
   /**
    * Performs the previous animation.
    */
   animatePrevious(): void {
-    this.prepareDom();
-    this.performAnimation('translate--left', 'translate--right');
+    if (this.enableAnimations) {
+      this.prepareDom();
+      this.performAnimation('translate--left', 'translate--right');
+    }
   }
 
   /**
@@ -132,7 +133,10 @@ export class PreviousNextComponent {
    * Emits the previous event.
    */
   emitPrevious(): void {
-    this.prepareAnimation();
+    if (this.enableAnimations) {
+      this.prepareAnimation();
+    }
+
     this.previous.emit();
   }
 
@@ -140,7 +144,10 @@ export class PreviousNextComponent {
    * Emits the next event.
    */
   emitNext(): void {
-    this.prepareAnimation();
+    if (this.enableAnimations) {
+      this.prepareAnimation();
+    }
+
     this.next.emit();
   }
 }
