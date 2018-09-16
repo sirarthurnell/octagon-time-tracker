@@ -16,7 +16,8 @@
 
 
     <!-- Year selector -->
-    <previous-next [text]="year.yearNumber"
+    <previous-next #previousNext
+                   [text]="year.yearNumber"
                    (previous)="setPrevious()"
                    (next)="setNext()"
                    [textClass]="isThisYear(year) ? 'current-time--inverted' : ''">

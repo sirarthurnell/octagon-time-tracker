@@ -27,5 +27,24 @@
 }
 
 .dynamic-content {
+  position: relative;
   height: calc(100% - #{$previous-next-height});
+}
+
+.absoluteWrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: translateX(0);
+  transition: all .3s ease;
+}
+
+.translate {
+  &--right {
+    transform: translateX(100%);
+  }
+
+  &--left {
+    transform: translateX(-100%);
+  }
 }

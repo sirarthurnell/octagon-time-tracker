@@ -3,6 +3,7 @@
   <!-- Previous -->
   <div class="selector__previous">
     <button class="nav-button"
+            [disabled]="previousButtonDisabled"
             (click)="emitPrevious()">
       <ion-icon name="arrow-back"></ion-icon>
     </button>
@@ -14,15 +15,18 @@
   <!-- Next -->
   <div class="selector__next">
     <button class="nav-button"
+            [disabled]="nextButtonDisabled"
             (click)="emitNext()">
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </div>
 
 </div>
-<div class="dynamic-content"
-     #content>
-  <ng-content>
 
-  </ng-content>
+<!-- Dynamic content -->
+<div class="dynamic-content"
+     #dynamicContent>
+
+  <ng-content></ng-content>
+
 </div>

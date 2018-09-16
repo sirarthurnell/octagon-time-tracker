@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Year } from '../../models/time/year';
@@ -9,6 +9,7 @@ import { create2dArray } from '../../models/array/array-extensions';
 import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
 import { MONTH_NAMES } from '../../text-items/months';
 import { Day } from '../../models/time/day';
+import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 
 /**
  * Shows info about the specified year.
@@ -19,6 +20,9 @@ import { Day } from '../../models/time/day';
   templateUrl: 'year.html'
 })
 export class YearPage {
+  @ViewChild('previousNext')
+  previousNext: PreviousNextComponent;
+
   /**
    * Year to show.
    */
@@ -57,14 +61,20 @@ export class YearPage {
    * Sets the previous year.
    */
   setPrevious(): void {
-    this.state.setPreviousYear().subscribe(change => (this.year = change.year));
+    this.state.setPreviousYear().subscribe(change => {
+      this.year = change.year;
+      this.previousNext.animatePrevious();
+    });
   }
 
   /**
    * Sets the next year.
    */
   setNext(): void {
-    this.state.setNextYear().subscribe(change => (this.year = change.year));
+    this.state.setNextYear().subscribe(change => {
+      this.year = change.year;
+      this.previousNext.animateNext();
+    });
   }
 
   /**
