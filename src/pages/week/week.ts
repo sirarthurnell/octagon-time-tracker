@@ -44,6 +44,6 @@ export class WeekPage {
   showDay(day: Day): void {
     this.state
       .setDay(day)
-      .subscribe(_ => this.navCtrl.setRoot('DayPage'));
+      .subscribe(_ => this.navCtrl.push('DayPage'));
   }
 }

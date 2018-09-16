@@ -54,7 +54,7 @@ export class YearPage {
   showMonth(month: Month): void {
     this.state
       .setMonth(month)
-      .subscribe(_ => this.navCtrl.setRoot('MonthPage'));
+      .subscribe(_ => this.navCtrl.push('MonthPage'));
   }
 
   /**
