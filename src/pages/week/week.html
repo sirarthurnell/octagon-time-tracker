@@ -20,6 +20,33 @@
       </tr>
     </table>
 
+    <!-- Graph (wrapper) -->
+    <div class="week-graph">
+
+
+
+      <!-- Actual graph -->
+      <div class="week-graph__graph">
+
+
+        <!-- Bar -->
+        <div class="week-graph__bar" *ngFor="let day of week.days" (click)="showDay(day)">
+          <div class="week-graph__hours">Day hours</div>
+          <div class="graph__day-name">Name</div>
+        </div>
+
+
+        <!-- Average -->
+        <div class="week-graph__average-line">
+          <div class="week-graph__average-label">Average</div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
   </ng-container>
 
 </ion-content>
