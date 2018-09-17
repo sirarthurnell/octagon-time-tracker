@@ -6,7 +6,6 @@ import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
-import { MONTH_NAMES } from '../../text-items/months';
 
 /**
  * Shows info about the specified month.
@@ -82,7 +81,7 @@ export class MonthPage {
    * Gets the name of the month.
    */
   getMonthName(): string {
-    return MONTH_NAMES[this.month.monthNumber] + ' ' + this.month.yearNumber;
+    return this.month.name;
   }
 
   /**

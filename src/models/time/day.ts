@@ -4,11 +4,13 @@ import { TimeCalculation } from './time-calculation';
 import { DayInfo } from './day-info';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { DAYS_OF_WEEK } from '../../text-items/days-of-week';
 
 /**
  * Represents a day.
  */
 export class Day {
+  private readonly asDate: Date;
 
   /**
    * Previous day.
@@ -20,6 +22,14 @@ export class Day {
    */
   next: Day;
 
+  /**
+   * Gets the name of the day.
+   */
+  get name(): string {
+    const dayOfWeekNumber = this.asDate.getDay();
+    return DAYS_OF_WEEK[dayOfWeekNumber].name;
+  }
+
   constructor(
     public yearNumber: number,
     public monthNumber: number,
@@ -27,22 +37,22 @@ export class Day {
     readonly checkings: Checking[],
     private saveCb: (timeStorageProvider: TimeStorageProvider) => Observable<any>,
     public info?: DayInfo
-  ) {}
+  ) {
+    this.asDate = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
+  }
 
   /**
    * Checks if the current day is Saturday.
    */
   isSaturday(): boolean {
-    const date = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
-    return date.getDay() === 6;
+    return this.asDate.getDay() === 6;
   }
 
   /**
    * Checks if the current day is Sunday.
    */
   isSunday(): boolean {
-    const date = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
-    return date.getDay() === 0;
+    return this.asDate.getDay() === 0;
   }
 
   /**

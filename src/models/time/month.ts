@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { DayInfo } from './day-info';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { MONTH_NAMES } from '../../text-items/months';
 
 /**
  * Represents a month.
@@ -71,6 +72,13 @@ export class Month {
     let checkings = [] as Checking[];
     this.days.forEach(day => checkings = checkings.concat(day.checkings));
     return checkings;
+  }
+
+  /**
+   * Gets the name of the month.
+   */
+  get name(): string {
+    return MONTH_NAMES[this.monthNumber];
   }
 
   constructor(

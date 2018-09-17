@@ -7,7 +7,6 @@ import { Month } from '../../models/time/month';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { create2dArray } from '../../models/array/array-extensions';
 import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
-import { MONTH_NAMES } from '../../text-items/months';
 import { Day } from '../../models/time/day';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 
@@ -89,7 +88,7 @@ export class YearPage {
    * @param month Month.
    */
   getMonthName(month: Month): string {
-    return MONTH_NAMES[month.monthNumber];
+    return month.name;
   }
 
   /**
