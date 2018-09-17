@@ -1,11 +1,32 @@
 import * as moment from 'moment';
 import { Day } from './day';
 import { TimeCalculation } from './time-calculation';
+import { MONTH_NAMES } from '../../text-items/months';
 
 /**
  * Represents a week.
  */
 export class Week {
+  /**
+   * Gets the name of the week.
+   */
+  get name(): string {
+    const firstDay = this.getFirstDay();
+    const lastDay = this.getLastDay();
+
+    if (firstDay.monthNumber === lastDay.monthNumber) {
+      return `${MONTH_NAMES[firstDay.monthNumber]} ${firstDay.dayNumber} - ${
+        lastDay.dayNumber
+      }`;
+    } else {
+      return `${MONTH_NAMES[firstDay.monthNumber].substr(0, 3)}. ${
+        firstDay.dayNumber
+      } - ${MONTH_NAMES[lastDay.monthNumber].substr(0, 3)}. ${
+        lastDay.dayNumber
+      }`;
+    }
+  }
+
   /**
    * Gets the days of the week.
    */

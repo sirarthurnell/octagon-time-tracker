@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Week } from '../../models/time/week';
 import { Subscription } from 'rxjs';
 import { Day } from '../../models/time/day';
+import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 
 /**
  * Shows info about the specified week.
@@ -14,6 +15,9 @@ import { Day } from '../../models/time/day';
   templateUrl: 'week.html'
 })
 export class WeekPage {
+  @ViewChild('previousNext')
+  previousNext: PreviousNextComponent;
+
   /**
    * Week to show.
    */
@@ -37,13 +41,46 @@ export class WeekPage {
     this.changeSubscription.unsubscribe();
   }
 
+    /**
+   * Sets the previous week.
+   */
+  setPrevious(): void {
+    this.state.setPreviousWeek().subscribe(change => {
+      this.week = change.week;
+      this.previousNext.animatePrevious();
+    });
+  }
+
+  /**
+   * Sets the next week.
+   */
+  setNext(): void {
+    this.state.setNextWeek().subscribe(change => {
+      this.week = change.week;
+      this.previousNext.animateNext();
+    });
+  }
+
   /**
    * Go to the day page.
    * @param day Day to show.
    */
   showDay(day: Day): void {
-    this.state
-      .setDay(day)
-      .subscribe(_ => this.navCtrl.push('DayPage'));
+    this.state.setDay(day).subscribe(_ => this.navCtrl.push('DayPage'));
+  }
+
+  /**
+   * Checks if the actual week is the current week.
+   */
+  isThisWeek(): boolean {
+    return this.state.isThisWeek(this.week);
+  }
+
+  /**
+   * Checks if the day specified is the current day.
+   * @param day Day to check.
+   */
+  isToday(day: Day): boolean {
+    return this.state.isToday(day);
   }
 }

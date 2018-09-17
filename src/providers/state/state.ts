@@ -134,6 +134,18 @@ export class StateProvider {
   }
 
   /**
+   * Checks if the week specified is the current week.
+   * @param week Week to check.
+   */
+  isThisWeek(week: Week): boolean {
+    return (
+      week.yearNumber === this.TODAY.getFullYear() &&
+      week.monthNumber === this.TODAY.getMonth() &&
+      !!week.days.find(day => day.dayNumber === this.TODAY.getDate())
+    );
+  }
+
+  /**
    * Checks if the year specified is the current year.
    * @param year Year to check.
    */

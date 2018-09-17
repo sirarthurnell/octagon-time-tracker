@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
@@ -9,44 +10,46 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-
   <ng-container *ngIf="week">
 
-    <table class="week">
-      <tr>
-        <td class="week__day" *ngFor="let day of week.days" (click)="showDay(day)">
-          {{ day.dayNumber }}
-        </td>
-      </tr>
-    </table>
 
-    <!-- Graph (wrapper) -->
-    <div class="week-graph">
+    <!-- Month selector -->
+    <previous-next #previousNext
+                   [text]="week.name"
+                   (previous)="setPrevious()"
+                   (next)="setNext()"
+                   [textClass]="isThisWeek() ? 'current-time--inverted week__name' : 'week__name'">
 
 
+      <!-- Graph (wrapper) -->
+      <div class="week-graph">
 
-      <!-- Actual graph -->
-      <div class="week-graph__graph">
 
 
-        <!-- Bar -->
-        <div class="week-graph__bar" *ngFor="let day of week.days" (click)="showDay(day)">
-          <div class="week-graph__hours">Day hours</div>
-          <div class="graph__day-name">{{ day.name }}</div>
+        <!-- Actual graph -->
+        <div class="week-graph__graph">
+
+
+          <!-- Bar -->
+          <div class="week-graph__bar"
+               *ngFor="let day of week.days"
+               (click)="showDay(day)">
+            <div class="week-graph__hours">Day hours</div>
+            <div class="graph__day-name">{{ day.name }}</div>
+          </div>
+
+
+          <!-- Average -->
+          <div class="week-graph__average-line">
+            <div class="week-graph__average-label">Average</div>
+          </div>
+
         </div>
 
 
-        <!-- Average -->
-        <div class="week-graph__average-line">
-          <div class="week-graph__average-label">Average</div>
-        </div>
 
       </div>
 
-
-
-    </div>
-
+    </previous-next>
   </ng-container>
-
 </ion-content>
