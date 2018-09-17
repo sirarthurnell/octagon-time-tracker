@@ -66,6 +66,51 @@ export class Week {
   }
 
   /**
+   * Gets worked average time as the percent of a day.
+   */
+  getWorkedAverageTimeAsPercent(): number {
+    const oneDayAsMilliseconds = 24 * 60 * 60 * 1000;
+    const average = this.calculateWorkedAverageTime().as('milliseconds');
+
+    return (average / oneDayAsMilliseconds) * 100;
+  }
+
+  /**
+   * Gets the formatted total time.
+   */
+  getFormattedWorkedAverageTime(): string {
+    return moment
+      .utc(this.calculateWorkedAverageTime().as('milliseconds'))
+      .format('HH:mm');
+  }
+
+  /**
+   * Calculates the worked average time per day worked.
+   */
+  calculateWorkedAverageTime(): moment.Duration {
+    if (this.isWorked()) {
+      const workedDays = this.days.filter(
+        day => day.calculateTotalTime().as('milliseconds') > 0
+      );
+
+      const average = Math.floor(
+        this.calculateTotalTime().as('milliseconds') / workedDays.length
+      );
+
+      return moment.duration(average);
+    } else {
+      return moment.duration();
+    }
+  }
+
+  /**
+   * This week was worked.
+   */
+  isWorked(): boolean {
+    return this.calculateTotalTime().as('milliseconds') > 0;
+  }
+
+  /**
    * Calculates the total time worked
    * during the current day.
    */

@@ -35,7 +35,9 @@ export class Day {
     public monthNumber: number,
     public dayNumber: number,
     readonly checkings: Checking[],
-    private saveCb: (timeStorageProvider: TimeStorageProvider) => Observable<any>,
+    private saveCb: (
+      timeStorageProvider: TimeStorageProvider
+    ) => Observable<any>,
     public info?: DayInfo
   ) {
     this.asDate = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
@@ -53,6 +55,25 @@ export class Day {
    */
   isSunday(): boolean {
     return this.asDate.getDay() === 0;
+  }
+
+  /**
+   * Gets the total time as percent of the whole day.
+   */
+  getTotalTimeAsPercent(): number {
+    const oneDayAsMilliseconds = 24 * 60 * 60 * 1000;
+    const totalTimeAsMilliseconds = this.calculateTotalTime().as('milliseconds');
+
+    return (totalTimeAsMilliseconds / oneDayAsMilliseconds) * 100;
+  }
+
+  /**
+   * Gets the formatted total time.
+   */
+  getFormattedTotalTime(): string {
+    return moment
+      .utc(this.calculateTotalTime().as('milliseconds'))
+      .format('HH:mm');
   }
 
   /**

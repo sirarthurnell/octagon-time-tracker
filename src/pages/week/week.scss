@@ -1,3 +1,7 @@
+$week-graph-bar-width: 10%;
+$week-graph-bar-font-size: 1rem;
+$week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
+
 .week {
   &__name {
     text-transform: uppercase;
@@ -6,17 +10,17 @@
 }
 
 .week-graph {
-  border: 2px dashed red;
-  height: 50%; //Controlar
+  margin-top: 16px;
+  height: 100%;
 
   &__graph {
     display: flex;
     position: relative;
-    background: aliceblue;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    background: lighten($week-graph-background-color, 7.5%);
+    border-bottom: 1px solid $black;
     width: 100%;
-    height: 100%;
+    height: calc(100% - #{$week-graph-bar-label-gap});
+    padding-top: $week-graph-bar-label-gap;
   }
 
   &__bar {
@@ -25,23 +29,27 @@
     justify-content: space-between;
     align-items: center;
     align-self: flex-end;
-    background-color: pink;
-    height: 60%; //Controlar con nth-child
-    width: 2rem;
-    margin-left: calc(14.28% - 2rem);
+    background-color: $week-graph-bar-color;
+    height: 100%; //Controlar con style
+    width: $week-graph-bar-width;
+    margin-left: calc((100% / 7) - #{$week-graph-bar-width} - ((100% / 7) - #{$week-graph-bar-width}) / 8);
   }
 
   &__hours {
     transform: translateY(-100%);
+    color: $week-graph-day-hours-color;
+    opacity: 0.5;
   }
 
   &__day-name {
-    transform: translateY(120%);
+    transform: translateY($week-graph-bar-label-gap);
+    color: $week-graph-day-name-color;
+    opacity: 0.5;
   }
 
   &__average-line {
     position: absolute;
-    border: 0.5px solid orangered;
+    border: 0.5px solid $week-graph-average-color;
     width: 100%;
     top: 100% - 45%; //Controlar
   }
@@ -50,6 +58,6 @@
     position: absolute;
     transform: translateY(-100%);
     margin-left: 2%;
-    color: orangered;
+    color: $week-graph-average-color;
   }
 }

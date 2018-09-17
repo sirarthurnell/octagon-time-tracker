@@ -1,9 +1,19 @@
 /*
+  General concepts.
+*/
+$white: white;
+$black: black;
+$working-time: lightblue;
+$resting-time: fuchsia;
+$application-info: orangered;
+$application-interaction: gainsboro;
+
+/*
   Point time.
 */
-$current-point-time-background-color: orangered;
-$current-point-time-color: white;
-$non-current-point-time-background-color: gainsboro;
+$current-point-time-background-color: $application-info;
+$current-point-time-color: $white;
+$non-current-point-time-background-color: $application-interaction;
 
 /*
   Special days.
@@ -14,10 +24,19 @@ $sunday-color: red;
 /*
   Time gauge component.
 */
-$time-gauge-working-color: blue;
-$time-gauge-resting-color: fuchsia;
+$time-gauge-working-color: $working-time;
+$time-gauge-resting-color: $resting-time;
+
+/*
+  Week graph.
+*/
+$week-graph-background-color: transparent;
+$week-graph-bar-color: $working-time;
+$week-graph-average-color: darken($application-info, 7.5%);
+$week-graph-day-name-color: $black;
+$week-graph-day-hours-color: $black;
 
 /*
   Touch link.
 */
-$touch-link-background-color: gainsboro;
+$touch-link-background-color: $application-interaction;
