@@ -17,8 +17,7 @@ export class PreviousNextComponent {
   @Output() previous = new EventEmitter();
   @Output() next = new EventEmitter();
 
-  nextButtonDisabled = false;
-  previousButtonDisabled = false;
+  animationInProgress = false;
 
   private $wrappedCopy: JQuery = null;
   private $wrappedOriginal: JQuery = null;
@@ -27,7 +26,7 @@ export class PreviousNextComponent {
    * Performs the next animation.
    */
   animateNext(): void {
-    if (this.enableAnimations) {
+    if (this.enableAnimations && this.animationInProgress) {
       this.prepareDom();
       this.performAnimation('translate--right', 'translate--left');
     }
@@ -37,7 +36,7 @@ export class PreviousNextComponent {
    * Performs the previous animation.
    */
   animatePrevious(): void {
-    if (this.enableAnimations) {
+    if (this.enableAnimations && this.animationInProgress) {
       this.prepareDom();
       this.performAnimation('translate--left', 'translate--right');
     }
@@ -51,12 +50,14 @@ export class PreviousNextComponent {
   private performAnimation(originalClass: string, copyClass: string): void {
     this.$wrappedOriginal.addClass(originalClass);
 
+    const delayThreshold = 50;
+
     setTimeout(() => {
       this.$wrappedOriginal.removeClass(originalClass);
       this.$wrappedCopy.addClass(copyClass);
 
       this.$wrappedCopy.one('transitionend', () => this.cleanDom());
-    }, 0);
+    }, delayThreshold);
   }
 
   /**
@@ -80,8 +81,7 @@ export class PreviousNextComponent {
     const $originalContent = this.$wrappedOriginal.children().first();
     $originalContent.unwrap();
 
-    this.previousButtonDisabled = false;
-    this.nextButtonDisabled = false;
+    this.animationInProgress = false;
   }
 
   /**
@@ -89,8 +89,7 @@ export class PreviousNextComponent {
    */
   prepareAnimation(): void {
     this.$wrappedCopy = this.prepareWrappedCopy();
-    this.nextButtonDisabled = true;
-    this.previousButtonDisabled = true;
+    this.animationInProgress = true;
   }
 
   /**
@@ -130,10 +129,24 @@ export class PreviousNextComponent {
   }
 
   /**
+   * Controls the swipe event.
+   */
+  swipe(event): void {
+    const LEFT = 4;
+    const RIGHT = 2;
+
+    if (event.direction === RIGHT) {
+      this.emitNext();
+    } else if(event.direction === LEFT) {
+      this.emitPrevious();
+    }
+  }
+
+  /**
    * Emits the previous event.
    */
   emitPrevious(): void {
-    if (this.enableAnimations) {
+    if (this.enableAnimations && !this.animationInProgress) {
       this.prepareAnimation();
     }
 
@@ -144,7 +157,7 @@ export class PreviousNextComponent {
    * Emits the next event.
    */
   emitNext(): void {
-    if (this.enableAnimations) {
+    if (this.enableAnimations && !this.animationInProgress) {
       this.prepareAnimation();
     }
 
