@@ -16,6 +16,8 @@ $week-margin-top: 16px;
 }
 
 .week {
+  height: 100%;
+
   &__name {
     text-transform: uppercase;
     text-align: center;
