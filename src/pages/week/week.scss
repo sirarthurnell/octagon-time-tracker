@@ -1,6 +1,19 @@
 $week-graph-bar-width: 10%;
 $week-graph-bar-font-size: 1rem;
 $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
+$week-margin-top: 16px;
+
+.corrected-card {
+  width: 100%;
+  margin: 0;
+  margin-top: $week-margin-top;
+  height: calc(25% - #{$week-margin-top});
+
+  & ion-card-content {
+    height: 100%;
+    overflow-y: auto;
+  }
+}
 
 .week {
   &__name {
@@ -10,12 +23,12 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
 }
 
 .week-graph {
-  margin-top: 16px;
-  height: 100%;
+  padding-top: $week-margin-top;
+  height: 75%;
+  background: linear-gradient(to bottom, transparent 0%, transparent $week-margin-top, aliceblue $week-margin-top, aliceblue 100%);
 
-  &__graph {
+  &__bars-area {
     display: flex;
-    position: relative;
     background: lighten($week-graph-background-color, 7.5%);
     border-bottom: 1px solid $black;
     width: 100%;
@@ -26,11 +39,10 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
   &__bar {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     align-self: flex-end;
     background-color: $week-graph-bar-color;
-    height: 100%; //Controlar con style
+    height: 50%; //Controlar con style
     width: $week-graph-bar-width;
     margin-left: calc((100% / 7) - #{$week-graph-bar-width} - ((100% / 7) - #{$week-graph-bar-width}) / 8);
   }
@@ -41,8 +53,15 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
     opacity: 0.5;
   }
 
-  &__day-name {
-    transform: translateY($week-graph-bar-label-gap);
+  &__label-area {
+    display: flex;
+  }
+
+  &__label {
+    display: flex;
+    justify-content: center;
+    width: $week-graph-bar-width;
+    margin-left: calc((100% / 7) - #{$week-graph-bar-width} - ((100% / 7) - #{$week-graph-bar-width}) / 8);
     color: $week-graph-day-name-color;
     opacity: 0.5;
   }

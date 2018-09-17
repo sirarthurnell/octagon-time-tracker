@@ -27,7 +27,8 @@
 
 
         <!-- Actual graph -->
-        <div class="week-graph__graph">
+        <div class="week-graph__bars-area">
+
 
 
           <!-- Bar -->
@@ -36,7 +37,6 @@
                *ngFor="let day of week.days"
                (click)="showDay(day)">
             <div class="week-graph__hours">{{ day.getFormattedTotalTime() }}</div>
-            <div class="week-graph__day-name">{{ day.name }}</div>
           </div>
 
 
@@ -46,14 +46,33 @@
                [style.top]="(100 - week.getWorkedAverageTimeAsPercent()) + '%'">
             <div class="week-graph__average-label">{{ week.getFormattedWorkedAverageTime() }}</div>
           </div>
+        </div>
 
 
 
+        <!-- Day labels -->
+        <div class="week-graph__label-area">
+          <div class="week-graph__label"
+               [class.sunday]="dayOfWeek.type == 'sunday'"
+               [class.saturday]="dayOfWeek.type == 'saturday'"
+               *ngFor="let dayOfWeek of getDaysOfWeek()">{{ dayOfWeek.name }}</div>
         </div>
 
 
 
       </div>
+
+
+
+      <!-- Statistics -->
+      <ion-card class="corrected-card">
+
+        <ion-card-content>
+            Some statistics...
+        </ion-card-content>
+
+      </ion-card>
+
 
 
     </previous-next>

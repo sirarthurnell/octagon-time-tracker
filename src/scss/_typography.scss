@@ -19,3 +19,14 @@
 .selected-day {
   background-color: lighten($touch-link-background-color, 7.5%);
 }
+
+/*
+  Days of weekend.
+*/
+.saturday {
+  color: $saturday-color !important;
+}
+
+.sunday {
+  color: $sunday-color !important;
+}

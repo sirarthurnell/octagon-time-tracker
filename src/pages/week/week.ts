@@ -5,6 +5,7 @@ import { Week } from '../../models/time/week';
 import { Subscription } from 'rxjs';
 import { Day } from '../../models/time/day';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
+import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
 
 /**
  * Shows info about the specified week.
@@ -67,6 +68,13 @@ export class WeekPage {
    */
   showDay(day: Day): void {
     this.state.setDay(day).subscribe(_ => this.navCtrl.push('DayPage'));
+  }
+
+  /**
+   * Gets the days of the week.
+   */
+  getDaysOfWeek(): DayOfWeek[] {
+    return DAYS_OF_WEEK;
   }
 
   /**

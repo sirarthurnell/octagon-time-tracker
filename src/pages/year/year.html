@@ -9,7 +9,7 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content padding-top>
   <!-- Container rendered when year exists -->
   <ng-container *ngIf="year">
 
@@ -33,6 +33,7 @@
           <div class="year-grid__col"
                *ngFor="let month of monthRow">
 
+
             <!-- Month -->
             <a href="javascript:void(0)"
                (click)="showMonth(month)"
@@ -54,8 +55,8 @@
                 <tr>
                   <td *ngFor="let dayOfWeek of getDaysOfWeek()"
                       class="year-month__day-of-week"
-                      [class.year-month__day--sunday]="dayOfWeek.type == 'sunday'"
-                      [class.year-month__day--saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+                      [class.sunday]="dayOfWeek.type == 'sunday'"
+                      [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
                 </tr>
 
 
@@ -64,8 +65,8 @@
                     class="year-month__week">
                   <td *ngFor="let day of week.days"
                       class="year-month__day"
-                      [class.year-month__day--sunday]="day.isSunday()"
-                      [class.year-month__day--saturday]="day.isSaturday()"
+                      [class.sunday]="day.isSunday()"
+                      [class.saturday]="day.isSaturday()"
                       [class.current-time]="isToday(day)">
                     {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
                   </td>
