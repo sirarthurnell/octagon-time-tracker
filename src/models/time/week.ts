@@ -117,4 +117,17 @@ export class Week {
   calculateTotalTime(): moment.Duration {
     return TimeCalculation.sumDaysDuration(this.days);
   }
+
+  /**
+   * Checks if the week is the current week.
+   */
+  isThisWeek(): boolean {
+    const today = new Date();
+
+    return (
+      this.yearNumber === today.getFullYear() &&
+      this.monthNumber === today.getMonth() &&
+      !!this.days.find(day => day.dayNumber === today.getDate())
+    );
+  }
 }

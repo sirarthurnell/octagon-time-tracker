@@ -314,4 +314,16 @@ export class Month {
   calculateTotalTime(): moment.Duration {
     return TimeCalculation.sumDaysDuration(this.days);
   }
+
+  /**
+   * Checks if the month is the current month.
+   */
+  isThisMonth(): boolean {
+    const today = new Date();
+
+    return (
+      this.yearNumber === today.getFullYear() &&
+      this.monthNumber === today.getMonth()
+    );
+  }
 }

@@ -94,4 +94,12 @@ export class Year {
     this.months.forEach(month => totalDays = totalDays.concat(month.days));
     return totalDays;
   }
+
+  /**
+   * Checks if the year is the current year.
+   */
+  isThisYear(): boolean {
+    const today = new Date();
+    return this.yearNumber === today.getFullYear();
+  }
 }

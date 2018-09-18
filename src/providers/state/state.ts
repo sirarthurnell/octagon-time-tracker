@@ -123,10 +123,7 @@ export class StateProvider {
    * @param month Month to check.
    */
   isThisMonth(month: Month): boolean {
-    return (
-      month.yearNumber === this.TODAY.getFullYear() &&
-      month.monthNumber === this.TODAY.getMonth()
-    );
+    return month.isThisMonth();
   }
 
   /**
@@ -134,11 +131,7 @@ export class StateProvider {
    * @param week Week to check.
    */
   isThisWeek(week: Week): boolean {
-    return (
-      week.yearNumber === this.TODAY.getFullYear() &&
-      week.monthNumber === this.TODAY.getMonth() &&
-      !!week.days.find(day => day.dayNumber === this.TODAY.getDate())
-    );
+    return week.isThisWeek();
   }
 
   /**
@@ -146,7 +139,7 @@ export class StateProvider {
    * @param year Year to check.
    */
   isThisYear(year: Year): boolean {
-    return year.yearNumber === this.TODAY.getFullYear();
+    return year.isThisYear();
   }
 
   /**

@@ -91,8 +91,7 @@ export class Day {
   }
 
   /**
-   * Checks if the day specified is the current day.
-   * @param day Day to check.
+   * Checks if the day is the current day.
    */
   isToday(): boolean {
     const today = new Date();
