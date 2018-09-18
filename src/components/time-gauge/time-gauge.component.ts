@@ -102,6 +102,13 @@ export class TimeGaugeComponent implements OnInit {
   // }
 
   /**
+   * Perform a refresh.
+   */
+  refresh(): void {
+    this.day = this.day;
+  }
+
+  /**
    * Clears the graph.
    */
   private clear(): void {

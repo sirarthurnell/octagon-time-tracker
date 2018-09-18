@@ -1,0 +1,51 @@
+<ion-header>
+
+  <ion-navbar>
+
+    <!-- Close button -->
+    <ion-buttons end>
+      <button ion-button
+              (click)="dismiss()">Close</button>
+    </ion-buttons>
+
+    <ion-title>{{ title }}</ion-title>
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <p>Modify the checking you want to add or edit here:</p>
+
+  <ion-list>
+
+
+    <!-- Time -->
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime displayFormat="HH:mm"
+                    [(ngModel)]="selectedDate">
+      </ion-datetime>
+    </ion-item>
+
+
+    <!-- Direction -->
+    <ion-item>
+      <ion-label>Direction</ion-label>
+      <ion-select [(ngModel)]="checking.direction"
+                  multiple="false">
+        <ion-option [value]="directionIn">IN</ion-option>
+        <ion-option [value]="directionOut">OUT</ion-option>
+      </ion-select>
+    </ion-item>
+
+
+  </ion-list>
+
+
+  <!-- Accept button -->
+  <button ion-button margin-top float-right (click)="accept()">Accept</button>
+
+
+</ion-content>

@@ -30,6 +30,13 @@ export class Checking {
   constructor(private checkingDateTime: Date, public direction: CheckingDirection) {}
 
   /**
+   * Clonates the current checking.
+   */
+  clone(): Checking {
+    return new Checking(this.dateTime, this.direction);
+  }
+
+  /**
    * String representation of the checking.
    */
   toString(): string {

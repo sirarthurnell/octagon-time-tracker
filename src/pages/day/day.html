@@ -28,7 +28,7 @@
       <!-- Gauge -->
       <div class="time-gauge__container">
         <div class="time-gauge__gauge">
-          <time-gauge [day]=day></time-gauge>
+          <time-gauge #gauge [day]=day></time-gauge>
         </div>
       </div>
 
@@ -42,7 +42,7 @@
 
 
         <!-- Entries generation -->
-        <ion-item-sliding *ngFor="let checking of day.checkings">
+        <ion-item-sliding #slidingItem *ngFor="let checking of day.checkings">
 
           <ion-item>
             <ion-icon [name]="isCheckingIn(checking) ? 'arrow-forward' : 'arrow-back'"
@@ -55,7 +55,7 @@
           <ion-item-options side="left">
             <button ion-button
                     color="danger"
-                    (click)="deleteChecking(checking)">
+                    (click)="deleteChecking(slidingItem, checking)">
               <ion-icon name="trash"></ion-icon>
               Delete
             </button>
@@ -65,7 +65,7 @@
           <ion-item-options side="right">
             <button ion-button
                     color="secondary"
-                    (click)="editChecking(checking)">
+                    (click)="editChecking(slidingItem, checking)">
               <ion-icon name="create"></ion-icon>
               Edit
             </button>
