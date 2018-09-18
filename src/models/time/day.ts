@@ -64,13 +64,20 @@ export class Day {
    * Gets the most recent checking of the day.
    */
   getMostRecentChecking(): Checking {
-    const orderedCheckings = TimeCalculation.orderAscending(this.checkings);
+    const orderedCheckings = this.getOrderedCheckings();
 
     if(orderedCheckings.length > 0) {
       return orderedCheckings.pop();
     } else {
       return null;
     }
+  }
+
+  /**
+   * Gets the day checkins ordered in ascending way.
+   */
+  getOrderedCheckings(): Checking[] {
+    return TimeCalculation.orderAscending(this.checkings);
   }
 
   /**

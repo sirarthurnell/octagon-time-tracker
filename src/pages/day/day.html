@@ -42,7 +42,7 @@
 
 
         <!-- Entries generation -->
-        <ion-item-sliding #slidingItem *ngFor="let checking of day.checkings">
+        <ion-item-sliding #slidingItem *ngFor="let checking of day.getOrderedCheckings()">
 
           <ion-item>
             <ion-icon [name]="isCheckingIn(checking) ? 'arrow-forward' : 'arrow-back'"
@@ -59,10 +59,6 @@
               <ion-icon name="trash"></ion-icon>
               Delete
             </button>
-          </ion-item-options>
-
-
-          <ion-item-options side="right">
             <button ion-button
                     color="secondary"
                     (click)="editChecking(slidingItem, checking)">

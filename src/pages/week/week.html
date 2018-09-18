@@ -38,18 +38,21 @@
 
 
           <!-- Bar -->
-          <div class="week-graph__bar"
-               [style.height]="day.getTotalTimeAsPercent()"
-               *ngFor="let day of week.days"
-               (click)="showDay(day)">
+          <a href="javascript:void(0)"
+             (click)="showDay(day)"
+             class="touch-link week-graph__bar"
+             [style.height]="day.getTotalTimeAsPercent() + '%'"
+             *ngFor="let day of week.days">
+
             <div class="week-graph__hours">{{ day.getFormattedTotalTime() }}</div>
-          </div>
+
+          </a>
 
 
           <!-- Average -->
           <div *ngIf="week.isWorked()"
                class="week-graph__average-line"
-               [style.top]="(100 - week.getWorkedAverageTimeAsPercent()) + '%'">
+               [style.top]="100 - week.getWorkedAverageTimeAsPercent() + '%'">
             <div class="week-graph__average-label">{{ week.getFormattedWorkedAverageTime() }}</div>
           </div>
         </div>

@@ -1,5 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, ItemSliding, ModalController, NavController, NavParams, ToastController } from 'ionic-angular';
+import {
+  IonicPage,
+  ItemSliding,
+  ModalController,
+  NavController,
+  NavParams,
+  ToastController
+} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
@@ -98,7 +105,7 @@ export class DayPage {
     const index = this.day.checkings.indexOf(checkingToDelete);
     this.day.checkings.splice(index, 1);
 
-    // TODO Add persistence.
+    this.persist();
 
     this.gauge.refresh();
     this.showUndoToast(checkingToDelete, index);
@@ -136,7 +143,9 @@ export class DayPage {
    * Adds a new checking.
    */
   addChecking(): void {
-    const checkingPage = this.modalCtrl.create('CheckingPage');
+    const checkingPage = this.modalCtrl.create('CheckingPage', {
+      day: this.day
+    });
     checkingPage.onDidDismiss(newChecking => {
       if (newChecking) {
         this.day.checkings.push(newChecking as Checking);
@@ -155,7 +164,8 @@ export class DayPage {
    */
   editChecking(slidingItem: ItemSliding, checkingToEdit: Checking): void {
     const checkingPage = this.modalCtrl.create('CheckingPage', {
-      'edit-checking': checkingToEdit
+      'edit-checking': checkingToEdit,
+      day: this.day
     });
     checkingPage.onDidDismiss(checking => {
       if (checking) {

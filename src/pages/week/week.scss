@@ -16,7 +16,7 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
 
 .week {
   height: 100%;
-  padding-top: $ionic-margin-top;
+  padding-top: $week-graph-bar-label-gap;
 }
 
 .week-graph {
@@ -29,12 +29,13 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
     border-bottom: 1px solid $black;
     width: 100%;
     height: calc(100% - #{$week-graph-bar-label-gap});
-    padding-top: $week-graph-bar-label-gap;
+    position: relative;
   }
 
   &__bar {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     align-self: flex-end;
     background-color: $week-graph-bar-color;

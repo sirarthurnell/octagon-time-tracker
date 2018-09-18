@@ -7,6 +7,7 @@ import {
 } from 'ionic-angular';
 import { Checking, CheckingDirection } from '../../models/time/checking';
 import * as moment from 'moment';
+import { Day } from '../../models/time/day';
 
 /**
  * Create and edit checking page.
@@ -20,6 +21,7 @@ export class CheckingPage {
   title = 'Checking';
 
   checking: Checking;
+  day: Day;
 
   /**
    * For model transformation.
@@ -29,7 +31,8 @@ export class CheckingPage {
   }
 
   set selectedDate(isoDate: string) {
-    this.checking.dateTime = new Date(Date.parse(isoDate));
+    const date = new Date(Date.parse(isoDate));
+    this.checking.dateTime = date;
   }
 
   /**
@@ -43,18 +46,19 @@ export class CheckingPage {
     public navParams: NavParams,
     public viewCtrl: ViewController
   ) {
-    const fromParams: Checking = this.navParams.get('edit-checking');
+    const checkingFromParams: Checking = this.navParams.get('edit-checking');
+    this.day = this.navParams.get('day');
 
-    if (fromParams) {
-
-      this.checking = fromParams.clone();
+    if (checkingFromParams) {
+      this.checking = checkingFromParams.clone();
       this.title = 'Editing: ' + this.checking.toString();
-
     } else {
-
-      this.checking = new Checking(new Date(), CheckingDirection.In);
+      const newDate = new Date();
+      newDate.setFullYear(this.day.yearNumber);
+      newDate.setMonth(this.day.monthNumber);
+      newDate.setDate(this.day.dayNumber);
+      this.checking = new Checking(newDate, CheckingDirection.In);
       this.title = 'New checking';
-
     }
   }
 
