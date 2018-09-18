@@ -10,84 +10,82 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding-top>
-  <!-- Container rendered when year exists -->
-  <ng-container *ngIf="year">
 
 
 
-    <!-- Year selector -->
-    <previous-next #previousNext
-                   [text]="year.yearNumber"
-                   (previous)="setPrevious()"
-                   (next)="setNext()"
-                   [textClass]="isThisYear(year) ? 'current-time--inverted' : ''">
+  <!-- Year selector -->
+  <previous-next *ngIf="year"
+                 #previousNext
+                 [text]="year.yearNumber"
+                 (previous)="setPrevious()"
+                 (next)="setNext()"
+                 [textClass]="isThisYear(year) ? 'current-time--inverted' : ''">
 
 
 
-      <!-- Months grid -->
-      <div class="year-grid">
+    <!-- Months grid -->
+    <div class="year-grid">
 
-        <div class="year-grid__row"
-             *ngFor="let monthRow of getRowsOfMonths()">
+      <div class="year-grid__row"
+           *ngFor="let monthRow of getRowsOfMonths()">
 
-          <div class="year-grid__col"
-               *ngFor="let month of monthRow">
-
-
-            <!-- Month -->
-            <a href="javascript:void(0)"
-               (click)="showMonth(month)"
-               class="touch-link">
-              <table class="year-month">
+        <div class="year-grid__col"
+             *ngFor="let month of monthRow">
 
 
-                <!-- Month name -->
-                <thead>
-                  <tr>
-                    <td colspan="7"
-                        class="year-month__name"
-                        [class.current-time]="isThisMonth(month)">{{ getMonthName(month) }}</td>
-                  </tr>
-                </thead>
+          <!-- Month -->
+          <a href="javascript:void(0)"
+             (click)="showMonth(month)"
+             class="touch-link">
+            <table class="year-month">
 
 
-                <!-- Day of week names -->
+              <!-- Month name -->
+              <thead>
                 <tr>
-                  <td *ngFor="let dayOfWeek of getDaysOfWeek()"
-                      class="year-month__day-of-week"
-                      [class.sunday]="dayOfWeek.type == 'sunday'"
-                      [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+                  <td colspan="7"
+                      class="year-month__name"
+                      [class.current-time]="isThisMonth(month)">{{ getMonthName(month) }}</td>
                 </tr>
+              </thead>
 
 
-                <!-- Actual day number -->
-                <tr *ngFor="let week of month.weeks"
-                    class="year-month__week">
-                  <td *ngFor="let day of week.days"
-                      class="year-month__day"
-                      [class.sunday]="day.isSunday()"
-                      [class.saturday]="day.isSaturday()"
-                      [class.current-time]="isToday(day)">
-                    {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
-                  </td>
-                </tr>
+              <!-- Day of week names -->
+              <tr>
+                <td *ngFor="let dayOfWeek of getDaysOfWeek()"
+                    class="year-month__day-of-week"
+                    [class.sunday]="dayOfWeek.type == 'sunday'"
+                    [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+              </tr>
 
 
-              </table>
-            </a>
+              <!-- Actual day number -->
+              <tr *ngFor="let week of month.weeks"
+                  class="year-month__week">
+                <td *ngFor="let day of week.days"
+                    class="year-month__day"
+                    [class.sunday]="day.isSunday()"
+                    [class.saturday]="day.isSaturday()"
+                    [class.current-time]="isToday(day)">
+                  {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
+                </td>
+              </tr>
 
 
-          </div>
+            </table>
+          </a>
+
 
         </div>
 
       </div>
 
-
-
-    </previous-next>
+    </div>
 
 
 
-  </ng-container>
+  </previous-next>
+
+
+
 </ion-content>

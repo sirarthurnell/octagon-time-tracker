@@ -10,7 +10,10 @@ import { DAYS_OF_WEEK } from '../../text-items/days-of-week';
  * Represents a day.
  */
 export class Day {
-  private readonly asDate: Date;
+  /**
+   * Gets the date representation of the day.
+   */
+  public readonly asDate: Date;
 
   /**
    * Previous day.

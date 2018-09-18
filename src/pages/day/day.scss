@@ -1,3 +1,9 @@
-page-day {
+.day {
+  height: 100%;
+  padding-top: $ionic-margin-top;
 
+  &__name {
+    text-transform: uppercase;
+    text-align: center;
+  }
 }

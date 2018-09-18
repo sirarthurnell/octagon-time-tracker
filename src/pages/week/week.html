@@ -10,73 +10,59 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ng-container *ngIf="week">
-
-
-    <!-- Week selector -->
-    <previous-next #previousNext
-                   [text]="week.name"
-                   (previous)="setPrevious()"
-                   (next)="setNext()"
-                   [textClass]="isThisWeek() ? 'current-time--inverted week__name' : 'week__name'">
-
-
-      <!-- Previous/next wants only one direct child -->
-      <div class="week">
 
 
 
-        <!-- Graph (wrapper) -->
-        <div class="week-graph">
+  <!-- Week selector -->
+  <previous-next *ngIf="week"
+                 #previousNext
+                 [text]="week.name"
+                 (previous)="setPrevious()"
+                 (next)="setNext()"
+                 [textClass]="isThisWeek() ? 'current-time--inverted week__name' : 'week__name'">
+
+
+    <!-- Previous/next wants only one direct child -->
+    <div class="week">
 
 
 
-          <!-- Actual graph -->
-          <div class="week-graph__bars-area">
+      <!-- Graph (wrapper) -->
+      <div class="week-graph">
 
 
 
-            <!-- Bar -->
-            <div class="week-graph__bar"
-                 [style.height]="day.getTotalTimeAsPercent()"
-                 *ngFor="let day of week.days"
-                 (click)="showDay(day)">
-              <div class="week-graph__hours">{{ day.getFormattedTotalTime() }}</div>
-            </div>
+        <!-- Actual graph -->
+        <div class="week-graph__bars-area">
 
 
-            <!-- Average -->
-            <div *ngIf="week.isWorked()"
-                 class="week-graph__average-line"
-                 [style.top]="(100 - week.getWorkedAverageTimeAsPercent()) + '%'">
-              <div class="week-graph__average-label">{{ week.getFormattedWorkedAverageTime() }}</div>
-            </div>
+
+          <!-- Bar -->
+          <div class="week-graph__bar"
+               [style.height]="day.getTotalTimeAsPercent()"
+               *ngFor="let day of week.days"
+               (click)="showDay(day)">
+            <div class="week-graph__hours">{{ day.getFormattedTotalTime() }}</div>
           </div>
 
 
-
-          <!-- Day labels -->
-          <div class="week-graph__label-area">
-            <div class="week-graph__label"
-                 [class.sunday]="dayOfWeek.type == 'sunday'"
-                 [class.saturday]="dayOfWeek.type == 'saturday'"
-                 *ngFor="let dayOfWeek of getDaysOfWeek()">{{ dayOfWeek.name }}</div>
+          <!-- Average -->
+          <div *ngIf="week.isWorked()"
+               class="week-graph__average-line"
+               [style.top]="(100 - week.getWorkedAverageTimeAsPercent()) + '%'">
+            <div class="week-graph__average-label">{{ week.getFormattedWorkedAverageTime() }}</div>
           </div>
-
-
-
         </div>
 
 
 
-        <!-- Statistics -->
-        <ion-card class="corrected-card">
-
-          <ion-card-content>
-            Some statistics...
-          </ion-card-content>
-
-        </ion-card>
+        <!-- Day labels -->
+        <div class="week-graph__label-area">
+          <div class="week-graph__label"
+               [class.sunday]="dayOfWeek.type == 'sunday'"
+               [class.saturday]="dayOfWeek.type == 'saturday'"
+               *ngFor="let dayOfWeek of getDaysOfWeek()">{{ dayOfWeek.name }}</div>
+        </div>
 
 
 
@@ -84,6 +70,23 @@
 
 
 
-    </previous-next>
-  </ng-container>
+      <!-- Statistics -->
+      <ion-card class="corrected-card">
+
+        <ion-card-content>
+          Some statistics...
+        </ion-card-content>
+
+      </ion-card>
+
+
+
+    </div>
+
+
+
+  </previous-next>
+
+
+
 </ion-content>

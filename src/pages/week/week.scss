@@ -1,13 +1,12 @@
 $week-graph-bar-width: 10%;
 $week-graph-bar-font-size: 1rem;
 $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
-$week-margin-top: 16px;
 
 .corrected-card {
   width: 100%;
   margin: 0;
-  margin-top: $week-margin-top;
-  height: calc(25% - #{$week-margin-top});
+  margin-top: $ionic-margin-top;
+  height: calc(25% - #{$ionic-margin-top});
 
   & ion-card-content {
     height: 100%;
@@ -17,6 +16,7 @@ $week-margin-top: 16px;
 
 .week {
   height: 100%;
+  padding-top: $ionic-margin-top;
 
   &__name {
     text-transform: uppercase;
@@ -25,9 +25,8 @@ $week-margin-top: 16px;
 }
 
 .week-graph {
-  padding-top: $week-margin-top;
   height: 75%;
-  background: linear-gradient(to bottom, transparent 0%, transparent $week-margin-top, aliceblue $week-margin-top, aliceblue 100%);
+  background: aliceblue;
 
   &__bars-area {
     display: flex;

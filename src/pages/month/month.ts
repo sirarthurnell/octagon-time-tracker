@@ -81,7 +81,7 @@ export class MonthPage {
    * Gets the name of the month.
    */
   getMonthName(): string {
-    return this.month.name;
+    return `${this.month.name} ${this.month.yearNumber}`;
   }
 
   /**

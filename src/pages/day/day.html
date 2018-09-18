@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
@@ -10,8 +11,30 @@
 </ion-header>
 <ion-content padding>
 
-  <ng-container *ngIf="day">
-    <time-gauge [day]=day></time-gauge>
-  </ng-container>
+
+  <!-- Day selector -->
+  <previous-next *ngIf="day"
+                 #previousNext
+                 [text]="getDayText()"
+                 (previous)="setPrevious()"
+                 (next)="setNext()"
+                 [textClass]="isToday() ? 'current-time--inverted day__name' : 'day__name'">
+
+
+    <!-- Day wrapper -->
+    <div class="day">
+
+
+      <!-- Gauge -->
+      <ng-container *ngIf="day">
+        <time-gauge [day]=day></time-gauge>
+      </ng-container>
+
+
+    </div>
+
+
+  </previous-next>
+
 
 </ion-content>
