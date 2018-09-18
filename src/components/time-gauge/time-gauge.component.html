@@ -1,13 +1,25 @@
-<svg class="view-box" [attr.viewBox]="'0' + ' ' + '0' + ' ' + (boxDimesion * resolution) + ' ' + (boxDimesion * resolution)">
-  <defs>
-    <radialGradient id="inset">
-      <stop [attr.offset]="innerGradientStart + '%'" stop-color="transparent"/>
-      <stop [attr.offset]="innerGradientStart + '%'" stop-color="rgba(0, 0, 0, 0.075)"/>
-      <stop offset="100%" stop-color="rgba(0, 0, 0, 0.075)"/>
-    </radialGradient>
-  </defs>
-  <circle fill="url(#inset)" [attr.cx]="radius * resolution" [attr.cy]="radius * resolution" [attr.r]="radius * resolution"/>
-  <ng-container *ngFor="let path of pathData">
-    <path fill="none" [attr.class]="path.className" [attr.stroke-width]="strokeWidth * resolution" [attr.d]="path.d"/>
-  </ng-container>
-</svg>
+<div class="time-gauge">
+  <svg class="time-gauge__view-box"
+       [attr.viewBox]="'0' + ' ' + '0' + ' ' + (boxDimesion * resolution) + ' ' + (boxDimesion * resolution)">
+    <defs>
+      <radialGradient id="inset">
+        <stop [attr.offset]="innerGradientStart + '%'"
+              stop-color="transparent" />
+        <stop [attr.offset]="innerGradientStart + '%'"
+              stop-color="rgba(0, 0, 0, 0.075)" />
+        <stop offset="100%"
+              stop-color="rgba(0, 0, 0, 0.075)" />
+      </radialGradient>
+    </defs>
+    <circle fill="url(#inset)"
+            [attr.cx]="radius * resolution"
+            [attr.cy]="radius * resolution"
+            [attr.r]="radius * resolution" />
+    <ng-container *ngFor="let path of pathData">
+      <path fill="none"
+            [attr.class]="path.className"
+            [attr.stroke-width]="strokeWidth * resolution"
+            [attr.d]="path.d" />
+    </ng-container>
+  </svg>
+</div>

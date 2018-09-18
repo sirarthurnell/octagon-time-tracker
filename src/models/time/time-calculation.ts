@@ -239,7 +239,7 @@ export class TimeCalculation {
    * Order the specified checkings in ascending order.
    * @param checkings Checkings to order.
    */
-  private static orderAscending(checkings: Checking[]): Checking[] {
+  public static orderAscending(checkings: Checking[]): Checking[] {
     const ordered: Checking[] = [].concat(checkings);
 
     ordered.sort((checking1, checking2) => {

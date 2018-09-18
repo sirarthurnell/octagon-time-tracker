@@ -61,6 +61,19 @@ export class Day {
   }
 
   /**
+   * Gets the most recent checking of the day.
+   */
+  getMostRecentChecking(): Checking {
+    const orderedCheckings = TimeCalculation.orderAscending(this.checkings);
+
+    if(orderedCheckings.length > 0) {
+      return orderedCheckings.pop();
+    } else {
+      return null;
+    }
+  }
+
+  /**
    * Gets the total time as percent of the whole day.
    */
   getTotalTimeAsPercent(): number {

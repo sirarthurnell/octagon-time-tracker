@@ -1,19 +1,38 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Current day
+      Today
     </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-
   <ng-container *ngIf="day">
-    <time-gauge [day]=day></time-gauge>
-    <button ion-button>Check IN</button>
-    <button ion-button>Check OUT</button>
-  </ng-container>
 
+
+
+    <!-- Realtime gauge -->
+    <div class="realtime-gauge">
+      <time-gauge #gauge
+                  [day]=day></time-gauge>
+    </div>
+
+
+
+    <!-- Checking buttons -->
+    <button ion-button
+            [disabled]="!checkInButtonEnabled"
+            class="button-in"
+            (click)="checkIn()">Check IN</button>
+    <button ion-button
+            [disabled]="!checkOutButtonEnabled"
+            class="button-out"
+            (click)="checkOut()">Check OUT</button>
+
+
+
+  </ng-container>
 </ion-content>

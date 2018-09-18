@@ -1,3 +1,36 @@
-page-current-day {
+.realtime-gauge {
 
+  position: absolute;
+  width: 75vmin;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @media screen and (orientation: portrait) {
+    top: 15vmin;
+  }
+
+  @media screen and (orientation: landscape) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+.button-in,
+.button-out {
+  position: absolute;
+  bottom: 25%;
+
+  @media screen and (orientation: landscape) {
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+}
+
+.button-in {
+  right: 10%;
+}
+
+.button-out {
+  left: 10%;
 }

@@ -33,7 +33,7 @@ export class TimeGaugeComponent implements OnInit {
   @Input()
   resolution = 1000;
   @Input()
-  strokeWidth = 20;
+  strokeWidth = 10;
   @Input()
   workingTimeClass = 'time-gauge__working-time';
   @Input()

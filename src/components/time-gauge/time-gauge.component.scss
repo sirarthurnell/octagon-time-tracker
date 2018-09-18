@@ -1,10 +1,12 @@
 @import '../../scss/variables';
 
-.view-box {
-  width: 100%;
-}
-
 .time-gauge {
+  width: 100%;
+
+  &__view-box {
+    width: 100%;
+  }
+
   &__working-time {
     stroke: $time-gauge-working-color;
   }

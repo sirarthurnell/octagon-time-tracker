@@ -1,18 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ModalController,
-  ToastController,
-  ItemSliding
-} from 'ionic-angular';
-import { Day } from '../../models/time/day';
-import { StateProvider } from '../../providers/state/state';
+import { IonicPage, ItemSliding, ModalController, NavController, NavParams, ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
-import { Checking, CheckingDirection } from '../../models/time/checking';
 import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
+import { Checking, CheckingDirection } from '../../models/time/checking';
+import { Day } from '../../models/time/day';
+import { StateProvider } from '../../providers/state/state';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 
 /**

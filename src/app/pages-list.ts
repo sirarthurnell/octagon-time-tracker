@@ -12,7 +12,7 @@ export interface PageData {
  */
 export const PAGES_LIST: PageData[] = [
   { name: 'MockPage', caption: 'Mock', icon: 'settings' },
-  { name: 'CurrentDayPage', caption: 'Current day', icon: 'timer' },
+  { name: 'CurrentDayPage', caption: 'Today', icon: 'timer' },
   { name: 'DayPage', caption: 'Day', icon: 'clock' },
   { name: 'WeekPage', caption: 'Week', icon: 'calendar' },
   { name: 'MonthPage', caption: 'Month', icon: 'calendar' },
