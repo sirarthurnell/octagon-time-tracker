@@ -1,4 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import * as $ from 'jquery';
 
 /**
@@ -11,11 +18,16 @@ import * as $ from 'jquery';
 export class PreviousNextComponent {
   @ViewChild('dynamicContent')
   dynamicContent: ElementRef;
-  @Input() text = '';
-  @Input() textClass = '';
-  @Input() enableAnimations = true;
-  @Output() previous = new EventEmitter();
-  @Output() next = new EventEmitter();
+  @Input()
+  text = '';
+  @Input()
+  textClass = '';
+  @Input()
+  enableAnimations = true;
+  @Output()
+  previous = new EventEmitter();
+  @Output()
+  next = new EventEmitter();
 
   animationInProgress = false;
 
@@ -135,11 +147,28 @@ export class PreviousNextComponent {
     const LEFT = 4;
     const RIGHT = 2;
 
-    if (event.direction === RIGHT) {
-      this.emitNext();
-    } else if(event.direction === LEFT) {
-      this.emitPrevious();
+    if (!this.comesFromIonicItem(event)) {
+      if (event.direction === RIGHT) {
+        this.emitNext();
+      } else if (event.direction === LEFT) {
+        this.emitPrevious();
+      }
     }
+  }
+
+  /**
+   * Checks if the event comes from an
+   * ionic item (probably from a list).
+   * @param event Event.
+   */
+  comesFromIonicItem(event): boolean {
+    const partOfIonItem =
+      event.target &&
+      event.target.offsetParent &&
+      event.target.offsetParent.nodeName === 'ION-ITEM';
+    const ionItemOptions =
+      event.target && event.target.nodeName === 'ION-ITEM-OPTIONS';
+    return partOfIonItem || ionItemOptions;
   }
 
   /**

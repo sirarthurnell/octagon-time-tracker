@@ -1,3 +1,6 @@
+$time-gauge-width-landscape: 50vmin;
+$time-gauge-height: 40%;
+
 .day {
   height: 100%;
   padding-top: $ionic-margin-top;
@@ -5,5 +8,36 @@
   &__name {
     text-transform: uppercase;
     text-align: center;
+  }
+}
+
+.time-gauge {
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $time-gauge-height;
+
+    @media screen and (orientation:landscape) {
+      width: $time-gauge-height;
+      top: 25%; //($previous-next-height + $ionic-margin-top);
+      position: absolute;
+    }
+  }
+
+  &__gauge {
+    width: $time-gauge-width-landscape;
+  }
+}
+
+.checking-list {
+  height: (100% - $time-gauge-height);
+  overflow-y: auto;
+  padding-top: $ionic-margin-top;
+
+  @media screen and (orientation:landscape) {
+    height: 100%;
+    padding-left: $time-gauge-height;
+    padding-top: 0;
   }
 }
