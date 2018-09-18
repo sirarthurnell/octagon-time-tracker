@@ -43,11 +43,11 @@ export class MonthPage {
   }
 
   /**
-   * Go to the week page.
-   * @param day Day of the week to show.
+   * Go to the day page.
+   * @param day Day to show.
    */
-  showWeek(day: Day): void {
-    this.state.setWeek(day).subscribe(_ => this.navCtrl.push('WeekPage'));
+  showDay(day: Day): void {
+    this.state.setDay(day).subscribe(_ => this.navCtrl.push('DayPage'));
   }
 
   /**

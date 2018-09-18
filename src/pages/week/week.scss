@@ -17,11 +17,6 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
 .week {
   height: 100%;
   padding-top: $ionic-margin-top;
-
-  &__name {
-    text-transform: uppercase;
-    text-align: center;
-  }
 }
 
 .week-graph {

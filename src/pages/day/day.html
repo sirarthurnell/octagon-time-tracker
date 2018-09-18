@@ -18,7 +18,7 @@
                  [text]="getDayText()"
                  (previous)="setPrevious()"
                  (next)="setNext()"
-                 [textClass]="isToday() ? 'current-time--inverted day__name' : 'day__name'">
+                 [textClass]="isToday() ? 'current-time--inverted' : ''">
 
 
     <!-- Day wrapper -->
@@ -33,153 +33,57 @@
       </div>
 
 
-
       <!-- Checkings -->
       <ion-list class="checking-list">
+
         <ion-list-header>
           Checkings
         </ion-list-header>
-        <ion-item-sliding>
-          <ion-item>
-            <ion-avatar item-start>
-              <img src="img/slimer.png">
-            </ion-avatar>
-            <h2>Slimer</h2>
-          </ion-item>
-          <ion-item-options side="left">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="text"></ion-icon>
-              Text
-            </button>
-            <button ion-button
-                    color="secondary">
-              <ion-icon name="call"></ion-icon>
-              Call
-            </button>
-          </ion-item-options>
-          <ion-item-options side="right">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="mail"></ion-icon>
-              Email
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
 
-        <ion-item-sliding>
-          <ion-item>
-            <ion-avatar item-start>
-              <img src="img/slimer.png">
-            </ion-avatar>
-            <h2>Slimer</h2>
-          </ion-item>
-          <ion-item-options side="left">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="text"></ion-icon>
-              Text
-            </button>
-            <button ion-button
-                    color="secondary">
-              <ion-icon name="call"></ion-icon>
-              Call
-            </button>
-          </ion-item-options>
-          <ion-item-options side="right">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="mail"></ion-icon>
-              Email
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
 
-        <ion-item-sliding>
-          <ion-item>
-            <ion-avatar item-start>
-              <img src="img/slimer.png">
-            </ion-avatar>
-            <h2>Slimer</h2>
-          </ion-item>
-          <ion-item-options side="left">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="text"></ion-icon>
-              Text
-            </button>
-            <button ion-button
-                    color="secondary">
-              <ion-icon name="call"></ion-icon>
-              Call
-            </button>
-          </ion-item-options>
-          <ion-item-options side="right">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="mail"></ion-icon>
-              Email
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
+        <!-- Entries generation -->
+        <ion-item-sliding *ngFor="let checking of day.checkings">
 
-        <ion-item-sliding>
           <ion-item>
-            <ion-avatar item-start>
-              <img src="img/slimer.png">
-            </ion-avatar>
-            <h2>Slimer</h2>
+            <ion-icon [name]="isCheckingIn(checking) ? 'arrow-forward' : 'arrow-back'"
+                      [class.checking-list__in-arrow]="isCheckingIn(checking)"
+                      [class.checking-list__out-arrow]="!isCheckingIn(checking)"
+                      item-start></ion-icon>
+            {{ checking.toString() }}
           </ion-item>
-          <ion-item-options side="left">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="text"></ion-icon>
-              Text
-            </button>
-            <button ion-button
-                    color="secondary">
-              <ion-icon name="call"></ion-icon>
-              Call
-            </button>
-          </ion-item-options>
-          <ion-item-options side="right">
-            <button ion-button
-                    color="primary">
-              <ion-icon name="mail"></ion-icon>
-              Email
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
 
-        <ion-item-sliding>
-          <ion-item>
-            <ion-avatar item-start>
-              <img src="img/slimer.png">
-            </ion-avatar>
-            <h2>Slimer</h2>
-          </ion-item>
           <ion-item-options side="left">
             <button ion-button
-                    color="primary">
-              <ion-icon name="text"></ion-icon>
-              Text
-            </button>
-            <button ion-button
-                    color="secondary">
-              <ion-icon name="call"></ion-icon>
-              Call
+                    color="danger"
+                    (click)="deleteChecking(checking)">
+              <ion-icon name="trash"></ion-icon>
+              Delete
             </button>
           </ion-item-options>
+
+
           <ion-item-options side="right">
             <button ion-button
-                    color="primary">
-              <ion-icon name="mail"></ion-icon>
-              Email
+                    color="secondary"
+                    (click)="editChecking(checking)">
+              <ion-icon name="create"></ion-icon>
+              Edit
             </button>
           </ion-item-options>
+
+
         </ion-item-sliding>
       </ion-list>
 
+      <!-- Add checking -->
+      <ion-fab right
+               bottom>
+        <button ion-fab
+                color="light"
+                (click)="addChecking()">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-fab>
 
 
     </div>

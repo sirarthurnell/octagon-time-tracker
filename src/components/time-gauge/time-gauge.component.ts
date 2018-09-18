@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ArcCommands } from '../../models/svg/arc-commands';
 import { Day } from '../../models/time/day';
 import { TimeCalculation } from '../../models/time/time-calculation';
+import { CheckingDirection } from '../../models/time/checking';
 
 /**
  * Represents an interval between
@@ -51,10 +52,10 @@ export class TimeGaugeComponent implements OnInit {
   set day(day: Day) {
     this._day = day;
 
+    this.clear();
+
     if (day) {
       this.plotDay();
-    } else {
-      this.clear();
     }
   }
 
@@ -75,6 +76,8 @@ export class TimeGaugeComponent implements OnInit {
     } else {
       this.clear();
     }
+
+    //this.plotOneHour();
   }
 
   /**
@@ -112,10 +115,25 @@ export class TimeGaugeComponent implements OnInit {
     const checkings = TimeCalculation.adjustCheckings(this.day);
 
     for (let i = 0; i < checkings.length; i += 2) {
-      const startTime = checkings[i].dateTime;
-      const endTime = checkings[i + 1].dateTime;
+      const startChecking = checkings[i];
+      const startTime = startChecking.dateTime;
+      let classToApply: string = '';
+      let endTime: Date;
 
-      this.plotTime(startTime, endTime, this.workingTimeClass);
+      if (i + 1 < checkings.length) {
+        endTime = checkings[i + 1].dateTime;
+        classToApply =
+          startChecking.direction === CheckingDirection.In
+            ? this.workingTimeClass
+            : this.restingTimeClass;
+      } else if (startChecking.direction === CheckingDirection.In) {
+        endTime = new Date();
+        classToApply = this.workingTimeClass;
+      } else {
+        return;
+      }
+
+      this.plotTime(startTime, endTime, classToApply);
     }
   }
 
@@ -157,7 +175,7 @@ export class TimeGaugeComponent implements OnInit {
     const millisEnd = moment.duration(endTime.valueOf() - midnight.valueOf());
     const duration = millisEnd.subtract(millisStart);
     const startAngle = this.durationToAngle(millisStart);
-    const endAngle = this.durationToAngle(duration);
+    const endAngle = startAngle + this.durationToAngle(duration);
 
     return {
       startAngle,

@@ -32,7 +32,7 @@ export const ONE_MONTH_EMPTY: Month[] = [
  * One month with one checking.
  */
 export const ONE_MONTH_ONE_CHECKING: Month[] = [
-  new Month(2018, 0, DayOfWeek.Sunday, [
-    new Checking(new Date(2018, 0, 1, 10), CheckingDirection.In)
+  new Month(2018, 8, DayOfWeek.Sunday, [
+    new Checking(new Date(2018, 8, 18, 10), CheckingDirection.In)
   ], {1: { absence: 'doctor', tag: '' }})
 ];

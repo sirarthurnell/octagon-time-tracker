@@ -28,4 +28,11 @@ export class Checking {
   }
 
   constructor(private checkingDateTime: Date, public direction: CheckingDirection) {}
+
+  /**
+   * String representation of the checking.
+   */
+  toString(): string {
+    return this.dateTime.toLocaleString();
+  }
 }

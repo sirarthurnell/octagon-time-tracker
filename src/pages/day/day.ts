@@ -4,6 +4,7 @@ import { Day } from '../../models/time/day';
 import { StateProvider } from '../../providers/state/state';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
+import { Checking, CheckingDirection } from '../../models/time/checking';
 
 /**
  * Shows info about the specified day.
@@ -72,5 +73,36 @@ export class DayPage {
    */
   isToday(): boolean {
     return this.state.isToday(this.day);
+  }
+
+  /**
+   * Checks if the specified checking is IN.
+   * @param checking Checking.
+   */
+  isCheckingIn(checking: Checking): boolean {
+    return checking.direction === CheckingDirection.In;
+  }
+
+  /**
+   * Deletes the specified checking.
+   * @param checking Checking to delete.
+   */
+  deleteChecking(checking: Checking): void {
+    // TODO Fill.
+  }
+
+  /**
+   * Adds a new checking.
+   */
+  addChecking(): void {
+    // TODO Fill.
+  }
+
+  /**
+   * Edits the specified checking.
+   * @param checking Checking to edit.
+   */
+  editChecking(checking: Checking): void {
+    // TODO Fill.
   }
 }

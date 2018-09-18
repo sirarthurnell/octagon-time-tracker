@@ -4,11 +4,6 @@ $time-gauge-height: 40%;
 .day {
   height: 100%;
   padding-top: $ionic-margin-top;
-
-  &__name {
-    text-transform: uppercase;
-    text-align: center;
-  }
 }
 
 .time-gauge {
@@ -39,5 +34,13 @@ $time-gauge-height: 40%;
     height: 100%;
     padding-left: $time-gauge-height;
     padding-top: 0;
+  }
+
+  &__in-arrow {
+    color: $working-time;
+  }
+
+  &__out-arrow {
+    color: $resting-time;
   }
 }

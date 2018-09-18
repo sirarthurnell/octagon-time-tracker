@@ -18,7 +18,7 @@
                  [text]="getMonthName()"
                  (previous)="setPrevious()"
                  (next)="setNext()"
-                 [textClass]="isThisMonth() ? 'current-time--inverted month__name' : 'month__name'">
+                 [textClass]="isThisMonth() ? 'current-time--inverted' : ''">
 
 
     <!-- Month -->
@@ -47,7 +47,7 @@
 
           <!-- Day link -->
           <a href="javascript:void(0)"
-             (click)="showWeek(day)"
+             (click)="showDay(day)"
              class="touch-link">
             {{ day.dayNumber }}
           </a>
