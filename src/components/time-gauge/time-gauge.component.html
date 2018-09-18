@@ -21,5 +21,12 @@
             [attr.stroke-width]="strokeWidth * resolution"
             [attr.d]="path.d" />
     </ng-container>
+    <text class="time-gauge__working-time-text"
+          [attr.font-size]="25 * resolution"
+          [attr.x]="radius * resolution"
+          [attr.y]="radius * resolution"
+          text-anchor="middle"
+          alignment-baseline="middle"
+          fill="red"> {{ totalWorkedTime }} </text>
   </svg>
 </div>

@@ -31,7 +31,7 @@ interface PathData {
 })
 export class TimeGaugeComponent implements OnInit {
   @Input()
-  resolution = 1000;
+  resolution = 1;
   @Input()
   strokeWidth = 10;
   @Input()
@@ -51,17 +51,18 @@ export class TimeGaugeComponent implements OnInit {
   @Input()
   set day(day: Day) {
     this._day = day;
-
     this.clear();
 
     if (day) {
       this.plotDay();
+      this.totalWorkedTime = this.day.getFormattedTotalTime();
     }
   }
 
   radius = 50;
   boxDimesion = 100;
   innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
+  totalWorkedTime = '';
 
   private centerXY = 50;
 
@@ -113,6 +114,7 @@ export class TimeGaugeComponent implements OnInit {
    */
   private clear(): void {
     this.pathData = [];
+    this.totalWorkedTime = '';
   }
 
   /**
@@ -124,16 +126,17 @@ export class TimeGaugeComponent implements OnInit {
     for (let i = 0; i < checkings.length; i += 2) {
       const startChecking = checkings[i];
       const startTime = startChecking.dateTime;
+      const isStartDirectionIn =
+        startChecking.direction === CheckingDirection.In;
       let classToApply: string = '';
       let endTime: Date;
 
       if (i + 1 < checkings.length) {
         endTime = checkings[i + 1].dateTime;
-        classToApply =
-          startChecking.direction === CheckingDirection.In
-            ? this.workingTimeClass
-            : this.restingTimeClass;
-      } else if (startChecking.direction === CheckingDirection.In) {
+        classToApply = isStartDirectionIn
+          ? this.workingTimeClass
+          : this.restingTimeClass;
+      } else if (isStartDirectionIn && this.day.isToday()) {
         endTime = new Date();
         classToApply = this.workingTimeClass;
       } else {

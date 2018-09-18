@@ -14,4 +14,8 @@
   &__resting-time {
     stroke: $time-gauge-resting-color;
   }
+
+  &__working-time-text {
+    fill: $time-gauge-working-color;
+  }
 }

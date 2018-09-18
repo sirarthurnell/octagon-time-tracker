@@ -91,6 +91,20 @@ export class Day {
   }
 
   /**
+   * Checks if the day specified is the current day.
+   * @param day Day to check.
+   */
+  isToday(): boolean {
+    const today = new Date();
+
+    return (
+      this.yearNumber === today.getFullYear() &&
+      this.monthNumber === today.getMonth() &&
+      this.dayNumber === today.getDate()
+    );
+  }
+
+  /**
    * Gets the formatted total time.
    */
   getFormattedTotalTime(): string {

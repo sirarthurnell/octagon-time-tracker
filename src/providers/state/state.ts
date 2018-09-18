@@ -115,11 +115,7 @@ export class StateProvider {
    * @param day Day to check.
    */
   isToday(day: Day): boolean {
-    return (
-      day.yearNumber === this.TODAY.getFullYear() &&
-      day.monthNumber === this.TODAY.getMonth() &&
-      day.dayNumber === this.TODAY.getDate()
-    );
+    return day.isToday();
   }
 
   /**
