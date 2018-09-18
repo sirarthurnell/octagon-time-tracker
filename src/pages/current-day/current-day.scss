@@ -19,7 +19,8 @@
 .button-in,
 .button-out {
   position: absolute;
-  bottom: 25%;
+  bottom: 10vmin;
+  width: 35vmin;
 
   @media screen and (orientation: landscape) {
     bottom: 50%;
@@ -28,9 +29,9 @@
 }
 
 .button-in {
-  right: 10%;
+  right: 5%;
 }
 
 .button-out {
-  left: 10%;
+  left: 5%;
 }
