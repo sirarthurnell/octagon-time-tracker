@@ -6,12 +6,8 @@
   align-items: center;
   height: $previous-next-height;
 
-  &__previous {
-    justify-self: flex-start;
-  }
-
-  &__next {
-    justify-self: flex-end;
+  &__text {
+    width: 50%;
   }
 }
 
