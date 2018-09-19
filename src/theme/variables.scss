@@ -1,3 +1,5 @@
+@import '../scss/colors';
+
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
@@ -38,7 +40,10 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  accent:       $application-info-light,
+  working-time: $working-time,
+  resting-time: $resting-time
 );
 
 

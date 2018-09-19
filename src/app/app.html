@@ -1,7 +1,7 @@
 <ion-menu [content]="navigation" [persistent]="true">
   <ion-header>
-    <ion-toolbar>
-      <ion-title>Octagon time tracker</ion-title>
+    <ion-toolbar color="accent">
+      <ion-title>Octagon Time Tracker</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -9,9 +9,33 @@
       <ion-list-header>
         Time
       </ion-list-header>
-      <button ion-item menuClose (click)="navigateTo(page)" *ngFor="let page of pages">
-        <ion-icon [name]="page.icon" item-start></ion-icon>
-        {{ page.caption }}
+      <button ion-item menuClose (click)="navigateTo('MockPage')">
+        <ion-icon [name]="'settings'" item-start></ion-icon>
+        <ion-label>Mock</ion-label>
+      </button>
+      <button ion-item menuClose (click)="navigateTo('CurrentDayPage')">
+        <ion-icon [name]="'timer'" item-start></ion-icon>
+        <ion-label>Today</ion-label>
+      </button>
+      <button ion-item menuClose (click)="navigateTo('DayPage')">
+        <ion-icon [name]="'clock'" item-start></ion-icon>
+        <ion-label>Day</ion-label>
+        <ion-note item-end color="accent">{{ currentDayLabel }}</ion-note>
+      </button>
+      <button ion-item menuClose (click)="navigateTo('WeekPage')">
+        <ion-icon [name]="'calendar'" item-start></ion-icon>
+        <ion-label>Week</ion-label>
+        <ion-note item-end color="accent">{{ currentWeekLabel }}</ion-note>
+      </button>
+      <button ion-item menuClose (click)="navigateTo('MonthPage')">
+        <ion-icon [name]="'calendar'" item-start></ion-icon>
+        <ion-label>Month</ion-label>
+        <ion-note item-end color="accent">{{ currentMonthLabel }}</ion-note>
+      </button>
+      <button ion-item menuClose (click)="navigateTo('YearPage')">
+        <ion-icon [name]="'calendar'" item-start></ion-icon>
+        <ion-label>Year</ion-label>
+        <ion-note item-end color="accent">{{ currentYearLabel }}</ion-note>
       </button>
     </ion-list>
   </ion-content>

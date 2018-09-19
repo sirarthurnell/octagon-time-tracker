@@ -20,13 +20,24 @@ export class StateChanged {
   week: Week;
   day: Day;
 
+  /**
+   * Checks if the change is an empty one.
+   */
+  isEmpty(): boolean {
+    return !!!(this.year && this.month && this.week && this.week);
+  }
+
+  /**
+   * Creates an empty state.
+   */
   static empty(): StateChanged {
-    return {
-      year: null,
-      month: null,
-      week: null,
-      day: null
-    };
+    const emptyState = new StateChanged();
+    emptyState.year = null;
+    emptyState.month = null;
+    emptyState.week = null;
+    emptyState.day = null;
+
+    return emptyState;
   }
 }
 
@@ -360,12 +371,12 @@ export class StateProvider {
    * Emits a change in the state.
    */
   private emitChange(): StateChanged {
-    const newState: StateChanged = {
-      year: this._yearSnapshot,
-      month: this._monthSnapshot,
-      week: this._weekSnapshot,
-      day: this._daySnapshot
-    };
+    const newState = new StateChanged();
+
+    newState.year = this._yearSnapshot;
+    newState.month = this._monthSnapshot;
+    newState.week = this._weekSnapshot;
+    newState.day = this._daySnapshot;
 
     this._changeSubject.next(newState);
     return newState;
