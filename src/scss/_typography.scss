@@ -7,6 +7,11 @@
   background-color: $current-point-time-background-color !important;
   color: $current-point-time-color !important;
 
+  &--lighter {
+    background-color: lighten($current-point-time-background-color, 30%) !important;
+    color: $current-point-time-color !important;
+  }
+
   &--inverted {
     background-color: transparent;
     color: $current-point-time-background-color;
@@ -17,7 +22,11 @@
   Selected day.
 */
 .selected-day {
-  background-color: lighten($touch-link-background-color, 7.5%);
+  background-color: lighten($touch-link-background-color, 7.5%) !important;
+
+  &--darker {
+    background-color: darken($touch-link-background-color, 7.5%) !important;
+  }
 }
 
 /*

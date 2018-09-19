@@ -44,7 +44,7 @@
             class="month__week">
           <td *ngFor="let day of week.days"
               class="month__day"
-              [style.background]="!day.isToday() ? getDayBackgroundGradient(day) : ''"
+              [style.background]="!day.isToday() && !isSelectedDay(day) ? getDayBackgroundGradient(day) : ''"
               [class.sunday]="day.isSunday()"
               [class.saturday]="day.isSaturday()"
               [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"

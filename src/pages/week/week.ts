@@ -42,7 +42,7 @@ export class WeekPage {
     this.changeSubscription.unsubscribe();
   }
 
-    /**
+  /**
    * Sets the previous week.
    */
   setPrevious(): void {
@@ -90,5 +90,14 @@ export class WeekPage {
    */
   isToday(day: Day): boolean {
     return this.state.isToday(day);
+  }
+
+  /**
+   * Checks if the day specified is the day
+   * selected by the user.
+   * @param day Day to check.
+   */
+  isSelectedDay(day: Day): boolean {
+    return this.state.isSelectedDay(day);
   }
 }

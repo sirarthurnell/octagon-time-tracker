@@ -41,6 +41,8 @@
           <a href="javascript:void(0)"
              (click)="showDay(day)"
              class="touch-link week-graph__bar"
+             [class.selected-day--darker]="!day.isToday() && isSelectedDay(day)"
+             [class.current-time--lighter]="day.isToday()"
              [style.height]="day.getTotalTimeAsPercent() + '%'"
              *ngFor="let day of week.days">
 
