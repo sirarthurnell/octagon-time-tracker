@@ -40,6 +40,16 @@ export class TimeGaugeComponent implements OnInit {
   restingTimeClass = 'time-gauge__resting-time';
 
   /**
+   * Placeholder color for error conditions.
+   */
+  private readonly errorColor = 'rgba(255, 0, 0, 0.25)';
+
+  /**
+   * Normal placeholder color.
+   */
+  private readonly normalColor = 'rgba(0, 0, 0, 0.075)';
+
+  /**
    * Gets or sets the day to plot.
    */
   private _day: Day;
@@ -63,6 +73,7 @@ export class TimeGaugeComponent implements OnInit {
   boxDimesion = 100;
   innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
   totalWorkedTime = '';
+  placeholderColor = this.normalColor;
 
   private centerXY = 50;
 
@@ -77,30 +88,7 @@ export class TimeGaugeComponent implements OnInit {
     } else {
       this.clear();
     }
-
-    //this.plotOneHour();
   }
-
-  /**
-   * Plots only one hour (in order to show
-   * something when there's no day set).
-   */
-  // private plotOneHour(): void {
-  //   const today = new Date();
-  //   const midnight = new Date(
-  //     today.getFullYear(),
-  //     today.getMonth(),
-  //     today.getDate(),
-  //     0,
-  //     0,
-  //     0,
-  //     0
-  //   );
-  //   const midnightPlusOneHour = new Date(midnight.valueOf());
-  //   midnightPlusOneHour.setHours(1);
-
-  //   this.plotTime(midnight, midnightPlusOneHour, this.workingTimeClass);
-  // }
 
   /**
    * Perform a refresh.
@@ -115,6 +103,7 @@ export class TimeGaugeComponent implements OnInit {
   private clear(): void {
     this.pathData = [];
     this.totalWorkedTime = '';
+    this.placeholderColor = this.normalColor;
   }
 
   /**
@@ -122,12 +111,14 @@ export class TimeGaugeComponent implements OnInit {
    */
   private plotDay(): void {
     const checkings = TimeCalculation.adjustCheckings(this.day);
+    const now = new Date();
 
     for (let i = 0; i < checkings.length; i += 2) {
       const startChecking = checkings[i];
       const startTime = startChecking.dateTime;
       const isStartDirectionIn =
         startChecking.direction === CheckingDirection.In;
+      const nowOlderThanStartChecking = now.valueOf() > startTime.valueOf();
       let classToApply: string = '';
       let endTime: Date;
 
@@ -136,15 +127,27 @@ export class TimeGaugeComponent implements OnInit {
         classToApply = isStartDirectionIn
           ? this.workingTimeClass
           : this.restingTimeClass;
-      } else if (isStartDirectionIn && this.day.isToday()) {
-        endTime = new Date();
+      } else if (
+        isStartDirectionIn &&
+        this.day.isToday() &&
+        nowOlderThanStartChecking
+      ) {
+        endTime = now;
         classToApply = this.workingTimeClass;
       } else {
+        this.indicateError();
         return;
       }
 
       this.plotTime(startTime, endTime, classToApply);
     }
+  }
+
+  /**
+   * Indicates an error using the placeholder.
+   */
+  private indicateError(): void {
+    this.placeholderColor = this.errorColor;
   }
 
   /**

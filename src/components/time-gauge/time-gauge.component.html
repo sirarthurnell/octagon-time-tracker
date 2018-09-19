@@ -6,9 +6,9 @@
         <stop [attr.offset]="innerGradientStart + '%'"
               stop-color="transparent" />
         <stop [attr.offset]="innerGradientStart + '%'"
-              stop-color="rgba(0, 0, 0, 0.075)" />
+              [attr.stop-color]="placeholderColor" />
         <stop offset="100%"
-              stop-color="rgba(0, 0, 0, 0.075)" />
+              [attr.stop-color]="placeholderColor" />
       </radialGradient>
     </defs>
     <circle fill="url(#inset)"
@@ -26,7 +26,6 @@
           [attr.x]="radius * resolution"
           [attr.y]="radius * resolution"
           text-anchor="middle"
-          alignment-baseline="middle"
-          fill="red"> {{ totalWorkedTime }} </text>
+          alignment-baseline="middle"> {{ totalWorkedTime }} </text>
   </svg>
 </div>
