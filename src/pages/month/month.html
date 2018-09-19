@@ -48,8 +48,8 @@
               [class.sunday]="day.isSunday()"
               [class.saturday]="day.isSaturday()"
               [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"
-              [class.selected-day]="isSelectedDay(day) && !week.isFromPreviusNextMonth(day)"
-              [class.current-time]="day.isToday()">
+              [class.current-time]="day.isToday()"
+              [class.selected-day]="!day.isToday() && isSelectedDay(day) && !week.isFromPreviusNextMonth(day)">
 
             <!-- Day link -->
             <a href="javascript:void(0)"
