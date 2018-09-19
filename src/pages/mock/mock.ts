@@ -8,11 +8,12 @@ import { Week } from '../../models/time/week';
 import { ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
 import { Month } from '../../models/time/month';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { ExportProvider } from '../../providers/export/export';
 
 @IonicPage()
 @Component({
   selector: 'page-mock',
-  templateUrl: 'mock.html',
+  templateUrl: 'mock.html'
 })
 export class MockPage {
   private readonly MONTHS_IN_YEAR = 12;
@@ -21,8 +22,12 @@ export class MockPage {
   storableMonths: StorableMonth[] = [];
   weeks: Week[] = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private timeStorageProvider: TimeStorageProvider) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private timeStorageProvider: TimeStorageProvider,
+    private exportProvider: ExportProvider
+  ) {}
 
   ionViewDidLoad() {
     this.showOneMonth();
@@ -35,7 +40,9 @@ export class MockPage {
   private showOneYear(): void {
     Year.getYear(this.timeStorageProvider, 2018).subscribe(year => {
       this.year = year;
-      this.storableMonths = this.year.months.map(month => StorableMonth.toStorable(month));
+      this.storableMonths = this.year.months.map(month =>
+        StorableMonth.toStorable(month)
+      );
       this.weeks = this.year.months[0].weeks;
     });
   }
@@ -78,5 +85,30 @@ export class MockPage {
 
     const months$ = forkJoin(months);
     return months$;
+  }
+
+  /**
+   * Export data to an Excel file.
+   */
+  exportToExcel(): void {
+    const json: any = [
+      {
+        eid: 'e101',
+        ename: 'ravi',
+        esal: 1000
+      },
+      {
+        eid: 'e102',
+        ename: 'ram',
+        esal: 2000
+      },
+      {
+        eid: 'e103',
+        ename: 'rajesh',
+        esal: 3000
+      }
+    ];
+
+    this.exportProvider.exportToExcelFile('mock-data', json);
   }
 }

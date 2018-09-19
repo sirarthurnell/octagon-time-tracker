@@ -50,4 +50,10 @@
   <!-- JSON -->
   <div>Results JSON:</div>
   <div> {{ storableMonths | json }} </div>
+
+  <hr>
+
+  <!-- Export -->
+  <h1>Export:</h1>
+  <button ion-button (click)="exportToExcel()">Export to Excel file</button>
 </ion-content>

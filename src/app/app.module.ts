@@ -5,11 +5,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 import { MyApp } from './app.component';
 import { SettingsProvider } from '../providers/settings/settings';
 import { StateProvider } from '../providers/state/state';
 import { TimeStorageProvider } from '../providers/time-storage/time-storage';
+import { ExportProvider } from '../providers/export/export';
 
 @NgModule({
   declarations: [
@@ -28,10 +30,12 @@ import { TimeStorageProvider } from '../providers/time-storage/time-storage';
     StatusBar,
     SplashScreen,
     ScreenOrientation,
+    EmailComposer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SettingsProvider,
     StateProvider,
-    TimeStorageProvider
+    TimeStorageProvider,
+    ExportProvider
   ]
 })
 export class AppModule {}
