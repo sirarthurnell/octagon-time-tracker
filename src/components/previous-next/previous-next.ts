@@ -186,39 +186,41 @@ export class PreviousNextComponent {
    * Emits the previous event.
    */
   emitPrevious(): void {
-    this.createAndPresentLoaderIfConfigured();
+    this.createAndPresentLoaderIfConfigured().then(() => {
+      if (this.enableAnimations && !this.animationInProgress) {
+        this.prepareAnimation();
+      }
 
-    if (this.enableAnimations && !this.animationInProgress) {
-      this.prepareAnimation();
-    }
-
-    this.previous.emit();
+      this.previous.emit();
+    });
   }
 
   /**
    * Emits the next event.
    */
   emitNext(): void {
-    this.createAndPresentLoaderIfConfigured();
+    this.createAndPresentLoaderIfConfigured().then(() => {
+      if (this.enableAnimations && !this.animationInProgress) {
+        this.prepareAnimation();
+      }
 
-    if (this.enableAnimations && !this.animationInProgress) {
-      this.prepareAnimation();
-    }
-
-    this.next.emit();
+      this.next.emit();
+    });
   }
 
   /**
    * Creates and shows a loader.
    */
-  private createAndPresentLoaderIfConfigured(): void {
+  private createAndPresentLoaderIfConfigured(): Promise<void> {
     if (this.showLoader) {
       this.loading = this.loadingCtrl.create({
         content: 'Please wait...',
         showBackdrop: false
       });
 
-      this.loading.present();
+      return this.loading.present();
+    } else {
+      return Promise.resolve();
     }
   }
 
