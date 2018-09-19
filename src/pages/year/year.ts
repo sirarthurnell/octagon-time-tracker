@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { create2dArray } from '../../models/array/array-extensions';
@@ -33,6 +33,7 @@ export class YearPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public loadingCtrl: LoadingController,
     private screenOrientation: ScreenOrientation,
     private state: StateProvider
   ) {}
@@ -61,9 +62,13 @@ export class YearPage {
    * Sets the previous year.
    */
   setPrevious(): void {
+    let loading = this.createAndPresentLoader();
+
     this.state.setPreviousYear().subscribe(change => {
       this.year = change.year;
       this.previousNext.animatePrevious();
+
+      loading.dismiss();
     });
   }
 
@@ -71,10 +76,27 @@ export class YearPage {
    * Sets the next year.
    */
   setNext(): void {
+    let loading = this.createAndPresentLoader();
+
     this.state.setNextYear().subscribe(change => {
       this.year = change.year;
       this.previousNext.animateNext();
+
+      loading.dismiss();
     });
+  }
+
+  /**
+   * Creates and shows a loader.
+   */
+  private createAndPresentLoader(): Loading {
+    let loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+      showBackdrop: false
+    });
+
+    loading.present();
+    return loading;
   }
 
   /**
