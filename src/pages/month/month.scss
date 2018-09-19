@@ -1,13 +1,15 @@
+$month-border-color: $application-interaction;
+
 .month {
   border: none;
   text-align: center;
   text-transform: uppercase;
   margin: 0;
   width: 100%;
-  height: 100%;
+  height: 75%;
 
   &__week {
-    border: none;
+    border: 1px solid $month-border-color;
   }
 
   &__day-of-week{
@@ -15,7 +17,7 @@
   }
 
   &__day {
-    border: none;
+    border: 1px solid $month-border-color;
 
     &--saturday {
       color: $saturday-color;

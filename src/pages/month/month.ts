@@ -107,8 +107,6 @@ export class MonthPage {
       CssVariables.workingTimeColor
     } ${height}%, transparent ${height}%, transparent 100%)`;
 
-    console.log(gradient);
-
     return gradient;
   }
 }

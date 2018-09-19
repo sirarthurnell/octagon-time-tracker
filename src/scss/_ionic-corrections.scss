@@ -2,3 +2,18 @@
   Ionic's default margin top.
 */
 $ionic-margin-top: 16px;
+
+/*
+  Full width, 1/4 height Ionic card.
+*/
+.corrected-card {
+  width: 100%;
+  margin: 0;
+  margin-top: $ionic-margin-top;
+  height: calc(25% - #{$ionic-margin-top});
+
+  & ion-card-content {
+    height: 100%;
+    overflow-y: auto;
+  }
+}
