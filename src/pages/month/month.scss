@@ -1,18 +1,25 @@
 $month-border-color: $application-interaction;
 
 .month {
+  height: 100%;
   border: none;
-  text-align: center;
-  text-transform: uppercase;
   margin: 0;
-  width: 100%;
-  height: 75%;
+  padding: 0;
+
+  &__table {
+    border: none;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+    width: 100%;
+    height: 75%;
+  }
 
   &__week {
     border: 1px solid $month-border-color;
   }
 
-  &__day-of-week{
+  &__day-of-week {
     opacity: 0.5;
   }
 

@@ -21,57 +21,68 @@
                  [textClass]="month.isThisMonth() ? 'current-time--inverted' : ''">
 
 
-    <!-- Month -->
-    <table class="month">
+
+    <!-- Previous/next wants only one direct child -->
+    <div class="month-page">
 
 
-      <!-- Day of week names -->
-      <tr>
-        <td *ngFor="let dayOfWeek of getDaysOfWeek()"
-            class="month__day-of-week"
-            [class.sunday]="dayOfWeek.type == 'sunday'"
-            [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
-      </tr>
+      <!-- Month -->
+      <table class="month__table">
 
 
-      <!-- Actual day number -->
-      <tr *ngFor="let week of month.weeks"
-          class="month__week">
-        <td *ngFor="let day of week.days"
-            class="month__day"
-            [style.background]="!day.isToday() ? getDayBackgroundGradient(day) : ''"
-            [class.sunday]="day.isSunday()"
-            [class.saturday]="day.isSaturday()"
-            [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"
-            [class.selected-day]="isSelectedDay(day) && !week.isFromPreviusNextMonth(day)"
-            [class.current-time]="day.isToday()">
-
-          <!-- Day link -->
-          <a href="javascript:void(0)"
-             (click)="showDay(day)"
-             class="touch-link">
-            {{ day.dayNumber }}
-          </a>
+        <!-- Day of week names -->
+        <tr>
+          <td *ngFor="let dayOfWeek of getDaysOfWeek()"
+              class="month__day-of-week"
+              [class.sunday]="dayOfWeek.type == 'sunday'"
+              [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+        </tr>
 
 
-        </td>
-      </tr>
+        <!-- Actual day number -->
+        <tr *ngFor="let week of month.weeks"
+            class="month__week">
+          <td *ngFor="let day of week.days"
+              class="month__day"
+              [style.background]="!day.isToday() ? getDayBackgroundGradient(day) : ''"
+              [class.sunday]="day.isSunday()"
+              [class.saturday]="day.isSaturday()"
+              [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"
+              [class.selected-day]="isSelectedDay(day) && !week.isFromPreviusNextMonth(day)"
+              [class.current-time]="day.isToday()">
+
+            <!-- Day link -->
+            <a href="javascript:void(0)"
+               (click)="showDay(day)"
+               class="touch-link">
+              {{ day.dayNumber }}
+            </a>
 
 
-    </table>
+          </td>
+        </tr>
 
 
-    <!-- Statistics -->
-    <ion-card class="corrected-card">
+      </table>
 
-      <ion-card-content>
-        Some statistics...
-      </ion-card-content>
 
-    </ion-card>
+      <!-- Statistics -->
+      <ion-card class="corrected-card">
+
+        <ion-card-content>
+          Some statistics...
+        </ion-card-content>
+
+      </ion-card>
+
+
+
+    </div>
+
 
 
   </previous-next>
+
 
 
 </ion-content>
