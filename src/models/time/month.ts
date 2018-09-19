@@ -1,15 +1,15 @@
-import { Day } from './day';
-import { Checking } from './checking';
-import { create2dArray } from '../array/array-extensions';
-import { DateOperations } from './date-operations';
-import { DayOfWeek } from './day-of-week';
-import { Week } from './week';
-import { TimeCalculation } from './time-calculation';
 import * as moment from 'moment';
-import { DayInfo } from './day-info';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { MONTH_NAMES } from '../../text-items/months';
+import { create2dArray } from '../array/array-extensions';
+import { Checking } from './checking';
+import { DateOperations } from './date-operations';
+import { Day } from './day';
+import { DayInfo } from './day-info';
+import { DayOfWeek } from './day-of-week';
+import { TimeCalculation } from './time-calculation';
+import { Week } from './week';
 
 /**
  * Represents a month.
@@ -70,7 +70,7 @@ export class Month {
    */
   get checkings(): Checking[] {
     let checkings = [] as Checking[];
-    this.days.forEach(day => checkings = checkings.concat(day.checkings));
+    this.days.forEach(day => (checkings = checkings.concat(day.checkings)));
     return checkings;
   }
 
@@ -164,7 +164,9 @@ export class Month {
     const firstDayCurrentMonth = this.days[0];
 
     if (this.previous) {
-      const lastDayPreviousMonth = this.previous.days[this.previous.days.length - 1];
+      const lastDayPreviousMonth = this.previous.days[
+        this.previous.days.length - 1
+      ];
       firstDayCurrentMonth.previous = lastDayPreviousMonth;
     } else {
       firstDayCurrentMonth.previous = undefined;
@@ -308,11 +310,53 @@ export class Month {
   }
 
   /**
+   * Gets the formatted total time.
+   */
+  getFormattedWorkedAverageTime(): string {
+    return moment
+      .utc(this.calculateWorkedAverageTime().as('milliseconds'))
+      .format('HH:mm');
+  }
+
+  /**
+   * Calculates the worked average time per day worked.
+   */
+  calculateWorkedAverageTime(): moment.Duration {
+    const workedDays = this.days.filter(day => day.isWorked());
+
+    if (workedDays.length > 0) {
+      const average = Math.floor(
+        this.calculateTotalTime().as('milliseconds') / workedDays.length
+      );
+
+      return moment.duration(average);
+    } else {
+      return moment.duration();
+    }
+  }
+
+  /**
+   * Gets the formatted total time.
+   */
+  getFormattedWorkedTotalTime(): string {
+    return moment
+      .utc(this.calculateTotalTime().as('milliseconds'))
+      .format('HHH:mm');
+  }
+
+  /**
    * Calculates the total time worked
    * during the current day.
    */
   calculateTotalTime(): moment.Duration {
     return TimeCalculation.sumDaysDuration(this.days);
+  }
+
+  /**
+   * Counts the days worked.
+   */
+  getDaysWorkedCount(): number {
+    return this.days.filter(day => day.isWorked()).length;
   }
 
   /**

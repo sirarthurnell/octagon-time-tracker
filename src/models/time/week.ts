@@ -89,12 +89,8 @@ export class Week {
    */
   calculateWorkedAverageTime(): moment.Duration {
     if (this.isWorked()) {
-      const workedDays = this.days.filter(
-        day => day.calculateTotalTime().as('milliseconds') > 0
-      );
-
       const average = Math.floor(
-        this.calculateTotalTime().as('milliseconds') / workedDays.length
+        this.calculateTotalTime().as('milliseconds') / this.getDaysWorkedCount()
       );
 
       return moment.duration(average);
@@ -104,10 +100,30 @@ export class Week {
   }
 
   /**
+   * Gets the number of days worked.
+   */
+  getDaysWorkedCount(): number {
+    const workedDays = this.days.filter(
+      day => day.isWorked()
+    );
+
+    return workedDays.length;
+  }
+
+  /**
    * This week was worked.
    */
   isWorked(): boolean {
     return this.calculateTotalTime().as('milliseconds') > 0;
+  }
+
+  /**
+   * Gets the formatted total time.
+   */
+  getFormattedWorkedTotalTime(): string {
+    return moment
+      .utc(this.calculateTotalTime().as('milliseconds'))
+      .format('HHH:mm');
   }
 
   /**

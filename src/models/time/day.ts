@@ -121,6 +121,13 @@ export class Day {
   }
 
   /**
+   * This week was worked.
+   */
+  isWorked(): boolean {
+    return this.calculateTotalTime().as('milliseconds') > 0;
+  }
+
+  /**
    * Saves the checkings of the day.
    * @param timeStorageProvider Storage.
    */

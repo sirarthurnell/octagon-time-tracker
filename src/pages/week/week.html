@@ -77,7 +77,24 @@
       <ion-card class="corrected-card">
 
         <ion-card-content>
-          Some statistics...
+
+          <table class="statistics">
+            <tr>
+              <td rowspan="3"
+                  class="statistics__title">Statistics</td>
+              <td class="statistics__label">Total</td>
+              <td>{{ week.getFormattedWorkedTotalTime() }}</td>
+            </tr>
+            <tr>
+              <td class="statistics__label">Average / day</td>
+              <td>{{ week.getFormattedWorkedAverageTime() }}</td>
+            </tr>
+            <tr>
+              <td class="statistics__label">Days worked</td>
+              <td>{{ week.getDaysWorkedCount() }}</td>
+            </tr>
+          </table>
+
         </ion-card-content>
 
       </ion-card>

@@ -23,7 +23,7 @@
 
 
     <!-- Previous/next wants only one direct child -->
-    <div class="month-page">
+    <div class="month">
 
 
       <!-- Month -->
@@ -70,7 +70,24 @@
       <ion-card class="corrected-card">
 
         <ion-card-content>
-          Some statistics...
+
+          <table class="statistics">
+            <tr>
+              <td rowspan="3"
+                  class="statistics__title">Statistics</td>
+              <td class="statistics__label">Total</td>
+              <td>{{ month.getFormattedWorkedTotalTime() }}</td>
+            </tr>
+            <tr>
+              <td class="statistics__label">Average / day</td>
+              <td>{{ month.getFormattedWorkedAverageTime() }}</td>
+            </tr>
+            <tr>
+              <td class="statistics__label">Days worked</td>
+              <td>{{ month.getDaysWorkedCount() }}</td>
+            </tr>
+          </table>
+
         </ion-card-content>
 
       </ion-card>
