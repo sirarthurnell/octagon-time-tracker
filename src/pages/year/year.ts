@@ -1,14 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { StateProvider } from '../../providers/state/state';
-import { Year } from '../../models/time/year';
-import { Subscription } from 'rxjs';
-import { Month } from '../../models/time/month';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { create2dArray } from '../../models/array/array-extensions';
-import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
-import { Day } from '../../models/time/day';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
+import { create2dArray } from '../../models/array/array-extensions';
+import { Month } from '../../models/time/month';
+import { Year } from '../../models/time/year';
+import { StateProvider } from '../../providers/state/state';
+import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
+import { Day } from '../../models/time/day';
+import { CssVariables } from '../../models/css/CssVariables';
 
 /**
  * Shows info about the specified year.
@@ -116,26 +117,17 @@ export class YearPage {
   }
 
   /**
-   * Checks if the day specified is the current day.
-   * @param day Day to check.
+   * Gets the corresponding background color
+   * of the specified day calculated based on
+   * its worked time.
+   * @param day Day.
    */
-  isToday(day: Day): boolean {
-    return this.state.isToday(day);
-  }
+  getDayBackgroundColor(day: Day): string {
+    const timeAsPercent = day.getTotalTimeAsPercent();
+    const opacity = Math.floor((timeAsPercent / 100) * 255);
+    const opacityAsHex = opacity.toString(16);
+    const backgroundColor = CssVariables.workingTimeColor + opacityAsHex;
 
-  /**
-   * Checks if the month specified is the current month.
-   * @param month Month to check.
-   */
-  isThisMonth(month: Month): boolean {
-    return this.state.isThisMonth(month);
-  }
-
-  /**
-   * Checks if the year specified is the current year.
-   * @param year Year to check.
-   */
-  isThisYear(year: Year): boolean {
-    return this.state.isThisYear(year);
+    return backgroundColor;
   }
 }

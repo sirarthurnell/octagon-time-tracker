@@ -1,5 +1,7 @@
-@import './colors';
-@import './typography';
-@import './touch-link';
-@import './ionic-corrections';
-@import './previous-next';
+/*
+  CSS variables.
+*/
+:root {
+  --working-time-color: #{$working-time};
+  --resting-time-color: #{$resting-time};
+}

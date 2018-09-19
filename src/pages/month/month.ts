@@ -6,6 +6,7 @@ import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
+import { CssVariables } from '../../models/css/CssVariables';
 
 /**
  * Shows info about the specified month.
@@ -85,26 +86,29 @@ export class MonthPage {
   }
 
   /**
-   * Checks if the actual month is the current month.
-   */
-  isThisMonth(): boolean {
-    return this.state.isThisMonth(this.month);
-  }
-
-  /**
-   * Checks if the day specified is the current day.
-   * @param day Day to check.
-   */
-  isToday(day: Day): boolean {
-    return this.state.isToday(day);
-  }
-
-  /**
    * Checks if the day specified is the day
    * selected by the user.
    * @param day Day to check.
    */
   isSelectedDay(day: Day): boolean {
     return this.state.isSelectedDay(day);
+  }
+
+  /**
+   * Gets the corresponding background color
+   * of the specified day calculated based on
+   * its worked time.
+   * @param day Day.
+   */
+  getDayBackgroundGradient(day: Day): string {
+    const timeAsPercent = day.getTotalTimeAsPercent();
+    const height = Math.floor(timeAsPercent);
+    const gradient = `linear-gradient(to top, ${
+      CssVariables.workingTimeColor
+    } ${height}%, transparent ${height}%, transparent 100%)`;
+
+    console.log(gradient);
+
+    return gradient;
   }
 }

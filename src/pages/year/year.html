@@ -19,7 +19,7 @@
                  [text]="year.yearNumber"
                  (previous)="setPrevious()"
                  (next)="setNext()"
-                 [textClass]="isThisYear(year) ? 'current-time--inverted' : ''">
+                 [textClass]="year.isThisYear() ? 'current-time--inverted' : ''">
 
 
 
@@ -45,7 +45,7 @@
                 <tr>
                   <td colspan="7"
                       class="year-month__name"
-                      [class.current-time]="isThisMonth(month)">{{ getMonthName(month) }}</td>
+                      [class.current-time]="month.isThisMonth()">{{ getMonthName(month) }}</td>
                 </tr>
               </thead>
 
@@ -64,9 +64,10 @@
                   class="year-month__week">
                 <td *ngFor="let day of week.days"
                     class="year-month__day"
+                    [style.background-color]="getDayBackgroundColor(day)"
                     [class.sunday]="day.isSunday()"
                     [class.saturday]="day.isSaturday()"
-                    [class.current-time]="isToday(day)">
+                    [class.current-time]="day.isToday()">
                   {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
                 </td>
               </tr>
