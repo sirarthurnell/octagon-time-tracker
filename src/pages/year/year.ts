@@ -52,9 +52,7 @@ export class YearPage {
    * @param month Month to show.
    */
   showMonth(month: Month): void {
-    this.state
-      .setMonth(month)
-      .subscribe(_ => this.navCtrl.push('MonthPage'));
+    this.state.setMonth(month).subscribe(_ => this.navCtrl.push('MonthPage'));
   }
 
   /**

@@ -71,6 +71,13 @@ export class WeekPage {
   }
 
   /**
+   * Sets and shows today.
+   */
+  showToday(): void {
+    this.state.setToday();
+  }
+
+  /**
    * Gets the days of the week.
    */
   getDaysOfWeek(): DayOfWeek[] {
