@@ -6,9 +6,9 @@
         <stop [attr.offset]="innerGradientStart + '%'"
               stop-color="transparent" />
         <stop [attr.offset]="innerGradientStart + '%'"
-              [attr.stop-color]="placeholderColor" />
+              [attr.stop-color]="errorCondition ? errorColor : normalColor" />
         <stop offset="100%"
-              [attr.stop-color]="placeholderColor" />
+              [attr.stop-color]="errorCondition ? errorColor : normalColor" />
       </radialGradient>
     </defs>
     <circle fill="url(#inset)"
@@ -22,6 +22,7 @@
             [attr.d]="path.d" />
     </ng-container>
     <text class="time-gauge__working-time-text"
+          [class.time-gauge__working-time-text--blink]="blink"
           [attr.font-size]="25 * resolution"
           [attr.x]="radius * resolution"
           [attr.y]="radius * resolution"

@@ -1,35 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import * as moment from 'moment';
-import { ArcCommands } from '../../models/svg/arc-commands';
+import { Subscription } from 'rxjs';
+import { interval } from 'rxjs/observable/interval';
+import {
+  PathData,
+  TimeToSvgConverter
+} from '../../models/svg/time-to-svg-converter';
+import { CheckingDirection } from '../../models/time/checking';
 import { Day } from '../../models/time/day';
 import { TimeCalculation } from '../../models/time/time-calculation';
-import { CheckingDirection } from '../../models/time/checking';
-
-/**
- * Represents an interval between
- * two angles.
- */
-interface AngleInterval {
-  startAngle: number;
-  endAngle: number;
-}
-
-/**
- * Data for svg path.
- */
-interface PathData {
-  d: string;
-  className: string;
-}
 
 /**
  * Gauge that represents checkings over time.
  */
 @Component({
   selector: 'time-gauge',
-  templateUrl: 'time-gauge.component.html'
+  templateUrl: 'time-gauge.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimeGaugeComponent implements OnInit {
+export class TimeGaugeComponent implements OnInit, OnDestroy {
   @Input()
   resolution = 1;
   @Input()
@@ -38,16 +34,6 @@ export class TimeGaugeComponent implements OnInit {
   workingTimeClass = 'time-gauge__working-time';
   @Input()
   restingTimeClass = 'time-gauge__resting-time';
-
-  /**
-   * Placeholder color for error conditions.
-   */
-  private readonly errorColor = 'rgba(255, 0, 0, 0.25)';
-
-  /**
-   * Normal placeholder color.
-   */
-  private readonly normalColor = 'rgba(0, 0, 0, 0.075)';
 
   /**
    * Gets or sets the day to plot.
@@ -65,22 +51,17 @@ export class TimeGaugeComponent implements OnInit {
 
     if (day) {
       this.plotDay();
-      this.totalWorkedTime = this.day.getFormattedTotalTime();
     }
+
+    this.cd.detectChanges();
   }
-
-  radius = 50;
-  boxDimesion = 100;
-  innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
-  totalWorkedTime = '';
-  placeholderColor = this.normalColor;
-
-  private centerXY = 50;
 
   /**
    * Data of all the paths to draw.
    */
   pathData: PathData[] = [];
+
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (this.day) {
@@ -90,21 +71,22 @@ export class TimeGaugeComponent implements OnInit {
     }
   }
 
-  /**
-   * Perform a refresh.
-   */
-  refresh(): void {
-    this.day = this.day;
+  ngOnDestroy(): void {
+    this.stopBlinking();
   }
 
-  /**
-   * Clears the graph.
-   */
-  private clear(): void {
-    this.pathData = [];
-    this.totalWorkedTime = '';
-    this.placeholderColor = this.normalColor;
-  }
+  radius = 50;
+  boxDimesion = 100;
+  innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
+  totalWorkedTime = '';
+  blink = false;
+  errorCondition = false;
+  readonly errorColor = 'rgba(255, 0, 0, 0.25)';
+  readonly normalColor = 'rgba(0, 0, 0, 0.075)';
+
+  private centerXY = 50;
+  private blinkingSubscription: Subscription;
+  private timeToSvgConverter: TimeToSvgConverter;
 
   /**
    * Plots the stablished day.
@@ -112,6 +94,8 @@ export class TimeGaugeComponent implements OnInit {
   private plotDay(): void {
     const checkings = TimeCalculation.adjustCheckings(this.day);
     const now = new Date();
+
+    this.stopBlinking();
 
     for (let i = 0; i < checkings.length; i += 2) {
       const startChecking = checkings[i];
@@ -127,13 +111,16 @@ export class TimeGaugeComponent implements OnInit {
         classToApply = isStartDirectionIn
           ? this.workingTimeClass
           : this.restingTimeClass;
+        this.updateText();
       } else if (
         isStartDirectionIn &&
         this.day.isToday() &&
         nowOlderThanStartChecking
       ) {
         endTime = now;
+        this.updateTextWithNow();
         classToApply = this.workingTimeClass;
+        this.startBlinking();
       } else {
         this.indicateError();
         return;
@@ -144,10 +131,54 @@ export class TimeGaugeComponent implements OnInit {
   }
 
   /**
+   * Updates the time indicator only with the
+   * total time worked.
+   */
+  private updateText(): void {
+    this.totalWorkedTime = this.day.getFormattedTotalTime();
+  }
+
+  /**
+   * Updates the time indicator taking into account
+   * the time elapsed between the last checking and now.
+   */
+  private updateTextWithNow(): void {
+    const lastCheckingTime = this.day.getMostRecentChecking().dateTime;
+    const now = new Date();
+    const diff = moment(now).diff(lastCheckingTime);
+    const totalTime = this.day.calculateTotalTime().add(diff);
+    this.totalWorkedTime = moment
+      .utc(totalTime.as('milliseconds'))
+      .format('HH:mm');
+  }
+
+  /**
+   * Makes the time gauge blink.
+   */
+  private startBlinking(): void {
+    if (!this.blink) {
+      this.blink = true;
+
+      const blinking$ = interval(1000);
+      this.blinkingSubscription = blinking$.subscribe(_ => this.plotDay());
+    }
+  }
+
+  /**
+   * Makes the time gauge stop blinking.
+   */
+  private stopBlinking(): void {
+    if (this.blink) {
+      this.blinkingSubscription.unsubscribe();
+      this.blink = false;
+    }
+  }
+
+  /**
    * Indicates an error using the placeholder.
    */
   private indicateError(): void {
-    this.placeholderColor = this.errorColor;
+    this.errorCondition = true;
   }
 
   /**
@@ -157,74 +188,33 @@ export class TimeGaugeComponent implements OnInit {
    * @param className Class to apply to the time.
    */
   private plotTime(startTime: Date, endTime: Date, className: string): void {
-    const interval = this.calculateStartEndAngles(startTime, endTime);
-    const pathData = this.createPathData(interval, className);
+    const pathData = this.timeToSvgConverter.convertTime(
+      startTime,
+      endTime,
+      className
+    );
     this.pathData.push(pathData);
   }
 
   /**
-   * Calculates the start and end angle corresponding to
-   * the time interval specified.
-   * @param startTime Start time.
-   * @param endTime End time.
+   * Perform a refresh.
    */
-  private calculateStartEndAngles(
-    startTime: Date,
-    endTime: Date
-  ): AngleInterval {
-    const today = new Date();
-    const midnight = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      0,
-      0,
-      0,
-      0
-    );
-    const millisStart = moment.duration(
-      startTime.valueOf() - midnight.valueOf()
-    );
-    const millisEnd = moment.duration(endTime.valueOf() - midnight.valueOf());
-    const duration = millisEnd.subtract(millisStart);
-    const startAngle = this.durationToAngle(millisStart);
-    const endAngle = startAngle + this.durationToAngle(duration);
-
-    return {
-      startAngle,
-      endAngle
-    };
+  refresh(): void {
+    this.day = this.day;
   }
 
   /**
-   * Create the data to be consumed by a path.
-   * @param interval Angle interval.
-   * @param className CSS class to apply.
+   * Clears the graph.
    */
-  private createPathData(interval: AngleInterval, className: string): PathData {
-    const d = ArcCommands.createArcCommands(
-      this.centerXY * this.resolution,
-      this.centerXY * this.resolution,
-      this.radius * this.resolution - (this.strokeWidth * this.resolution) / 2,
-      interval.startAngle,
-      interval.endAngle
+  private clear(): void {
+    this.pathData = [];
+    this.totalWorkedTime = '';
+    this.errorCondition = false;
+    this.timeToSvgConverter = new TimeToSvgConverter(
+      this.centerXY,
+      this.radius,
+      this.strokeWidth,
+      this.resolution
     );
-
-    return {
-      d,
-      className
-    };
-  }
-
-  /**
-   * Calculates the corresponding angle of a duration
-   * within a day.
-   * @param duration Duration.
-   */
-  private durationToAngle(duration: moment.Duration): number {
-    const millisInOneDay = 24 * 60 * 60 * 1000;
-    const totalDegrees = 360;
-    const degrees = (totalDegrees * duration.asMilliseconds()) / millisInOneDay;
-    return degrees;
   }
 }

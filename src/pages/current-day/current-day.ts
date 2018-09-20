@@ -88,5 +88,13 @@ export class CurrentDayPage {
     this.day.save(this.storage);
 
     this.manageButtonsState();
+    this.refreshGauge();
+  }
+
+  /**
+   * Refreshes the gauge.
+   */
+  private refreshGauge(): void {
+    this.gauge.refresh();
   }
 }
