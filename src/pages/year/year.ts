@@ -1,6 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  PopoverController
+} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { create2dArray } from '../../models/array/array-extensions';
@@ -39,9 +44,9 @@ export class YearPage {
   ) {}
 
   ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(
-      change => (this.year = change.year)
-    );
+    this.changeSubscription = this.state.change$.subscribe(change => {
+      this.year = change.year;
+    });
   }
 
   ionViewWillUnload() {
@@ -130,7 +135,7 @@ export class YearPage {
     return backgroundColor;
   }
 
-    /**
+  /**
    * Shows the navigation popover.
    * @param event Event originated by the clicked
    * control.

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
+import { IonicPage, NavParams, ViewController } from 'ionic-angular';
 import * as moment from 'moment';
 import { ExportProvider } from '../../providers/export/export';
 import { StateProvider } from '../../providers/state/state';
@@ -24,10 +24,14 @@ export class TimePopoverPage {
 
   set dateToGo(isoDate: string) {
     this._dateToGo = new Date(Date.parse(isoDate));
-    this.state.setByDate(this._dateToGo);
+    this.state
+      .setByDate(this._dateToGo)
+      .take(1)
+      .subscribe(_ => this.close());
   }
 
   constructor(
+    private viewCtrl: ViewController,
     private navParams: NavParams,
     private exportProvider: ExportProvider,
     private state: StateProvider
@@ -41,8 +45,9 @@ export class TimePopoverPage {
   exportToExcel(): void {
     const json = this.getJson();
 
-    this.exportProvider
-      .sendExcelThroughEmail('mock-data', json);
+    this.exportProvider.sendExcelThroughEmail('mock-data', json);
+
+    this.close();
   }
 
   /**
@@ -56,5 +61,12 @@ export class TimePopoverPage {
     const json = formatter.format();
 
     return json;
+  }
+
+  /**
+   * Closes the popover.
+   */
+  private close(): void {
+    this.viewCtrl.dismiss();
   }
 }
