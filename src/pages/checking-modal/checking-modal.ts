@@ -15,9 +15,9 @@ import { Day } from '../../models/time/day';
 @IonicPage()
 @Component({
   selector: 'page-checking',
-  templateUrl: 'checking.html'
+  templateUrl: 'checking-modal.html'
 })
-export class CheckingPage {
+export class CheckingModalPage {
   title = 'Checking';
 
   checking: Checking;

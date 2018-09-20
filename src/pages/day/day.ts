@@ -143,7 +143,7 @@ export class DayPage {
    * Adds a new checking.
    */
   addChecking(): void {
-    const checkingPage = this.modalCtrl.create('CheckingPage', {
+    const checkingPage = this.modalCtrl.create('CheckingModalPage', {
       day: this.day
     });
     checkingPage.onDidDismiss(newChecking => {
@@ -163,7 +163,7 @@ export class DayPage {
    * @param checkingToEdit Checking to edit.
    */
   editChecking(slidingItem: ItemSliding, checkingToEdit: Checking): void {
-    const checkingPage = this.modalCtrl.create('CheckingPage', {
+    const checkingPage = this.modalCtrl.create('CheckingModalPage', {
       'edit-checking': checkingToEdit,
       day: this.day
     });
