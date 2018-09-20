@@ -1,11 +1,6 @@
-import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  PopoverController
-} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { create2dArray } from '../../models/array/array-extensions';
@@ -35,6 +30,7 @@ export class YearPage {
   year: Year;
 
   private changeSubscription: Subscription;
+  private orientationSubscription: Subscription;
 
   constructor(
     public navCtrl: NavController,
@@ -43,7 +39,11 @@ export class YearPage {
     public popoverCtrl: PopoverController,
     private cd: ChangeDetectorRef,
     private state: StateProvider
-  ) {}
+  ) {
+    this.orientationSubscription = this.screenOrientation
+      .onChange()
+      .subscribe(_ => this.cd.detectChanges());
+  }
 
   ionViewWillLoad() {
     this.changeSubscription = this.state.change$.subscribe(change => {
@@ -54,6 +54,7 @@ export class YearPage {
 
   ionViewWillUnload() {
     this.changeSubscription.unsubscribe();
+    this.orientationSubscription.unsubscribe();
   }
 
   /**
