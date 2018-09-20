@@ -68,8 +68,14 @@ export class TimeCalculation {
     if (correctedCheckings.length === 0) {
       return correctedCheckings;
     } else {
-      correctedCheckings = TimeCalculation.adjustBeginningOfDay(day, correctedCheckings);
-      correctedCheckings = TimeCalculation.adjustEndOfDay(day, correctedCheckings);
+      correctedCheckings = TimeCalculation.adjustBeginningOfDay(
+        day,
+        correctedCheckings
+      );
+      correctedCheckings = TimeCalculation.adjustEndOfDay(
+        day,
+        correctedCheckings
+      );
       return correctedCheckings;
     }
   }
@@ -79,14 +85,21 @@ export class TimeCalculation {
    * @param day Day.
    * @param correctedCheckings Corrected checkings so far.
    */
-  private static adjustEndOfDay(day: Day, correctedCheckings: Checking[]): Checking[] {
+  private static adjustEndOfDay(
+    day: Day,
+    correctedCheckings: Checking[]
+  ): Checking[] {
     const lastChecking = correctedCheckings[correctedCheckings.length - 1];
-    const isLastCheckingDirectionIn = lastChecking.direction === CheckingDirection.In;
-    const thereIsNextDayFirstChecking = day.next && day.next.checkings.length > 0;
+    const isLastCheckingDirectionIn =
+      lastChecking.direction === CheckingDirection.In;
+    const thereIsNextDayFirstChecking =
+      day.next && day.next.checkings.length > 0;
     const nextDayFirstChecking = thereIsNextDayFirstChecking
       ? TimeCalculation.orderAscending(day.next.checkings)[0]
       : null;
-    const isNextDayFirstCheckingDirectionOut = thereIsNextDayFirstChecking && nextDayFirstChecking.direction === CheckingDirection.Out;
+    const isNextDayFirstCheckingDirectionOut =
+      thereIsNextDayFirstChecking &&
+      nextDayFirstChecking.direction === CheckingDirection.Out;
     if (isLastCheckingDirectionIn && isNextDayFirstCheckingDirectionOut) {
       correctedCheckings.push(
         new Checking(
@@ -107,15 +120,18 @@ export class TimeCalculation {
     return correctedCheckings;
   }
 
-    /**
+  /**
    * Adjust the checkings at the beginning of the day.
    * @param day Day.
    * @param correctedCheckings Corrected checkings so far.
    */
-  private static adjustBeginningOfDay(day: Day, correctedCheckings: Checking[]): Checking[] {
+  private static adjustBeginningOfDay(
+    day: Day,
+    correctedCheckings: Checking[]
+  ): Checking[] {
     const firstChecking = correctedCheckings[0];
     const isFirstCheckingDirectionOut =
-    firstChecking.direction === CheckingDirection.Out;
+      firstChecking.direction === CheckingDirection.Out;
     const thereIsPreviousDayLastChecking =
       day.previous && day.previous.checkings.length > 0;
     const isPreviousDayLastCheckingDirectionIn = thereIsPreviousDayLastChecking
@@ -127,15 +143,7 @@ export class TimeCalculation {
     if (isFirstCheckingDirectionOut && isPreviousDayLastCheckingDirectionIn) {
       correctedCheckings.unshift(
         new Checking(
-          new Date(
-            day.yearNumber,
-            day.monthNumber,
-            day.dayNumber,
-            0,
-            0,
-            0,
-            0
-          ),
+          new Date(day.yearNumber, day.monthNumber, day.dayNumber, 0, 0, 0, 0),
           CheckingDirection.In
         )
       );
@@ -152,14 +160,17 @@ export class TimeCalculation {
    * @returns Checking with the specified direction or
    * null if there's no such checking.
    */
-  private static getFromEndWithDirection(checkings: Checking[], direction: CheckingDirection): Checking {
+  private static getFromEndWithDirection(
+    checkings: Checking[],
+    direction: CheckingDirection
+  ): Checking {
     let lastDirection = direction;
     let lastChecking: Checking = null;
 
     for (let i = checkings.length - 1; i >= 0; i--) {
       const currentChecking = checkings[i];
 
-      if(currentChecking.direction !== lastDirection) {
+      if (currentChecking.direction !== lastDirection) {
         break;
       }
 
@@ -188,10 +199,12 @@ export class TimeCalculation {
         case CheckingDirection.Out:
           lastOut = checking;
 
-          const currentDuration = moment(lastOut.dateTime).diff(
-            lastIn.dateTime
-          );
-          totalDuration.add(currentDuration);
+          if (lastIn) {
+            const currentDuration = moment(lastOut.dateTime).diff(
+              lastIn.dateTime
+            );
+            totalDuration.add(currentDuration);
+          }
 
           break;
       }
