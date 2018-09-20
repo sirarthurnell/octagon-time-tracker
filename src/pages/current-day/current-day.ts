@@ -68,6 +68,7 @@ export class CurrentDayPage {
    * Performs a check IN.
    */
   checkIn(): void {
+    this.gauge.allowCountingMode = true;
     this.persistNewChecking(CheckingDirection.In);
   }
 

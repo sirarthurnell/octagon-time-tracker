@@ -14,11 +14,17 @@
   </ion-item>
 
 
-  <!-- Direction -->
+  <!-- Export to excel -->
   <button ion-item menuClose (click)="exportToExcel()">
     <ion-icon [name]="'exit'" item-start></ion-icon>
     <ion-label>Export to Excel</ion-label>
   </button>
 
+
+  <!-- Delete all checkings -->
+  <button *ngIf="isDay" ion-item menuClose (click)="deleteAllCheckings()">
+    <ion-icon [name]="'trash'" item-start></ion-icon>
+    <ion-label>Delete all checkings</ion-label>
+  </button>
 
 </ion-list>

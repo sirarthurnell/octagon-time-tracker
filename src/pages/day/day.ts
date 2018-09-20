@@ -208,5 +208,6 @@ export class DayPage {
     popover.present({
       ev: event
     });
+    popover.onDidDismiss(() => this.gauge.refresh());
   }
 }

@@ -31,6 +31,7 @@ enum GaugeState {
 export class TimeGaugeComponent implements OnDestroy {
   @Input() resolution = 1;
   @Input() strokeWidth = 10;
+  @Input() allowCountingMode = false;
 
   /**
    * Gets or sets the day to plot.
@@ -131,11 +132,10 @@ export class TimeGaugeComponent implements OnDestroy {
       const inDirections = this.adjustedCheckings.filter(checking => checking.direction === CheckingDirection.In);
       const outDirections = this.adjustedCheckings.filter(checking => checking.direction === CheckingDirection.Out);
       const oneMoreInThanOutCount = inDirections.length === outDirections.length + 1;
-      const sameInOutCount = inDirections.length === outDirections.length;
 
-      if(isLastDirectionIn && isToday && isNowAfterLastChecking && oneMoreInThanOutCount) {
+      if(isLastDirectionIn && isToday && isNowAfterLastChecking && oneMoreInThanOutCount && this.allowCountingMode) {
         return GaugeState.counting;
-      } else if (sameInOutCount) {
+      } else if (isNowAfterLastChecking) {
         return GaugeState.showInfo;
       } else {
         return GaugeState.error;
@@ -150,7 +150,9 @@ export class TimeGaugeComponent implements OnDestroy {
    */
   private plotInfo(): void {
     this.stopBlinking();
-    this.plotSegmentsMinus(0);
+
+    const unevenCheckings = this.adjustedCheckings.length % 2;
+    this.plotSegmentsMinus(unevenCheckings);
     this.updateText();
   }
 
@@ -230,7 +232,7 @@ export class TimeGaugeComponent implements OnDestroy {
     const totalTime = this.day.calculateTotalTime().add(diff);
     this.totalWorkedTime = moment
       .utc(totalTime.as('milliseconds'))
-      .format('HH:mm:ss');
+      .format('HH:mm');
   }
 
   /**
