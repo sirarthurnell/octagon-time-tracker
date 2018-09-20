@@ -1,25 +1,60 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavParams } from 'ionic-angular';
+import * as moment from 'moment';
+import { ExportProvider } from '../../providers/export/export';
+import { StateProvider } from '../../providers/state/state';
+import { FormatterFactory } from '../../models/formatters/formatter-factory';
 
 /**
- * Generated class for the TimePopoverPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Popover to export and navigate to date.
  */
-
 @IonicPage()
 @Component({
   selector: 'page-time-popover',
-  templateUrl: 'time-popover.html',
+  templateUrl: 'time-popover.html'
 })
 export class TimePopoverPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  /**
+   * Selected date to show.
+   */
+  private _dateToGo: Date;
+  get dateToGo(): string {
+    return moment(this._dateToGo).format();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TimePopoverPage');
+  set dateToGo(isoDate: string) {
+    this._dateToGo = new Date(Date.parse(isoDate));
+    this.state.setByDate(this._dateToGo);
   }
 
+  constructor(
+    private navParams: NavParams,
+    private exportProvider: ExportProvider,
+    private state: StateProvider
+  ) {
+    this._dateToGo = this.state.daySnapshot.asDate;
+  }
+
+  /**
+   * Exports the data to excel.
+   */
+  exportToExcel(): void {
+    const json = this.getJson();
+
+    this.exportProvider
+      .sendExcelThroughEmail('mock-data', json);
+  }
+
+  /**
+   * Gets the json that will be used to generate
+   * the Excel file.
+   */
+  private getJson(): any[] {
+    const factory = new FormatterFactory();
+    const entity = this.navParams.data;
+    const formatter = factory.createFormatter(entity);
+    const json = formatter.format();
+
+    return json;
+  }
 }

@@ -5,7 +5,8 @@ import {
   ModalController,
   NavController,
   NavParams,
-  ToastController
+  ToastController,
+  PopoverController
 } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
@@ -41,6 +42,7 @@ export class DayPage {
     public navParams: NavParams,
     public modalCtrl: ModalController,
     private toastCtrl: ToastController,
+    public popoverCtrl: PopoverController,
     private state: StateProvider,
     private storage: TimeStorageProvider
   ) {}
@@ -194,5 +196,17 @@ export class DayPage {
    */
   private persist(): void {
     this.day.save(this.storage);
+  }
+
+  /**
+   * Shows the navigation popover.
+   * @param event Event originated by the clicked
+   * control.
+   */
+  showPopover(event): void {
+    const popover = this.popoverCtrl.create('TimePopoverPage', this.day);
+    popover.present({
+      ev: event
+    });
   }
 }

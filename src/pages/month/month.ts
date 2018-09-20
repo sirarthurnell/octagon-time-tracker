@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { Day } from '../../models/time/day';
 import { Month } from '../../models/time/month';
@@ -30,6 +30,7 @@ export class MonthPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
     private state: StateProvider
   ) {}
 
@@ -115,5 +116,17 @@ export class MonthPage {
     } ${height}%, transparent ${height}%, transparent 100%)`;
 
     return gradient;
+  }
+
+    /**
+   * Shows the navigation popover.
+   * @param event Event originated by the clicked
+   * control.
+   */
+  showPopover(event): void {
+    const popover = this.popoverCtrl.create('TimePopoverPage', this.month);
+    popover.present({
+      ev: event
+    });
   }
 }

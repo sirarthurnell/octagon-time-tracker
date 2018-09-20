@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { StateProvider } from '../../providers/state/state';
 import { Week } from '../../models/time/week';
 import { Subscription } from 'rxjs';
@@ -29,6 +29,7 @@ export class WeekPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public popoverCtrl: PopoverController,
     private state: StateProvider
   ) {}
 
@@ -106,5 +107,17 @@ export class WeekPage {
    */
   isSelectedDay(day: Day): boolean {
     return this.state.isSelectedDay(day);
+  }
+
+  /**
+   * Shows the navigation popover.
+   * @param event Event originated by the clicked
+   * control.
+   */
+  showPopover(event): void {
+    const popover = this.popoverCtrl.create('TimePopoverPage', this.week);
+    popover.present({
+      ev: event
+    });
   }
 }
