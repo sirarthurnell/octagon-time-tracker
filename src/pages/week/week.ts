@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
-import { StateProvider } from '../../providers/state/state';
-import { Week } from '../../models/time/week';
 import { Subscription } from 'rxjs';
-import { Day } from '../../models/time/day';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
+import { Day } from '../../models/time/day';
+import { Week } from '../../models/time/week';
+import { StateProvider } from '../../providers/state/state';
 import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
 
 /**
@@ -13,7 +13,8 @@ import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
 @IonicPage()
 @Component({
   selector: 'page-week',
-  templateUrl: 'week.html'
+  templateUrl: 'week.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WeekPage {
   @ViewChild('previousNext')
@@ -30,13 +31,15 @@ export class WeekPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
+    private cd: ChangeDetectorRef,
     private state: StateProvider
   ) {}
 
   ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(
-      change => (this.week = change.week)
-    );
+    this.changeSubscription = this.state.change$.subscribe(change => {
+      this.week = change.week;
+      this.cd.detectChanges();
+    });
   }
 
   ionViewWillUnload() {

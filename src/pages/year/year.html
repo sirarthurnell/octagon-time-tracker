@@ -21,8 +21,8 @@
   <!-- Year selector -->
   <previous-next *ngIf="year"
                  #previousNext
-                 [enableAnimations]="false"
-                 [showLoader]="true"
+                 [enableAnimations]="true"
+                 [showLoader]="false"
                  [text]="year.yearNumber"
                  (previous)="setPrevious()"
                  (next)="setNext()"

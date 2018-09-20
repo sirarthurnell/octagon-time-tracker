@@ -123,7 +123,7 @@ export class Week {
   getFormattedWorkedTotalTime(): string {
     return moment
       .utc(this.calculateTotalTime().as('milliseconds'))
-      .format('HHH:mm');
+      .format('hh:mm');
   }
 
   /**

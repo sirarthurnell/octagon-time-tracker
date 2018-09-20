@@ -4,7 +4,9 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Loading, LoadingController } from 'ionic-angular';
 import * as $ from 'jquery';
@@ -14,7 +16,8 @@ import * as $ from 'jquery';
  */
 @Component({
   selector: 'previous-next',
-  templateUrl: 'previous-next.html'
+  templateUrl: 'previous-next.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreviousNextComponent {
   @ViewChild('dynamicContent')
@@ -34,11 +37,14 @@ export class PreviousNextComponent {
 
   animationInProgress = false;
 
-  private $wrappedCopy: JQuery = null;
+  private $wrappedCopy: string = null;
   private $wrappedOriginal: JQuery = null;
   private loading: Loading = null;
 
-  constructor(private loadingCtrl: LoadingController) {}
+  constructor(
+    private loadingCtrl: LoadingController,
+    private cd: ChangeDetectorRef
+  ) {}
 
   /**
    * Performs the next animation.
@@ -76,9 +82,11 @@ export class PreviousNextComponent {
 
     setTimeout(() => {
       this.$wrappedOriginal.removeClass(originalClass);
-      this.$wrappedCopy.addClass(copyClass);
 
-      this.$wrappedCopy.one('transitionend', () => this.cleanDom());
+      const $wrappedCopy = $('.copyWrapper');
+      $wrappedCopy.addClass(copyClass);
+
+      $wrappedCopy.one('transitionend', () => this.cleanDom());
     }, delayThreshold);
   }
 
@@ -87,17 +95,26 @@ export class PreviousNextComponent {
    */
   private prepareDom(): void {
     const $original = this.getContent();
+    const $originalParent = $original.parent();
+
+    // ? Maybe isn't faster than just modifying it
+    // ? in place.
+
+    $original.detach();
     this.$wrappedOriginal = this.createWrapper($original);
+    this.$wrappedOriginal.appendTo($originalParent);
 
     const $content = $(this.dynamicContent.nativeElement);
-    $content.append([this.$wrappedOriginal, this.$wrappedCopy]);
+    $content.html(this.$wrappedCopy);
+    $content.append(this.$wrappedOriginal);
   }
 
   /**
    * Leaves the DOM in a correct state.
    */
   private cleanDom(): void {
-    this.$wrappedCopy.remove();
+    const $wrappedCopy = $('.copyWrapper');
+    $wrappedCopy.remove();
     this.$wrappedCopy = null;
 
     const $originalContent = this.$wrappedOriginal.children().first();
@@ -105,6 +122,7 @@ export class PreviousNextComponent {
 
     this.hideLoaderIfConfigured();
     this.animationInProgress = false;
+    this.cd.detectChanges();
   }
 
   /**
@@ -118,17 +136,17 @@ export class PreviousNextComponent {
   /**
    * Creates the copy of the original to be animated.
    */
-  private prepareWrappedCopy(): JQuery {
+  private prepareWrappedCopy(): string {
     const $copy = this.getClonedContent();
-    return this.createWrapper($copy);
+    return this.createWrapperAsText($copy);
   }
 
   /**
    * Clonates the current content.
    */
-  private getClonedContent(): JQuery {
+  private getClonedContent(): string {
     const $original = this.getContent();
-    const $copy = $original.clone();
+    const $copy = $original.parent().html();
     return $copy;
   }
 
@@ -139,6 +157,15 @@ export class PreviousNextComponent {
     const $content = $(this.dynamicContent.nativeElement);
     const $contentFirstChild = $content.children().first();
     return $contentFirstChild;
+  }
+
+  /**
+   * Wraps the element into an absolute container.
+   * The operation is done using strings.
+   * @param $el Element to wrap.
+   */
+  private createWrapperAsText(el: string): string {
+    return `<div class="absoluteWrapper copyWrapper">${el}</div>`;
   }
 
   /**

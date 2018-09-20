@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import {
   IonicPage,
@@ -22,7 +22,8 @@ import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
 @IonicPage()
 @Component({
   selector: 'page-year',
-  templateUrl: 'year.html'
+  templateUrl: 'year.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YearPage {
   @ViewChild('previousNext')
@@ -40,12 +41,14 @@ export class YearPage {
     public navParams: NavParams,
     private screenOrientation: ScreenOrientation,
     public popoverCtrl: PopoverController,
+    private cd: ChangeDetectorRef,
     private state: StateProvider
   ) {}
 
   ionViewWillLoad() {
     this.changeSubscription = this.state.change$.subscribe(change => {
       this.year = change.year;
+      this.cd.detectChanges();
     });
   }
 

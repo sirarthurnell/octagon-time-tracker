@@ -1,12 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { Subscription } from 'rxjs';
+import { PreviousNextComponent } from '../../components/previous-next/previous-next';
+import { CssVariables } from '../../models/css/CssVariables';
 import { Day } from '../../models/time/day';
 import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
-import { PreviousNextComponent } from '../../components/previous-next/previous-next';
-import { DAYS_OF_WEEK, DayOfWeek } from '../../text-items/days-of-week';
-import { CssVariables } from '../../models/css/CssVariables';
+import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
 
 /**
  * Shows info about the specified month.
@@ -14,7 +14,8 @@ import { CssVariables } from '../../models/css/CssVariables';
 @IonicPage()
 @Component({
   selector: 'page-month',
-  templateUrl: 'month.html'
+  templateUrl: 'month.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthPage {
   @ViewChild('previousNext')
@@ -31,13 +32,15 @@ export class MonthPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public popoverCtrl: PopoverController,
+    private cd: ChangeDetectorRef,
     private state: StateProvider
   ) {}
 
   ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(
-      change => (this.month = change.month)
-    );
+    this.changeSubscription = this.state.change$.subscribe(change => {
+      this.month = change.month;
+      this.cd.detectChanges();
+    });
   }
 
   ionViewWillUnload() {
@@ -118,7 +121,7 @@ export class MonthPage {
     return gradient;
   }
 
-    /**
+  /**
    * Shows the navigation popover.
    * @param event Event originated by the clicked
    * control.
