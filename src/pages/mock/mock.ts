@@ -91,6 +91,21 @@ export class MockPage {
    * Export data to an Excel file.
    */
   exportToExcel(): void {
+    this.exportProvider.exportToExcelFile('mock-data', this.getExportData());
+  }
+
+  /**
+   * Sends the exported data by email.
+   */
+  sendEmail(): void {
+    this.exportProvider
+      .sendExcelThroughEmail('mock-data', this.getExportData());
+  }
+
+  /**
+   * Gets some data to export.
+   */
+  private getExportData(): any[] {
     const json: any = [
       {
         eid: 'e101',
@@ -109,6 +124,6 @@ export class MockPage {
       }
     ];
 
-    this.exportProvider.exportToExcelFile('mock-data', json);
+    return json;
   }
 }

@@ -52,6 +52,13 @@ export class MonthPage {
   }
 
   /**
+   * Sets and shows today.
+   */
+  showToday(): void {
+    this.state.setToday();
+  }
+
+  /**
    * Sets the previous month.
    */
   setPrevious(): void {

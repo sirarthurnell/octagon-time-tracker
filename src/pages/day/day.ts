@@ -76,6 +76,13 @@ export class DayPage {
   }
 
   /**
+   * Sets and shows today.
+   */
+  showToday(): void {
+    this.state.setToday();
+  }
+
+  /**
    * Gets the text to display on previous next.
    */
   getDayText(): string {

@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EmailComposer } from '@ionic-native/email-composer';
 import * as FileSaver from 'file-saver';
-import { Observable } from 'rxjs';
-import { bindCallback } from 'rxjs/observable/bindCallback';
-import { from } from 'rxjs/observable/from';
-import { merge } from 'rxjs/observable/merge';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
 import * as xlsx from 'xlsx';
 
 /**
@@ -24,22 +19,11 @@ export class ExportProvider {
    * @param fileName Name of the generated file.
    * @param json Data.
    */
-  sendExcelThroughEmail(fileName: string, json: any[]): Observable<boolean> {
-    const checkAvailable$ = from<boolean>(
-      this.emailComposer.isAvailable()
-    ).pipe(map(available => !!available));
-
-    const notAvailable$ = checkAvailable$.pipe(filter(available => !available));
-    const toBase64Factory = bindCallback(this.toBase64Stream);
-    const available$ = checkAvailable$.pipe(
-      filter(available => available),
-      switchMap(() => toBase64Factory(this.createExcelDocumentBlob(json))),
-      tap((file64: string) => this.composeEmail(fileName, file64)),
-      map(_ => true)
+  sendExcelThroughEmail(fileName: string, json: any[]): void {
+    const documentAsBlob = this.createExcelDocumentBlob(json);
+    this.toBase64Stream(documentAsBlob, (base64: string) =>
+      this.composeEmail(fileName, base64)
     );
-
-    const conditional$ = merge(available$, notAvailable$);
-    return conditional$;
   }
 
   /**
@@ -47,16 +31,18 @@ export class ExportProvider {
    * @param fileContentAs64 File to attach.
    */
   private composeEmail(fileName: string, fileContentAs64: string): void {
-    let email = {
-      attachments: [
-        `base64:${fileName}.${this.EXCEL_EXTENSION}//${fileContentAs64}`
-      ],
-      subject: 'Checkings exported',
-      body: `Checkings exported (${new Date().toLocaleString()})`,
-      isHtml: true
-    };
+    this.emailComposer.isAvailable().then((available: boolean) => {
+      let email = {
+        attachments: [
+          `base64:${fileName}.${this.EXCEL_EXTENSION}//${fileContentAs64}`
+        ],
+        subject: 'Checkings exported',
+        body: `Checkings exported (${new Date().toLocaleString()})`,
+        isHtml: true
+      };
 
-    this.emailComposer.open(email);
+      this.emailComposer.open(email);
+    });
   }
 
   /**
@@ -77,7 +63,11 @@ export class ExportProvider {
    */
   private toBase64Stream(blob: Blob, cb: (base64: string) => void): void {
     const reader = new FileReader();
-    reader.onloadend = () => cb(reader.result as string);
+    reader.onload = function() {
+      var dataUrl = reader.result as string;
+      var base64 = dataUrl.split(',')[1];
+      cb(base64);
+    };
     reader.readAsDataURL(blob);
   }
 

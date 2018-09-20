@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
+import { Loading, LoadingController } from 'ionic-angular';
 import * as $ from 'jquery';
 
 /**
@@ -17,6 +25,8 @@ export class PreviousNextComponent {
   textClass = '';
   @Input()
   enableAnimations = true;
+  @Input()
+  showLoader = false;
   @Output()
   previous = new EventEmitter();
   @Output()
@@ -26,6 +36,9 @@ export class PreviousNextComponent {
 
   private $wrappedCopy: JQuery = null;
   private $wrappedOriginal: JQuery = null;
+  private loading: Loading = null;
+
+  constructor(private loadingCtrl: LoadingController) {}
 
   /**
    * Performs the next animation.
@@ -34,6 +47,8 @@ export class PreviousNextComponent {
     if (this.enableAnimations && this.animationInProgress) {
       this.prepareDom();
       this.performAnimation('translate--right', 'translate--left');
+    } else {
+      this.hideLoaderIfConfigured();
     }
   }
 
@@ -44,6 +59,8 @@ export class PreviousNextComponent {
     if (this.enableAnimations && this.animationInProgress) {
       this.prepareDom();
       this.performAnimation('translate--left', 'translate--right');
+    } else {
+      this.hideLoaderIfConfigured();
     }
   }
 
@@ -86,6 +103,7 @@ export class PreviousNextComponent {
     const $originalContent = this.$wrappedOriginal.children().first();
     $originalContent.unwrap();
 
+    this.hideLoaderIfConfigured();
     this.animationInProgress = false;
   }
 
@@ -168,21 +186,50 @@ export class PreviousNextComponent {
    * Emits the previous event.
    */
   emitPrevious(): void {
-    if (this.enableAnimations && !this.animationInProgress) {
-      this.prepareAnimation();
-    }
+    this.createAndPresentLoaderIfConfigured().then(() => {
+      if (this.enableAnimations && !this.animationInProgress) {
+        this.prepareAnimation();
+      }
 
-    this.previous.emit();
+      this.previous.emit();
+    });
   }
 
   /**
    * Emits the next event.
    */
   emitNext(): void {
-    if (this.enableAnimations && !this.animationInProgress) {
-      this.prepareAnimation();
-    }
+    this.createAndPresentLoaderIfConfigured().then(() => {
+      if (this.enableAnimations && !this.animationInProgress) {
+        this.prepareAnimation();
+      }
 
-    this.next.emit();
+      this.next.emit();
+    });
+  }
+
+  /**
+   * Creates and shows a loader.
+   */
+  private createAndPresentLoaderIfConfigured(): Promise<void> {
+    if (this.showLoader) {
+      this.loading = this.loadingCtrl.create({
+        content: 'Please wait...',
+        showBackdrop: false
+      });
+
+      return this.loading.present();
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  /**
+   * Hides the loader if configured.
+   */
+  private hideLoaderIfConfigured(): void {
+    if (this.showLoader && this.loading) {
+      this.loading.dismiss();
+    }
   }
 }

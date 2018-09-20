@@ -154,19 +154,19 @@ export class TimeCalculation {
    */
   private static getFromEndWithDirection(checkings: Checking[], direction: CheckingDirection): Checking {
     let lastDirection = direction;
-    let lastChecking: Checking;
+    let lastChecking: Checking = null;
 
     for (let i = checkings.length - 1; i >= 0; i--) {
       const currentChecking = checkings[i];
 
       if(currentChecking.direction !== lastDirection) {
-        return lastChecking;
+        break;
       }
 
       lastChecking = currentChecking;
     }
 
-    return null;
+    return lastChecking;
   }
 
   /**

@@ -24,10 +24,12 @@
 
     <!-- Checking buttons -->
     <button ion-button
+            color="working-time"
             [disabled]="!checkInButtonEnabled"
             class="button-in"
             (click)="checkIn()">Check IN</button>
     <button ion-button
+            color="resting-time"
             [disabled]="!checkOutButtonEnabled"
             class="button-out"
             (click)="checkOut()">Check OUT</button>
