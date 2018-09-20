@@ -25,7 +25,7 @@ export class CurrentDayPage {
   day: Day;
 
   checkInButtonEnabled = true;
-  checkOutButtonEnabled = true;
+  checkOutButtonEnabled = false;
 
   private changeSubscription: Subscription;
 
