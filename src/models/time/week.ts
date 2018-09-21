@@ -3,6 +3,7 @@ import { Day } from './day';
 import { TimeCalculation } from './time-calculation';
 import { MONTH_NAMES } from '../../text-items/months';
 import 'moment-duration-format';
+import { LONG_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Represents a week.
@@ -80,7 +81,7 @@ export class Week {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return this.calculateWorkedAverageTime().format('hhh:mm');
+    return this.calculateWorkedAverageTime().format(LONG_TIME_FORMAT);
   }
 
   /**
@@ -120,7 +121,7 @@ export class Week {
    * Gets the formatted total time.
    */
   getFormattedWorkedTotalTime(): string {
-    return this.calculateTotalTime().format('hhh:mm');
+    return this.calculateTotalTime().format(LONG_TIME_FORMAT);
   }
 
   /**

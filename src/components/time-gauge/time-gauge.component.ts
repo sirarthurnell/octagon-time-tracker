@@ -8,6 +8,8 @@ import { Checking, CheckingDirection } from '../../models/time/checking';
 import { isNowAfter, now } from '../../models/time/date-extensions';
 import { Day } from '../../models/time/day';
 import { TimeCalculation } from '../../models/time/time-calculation';
+import 'moment-duration-format';
+import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Different states the gauge can
@@ -44,7 +46,6 @@ export class TimeGaugeComponent implements OnDestroy {
 
   @Input() set allowCountingMode(allow: boolean) {
     this._allowCountingMode = allow;
-    console.log('allow counting', this._allowCountingMode);
     this.cd.detectChanges();
   }
 
@@ -115,7 +116,7 @@ export class TimeGaugeComponent implements OnDestroy {
     this.stopBlinking();
 
     this.pathData = [];
-    this.totalWorkedTime = moment.utc(0).format('HH:mm');
+    this.totalWorkedTime = moment.duration(0).format(SHORT_TIME_FORMAT);
     this.errorCondition = false;
     this.timeToSvgConverter = new TimeToSvgConverter(
       this.radius,
@@ -245,9 +246,7 @@ export class TimeGaugeComponent implements OnDestroy {
     const lastCheckingTime = getLast(this.adjustedCheckings);
     const diff = moment().diff(lastCheckingTime.dateTime);
     const totalTime = this.day.calculateTotalTime().add(diff);
-    this.totalWorkedTime = moment
-      .utc(totalTime.as('milliseconds'))
-      .format('HH:mm');
+    this.totalWorkedTime = totalTime.format(SHORT_TIME_FORMAT);
   }
 
   /**

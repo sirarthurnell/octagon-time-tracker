@@ -5,6 +5,8 @@ import { DayInfo } from './day-info';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { DAYS_OF_WEEK } from '../../text-items/days-of-week';
+import 'moment-duration-format';
+import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Represents a day.
@@ -107,9 +109,7 @@ export class Day {
    * Gets the formatted total time.
    */
   getFormattedTotalTime(): string {
-    return moment
-      .utc(this.calculateTotalTime().as('milliseconds'))
-      .format('HH:mm');
+    return this.calculateTotalTime().format(SHORT_TIME_FORMAT)
   }
 
   /**

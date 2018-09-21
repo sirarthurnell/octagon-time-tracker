@@ -11,6 +11,7 @@ import { DayOfWeek } from './day-of-week';
 import { TimeCalculation } from './time-calculation';
 import { Week } from './week';
 import 'moment-duration-format';
+import { LONG_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Represents a month.
@@ -314,7 +315,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return this.calculateWorkedAverageTime().format('hhh:mm');
+    return this.calculateWorkedAverageTime().format(LONG_TIME_FORMAT);
   }
 
   /**
@@ -338,7 +339,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedTotalTime(): string {
-    return this.calculateTotalTime().format('hhh:mm');
+    return this.calculateTotalTime().format(LONG_TIME_FORMAT);
   }
 
   /**

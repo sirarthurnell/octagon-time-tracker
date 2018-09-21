@@ -8,6 +8,7 @@ import {
 import { Checking, CheckingDirection } from '../../models/time/checking';
 import * as moment from 'moment';
 import { Day } from '../../models/time/day';
+import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Create and edit checking page.
@@ -18,6 +19,8 @@ import { Day } from '../../models/time/day';
   templateUrl: 'checking-modal.html'
 })
 export class CheckingModalPage {
+  readonly timeFormat = SHORT_TIME_FORMAT;
+
   title = 'Checking';
 
   checking: Checking;

@@ -24,7 +24,7 @@
     <!-- Time -->
     <ion-item>
       <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="HH:mm"
+      <ion-datetime [displayFormat]="timeFormat"
                     [(ngModel)]="selectedDate">
       </ion-datetime>
     </ion-item>
