@@ -1,11 +1,50 @@
 import * as moment from 'moment';
 import { Checking, CheckingDirection } from './checking';
 import { Day } from './day';
+import { getFirst, getLast } from '../array/array-extensions';
+import { compareDates } from './date-extensions';
+
+/**
+ * Types of checking adjustments.
+ */
+export enum CheckingAdjustementType {
+  none,
+  start,
+  end,
+  both
+}
 
 /**
  * Contains operations with checkings.
  */
 export class TimeCalculation {
+  /**
+   * Checks the type of adjustment that was
+   * performed on the checkings of the
+   * specified day.
+   * @param day Day to check.
+   * @param adjusted Adjusted checkings.
+   */
+  static checkIfTimeAdjusted(day: Day, adjusted: Checking[]): CheckingAdjustementType {
+    if (day.checkings.length === 0) {
+      return CheckingAdjustementType.none;
+    }
+
+    const rawOrdered = TimeCalculation.orderAscending(day.checkings);
+    const startAdjusted = compareDates(getFirst(rawOrdered).dateTime, getFirst(adjusted).dateTime) > 0;
+    const endAdjusted = compareDates(getLast(rawOrdered).dateTime, getLast(adjusted).dateTime) < 0;
+
+    if(startAdjusted && endAdjusted) {
+      return CheckingAdjustementType.both;
+    } else if (startAdjusted) {
+      return CheckingAdjustementType.start;
+    } else if (endAdjusted) {
+      return CheckingAdjustementType.end;
+    } else {
+      return CheckingAdjustementType.none;
+    }
+  }
+
   /**
    * Sums up the duration of an array of days.
    * @param days Days.
@@ -185,7 +224,7 @@ export class TimeCalculation {
    * specified checkings.
    * @param checkings Checkings to sum.
    */
-  private static sumCheckings(checkings: Checking[]): moment.Duration {
+  static sumCheckings(checkings: Checking[]): moment.Duration {
     let lastIn: Checking;
     let lastOut: Checking;
     const totalDuration = moment.duration();

@@ -76,6 +76,26 @@ export class Day {
   }
 
   /**
+   * Gets the oldest checking of the day.
+   */
+  getOldestChecking(): Checking {
+    const orderedCheckings = this.getOrderedCheckings();
+
+    if(orderedCheckings.length > 0) {
+      return orderedCheckings[0];
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Gets the checkings of this day adjusted.
+   */
+  getAdjustedCheckings(): Checking[] {
+    return TimeCalculation.adjustCheckings(this);
+  }
+
+  /**
    * Gets the day checkins ordered in ascending way.
    */
   getOrderedCheckings(): Checking[] {
