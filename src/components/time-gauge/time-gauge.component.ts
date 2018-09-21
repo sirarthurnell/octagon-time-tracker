@@ -10,6 +10,7 @@ import { Day } from '../../models/time/day';
 import { TimeCalculation } from '../../models/time/time-calculation';
 import 'moment-duration-format';
 import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
+import { StateProvider } from '../../providers/state/state';
 
 /**
  * Different states the gauge can
@@ -81,7 +82,7 @@ export class TimeGaugeComponent implements OnDestroy {
   private blinkingSubscription: Subscription;
   private timeToSvgConverter: TimeToSvgConverter;
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef, private state: StateProvider) {}
 
   ngOnDestroy(): void {
     this.stopBlinking();
@@ -196,7 +197,10 @@ export class TimeGaugeComponent implements OnDestroy {
       this.blink = true;
 
       const blinking$ = interval(1000);
-      this.blinkingSubscription = blinking$.subscribe(_ => this.plot());
+      this.blinkingSubscription = blinking$.subscribe(_ => {
+        this.plot();
+        this.updateDayIfChanged();
+      });
     }
   }
 
@@ -207,6 +211,18 @@ export class TimeGaugeComponent implements OnDestroy {
     if (this.blink) {
       this.blinkingSubscription.unsubscribe();
       this.blink = false;
+    }
+  }
+
+  /**
+   * Updates the current day if
+   * changed during the counting state.
+   */
+  private updateDayIfChanged(): void {
+    if (!this.day.isToday()) {
+      this.state.setNextDay()
+        .take(1)
+        .subscribe(change => this.day = change.day);
     }
   }
 

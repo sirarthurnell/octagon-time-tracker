@@ -1,8 +1,8 @@
-import * as moment from 'moment';
-import { Checking, CheckingDirection } from './checking';
-import { Day } from './day';
-import { getFirst, getLast } from '../array/array-extensions';
-import { compareDates } from './date-extensions';
+import * as moment from "moment";
+import { Checking, CheckingDirection } from "./checking";
+import { Day } from "./day";
+import { getFirst, getLast, hasAny } from "../array/array-extensions";
+import { compareDates } from "./date-extensions";
 
 /**
  * Types of checking adjustments.
@@ -25,16 +25,23 @@ export class TimeCalculation {
    * @param day Day to check.
    * @param adjusted Adjusted checkings.
    */
-  static checkIfTimeAdjusted(day: Day, adjusted: Checking[]): CheckingAdjustementType {
+  static checkIfTimeAdjusted(
+    day: Day,
+    adjusted: Checking[]
+  ): CheckingAdjustementType {
     if (day.checkings.length === 0) {
       return CheckingAdjustementType.none;
     }
 
     const rawOrdered = TimeCalculation.orderAscending(day.checkings);
-    const startAdjusted = compareDates(getFirst(rawOrdered).dateTime, getFirst(adjusted).dateTime) > 0;
-    const endAdjusted = compareDates(getLast(rawOrdered).dateTime, getLast(adjusted).dateTime) < 0;
+    const startAdjusted =
+      compareDates(getFirst(rawOrdered).dateTime, getFirst(adjusted).dateTime) >
+      0;
+    const endAdjusted =
+      compareDates(getLast(rawOrdered).dateTime, getLast(adjusted).dateTime) <
+      0;
 
-    if(startAdjusted && endAdjusted) {
+    if (startAdjusted && endAdjusted) {
       return CheckingAdjustementType.both;
     } else if (startAdjusted) {
       return CheckingAdjustementType.start;
@@ -101,21 +108,43 @@ export class TimeCalculation {
    * @param day Day to adjust.
    */
   static adjustCheckings(day: Day): Checking[] {
-    let correctedCheckings = TimeCalculation.orderAscending(day.checkings);
-    correctedCheckings = TimeCalculation.removeDuplicates(correctedCheckings);
+    let orderedCheckings = TimeCalculation.orderAscending(day.checkings);
+    let noDuplicates = TimeCalculation.removeDuplicates(orderedCheckings);
+    let correctedCheckings: Checking[];
 
-    if (correctedCheckings.length === 0) {
-      return correctedCheckings;
+    if (noDuplicates.length === 0) {
+      correctedCheckings = TimeCalculation.adjustForCounting(day);
     } else {
       correctedCheckings = TimeCalculation.adjustBeginningOfDay(
         day,
-        correctedCheckings
+        noDuplicates
       );
-      correctedCheckings = TimeCalculation.adjustEndOfDay(
-        day,
-        correctedCheckings
-      );
-      return correctedCheckings;
+      correctedCheckings = TimeCalculation.adjustEndOfDay(day, noDuplicates);
+    }
+
+    return correctedCheckings;
+  }
+
+  /**
+   * Adjust for possible counting process.
+   * @param day Day.
+   */
+  private static adjustForCounting(day: Day): Checking[] {
+    const previousDayLastChecking = hasAny(day.previous.checkings)
+      ? getLast(TimeCalculation.orderAscending(day.previous.checkings))
+      : null;
+    const isPreviousDayLastDirectionIn =
+      previousDayLastChecking &&
+      previousDayLastChecking.direction === CheckingDirection.In;
+    if (isPreviousDayLastDirectionIn) {
+      return [
+        new Checking(
+          new Date(day.yearNumber, day.monthNumber, day.dayNumber, 0, 0, 0, 0),
+          CheckingDirection.In
+        )
+      ];
+    } else {
+      return [];
     }
   }
 

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { Checking, CheckingDirection } from '../../models/time/checking';
+import { getLast } from '../../models/array/array-extensions';
 
 /**
  * Current day page.
@@ -55,7 +56,7 @@ export class CurrentDayPage {
    * of the buttons.
    */
   manageButtonsState(): void {
-    const mostRecentChecking = this.day.getMostRecentChecking();
+    const mostRecentChecking = getLast(this.day.getAdjustedCheckings());
 
     if (mostRecentChecking) {
       this.checkInButtonEnabled =
