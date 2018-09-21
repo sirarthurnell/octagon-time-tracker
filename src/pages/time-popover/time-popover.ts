@@ -1,15 +1,10 @@
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  NavParams,
-  ViewController,
-  AlertController
-} from 'ionic-angular';
+import { AlertController, IonicPage, NavParams, ViewController } from 'ionic-angular';
 import * as moment from 'moment';
-import { ExportProvider } from '../../providers/export/export';
-import { StateProvider } from '../../providers/state/state';
 import { FormatterFactory } from '../../models/formatters/formatter-factory';
 import { Day } from '../../models/time/day';
+import { ExportProvider } from '../../providers/export/export';
+import { StateProvider } from '../../providers/state/state';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 
 /**

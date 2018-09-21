@@ -6,12 +6,22 @@ import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { Day } from './day';
 import { Month } from './month';
 import { TimeCalculation } from './time-calculation';
+import { Checking } from './checking';
 
 /**
  * Represents a year.
  */
 export class Year {
   private static readonly MONTH_COUNT = 12;
+
+  /**
+   * Total checkings of the year.
+   */
+  get checkings(): Checking[] {
+    let checkings = [] as Checking[];
+    this.months.forEach(month => (checkings = checkings.concat(month.checkings)));
+    return checkings;
+  }
 
   private constructor(public readonly yearNumber: number, public readonly months: Month[]) { }
 

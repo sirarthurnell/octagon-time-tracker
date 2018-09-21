@@ -145,7 +145,7 @@ export class YearPage {
    * control.
    */
   showPopover(event): void {
-    const popover = this.popoverCtrl.create('TimePopoverPage', this.year);
+    const popover = this.popoverCtrl.create('TimePopoverPage', this.year.checkings);
     popover.present({
       ev: event
     });
