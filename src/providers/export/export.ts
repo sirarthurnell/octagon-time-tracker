@@ -15,6 +15,14 @@ export class ExportProvider {
   constructor(private emailComposer: EmailComposer) {}
 
   /**
+   * Performs the exportation.
+   */
+  export(fileName: string, json: any[]): void {
+    //this.exportToExcelFile(fileName, json);
+    this.sendExcelThroughEmail(fileName, json);
+  }
+
+  /**
    * Sends the specified data through email.
    * @param fileName Name of the generated file.
    * @param json Data.

@@ -58,7 +58,7 @@ export class TimePopoverPage {
   exportToExcel(): void {
     const json = this.getJson();
 
-    this.exportProvider.sendExcelThroughEmail('mock-data', json);
+    this.exportProvider.export('mock-data', json);
 
     this.close();
   }

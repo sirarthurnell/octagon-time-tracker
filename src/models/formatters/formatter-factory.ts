@@ -17,7 +17,7 @@ export class FormatterFactory {
    * specified entity.
    * @param entity Entity to format.
    */
-  createFormatter(entity: [] | {}): Formatter {
+  createFormatter(entity: Array<Checking> | {}): Formatter {
     if (entity instanceof Day) {
       return new DayFormatter(entity as Day);
     } else if (entity instanceof Week) {

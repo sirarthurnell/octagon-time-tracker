@@ -22,12 +22,12 @@ export class DayFormatter implements Formatter {
     );
     const checkingsAsJsonData: JsonData[] = [];
 
-    for (let i = 0, next = 1; next < adjusted.length; i = +2, next += 2) {
+    for (let i = 0, next = 1; next < adjusted.length; i += 2, next += 2) {
       if (this.shouldInclude(i, adjusted.length, adjustmentType)) {
         checkingsAsJsonData.push(this.toJsonData(adjusted[i]));
       }
 
-      if (next <= adjusted.length) {
+      if (next < adjusted.length) {
 
         if (this.shouldInclude(next, adjusted.length, adjustmentType)) {
           checkingsAsJsonData.push(this.toJsonData(adjusted[next]));
@@ -69,6 +69,8 @@ export class DayFormatter implements Formatter {
     ) {
       return false;
     }
+
+    return true;
   }
 
   /**
