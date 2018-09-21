@@ -31,7 +31,22 @@ enum GaugeState {
 export class TimeGaugeComponent implements OnDestroy {
   @Input() resolution = 1;
   @Input() strokeWidth = 10;
-  @Input() allowCountingMode = false;
+
+  /**
+   * Gets or sets if the gauge is allowed to
+   * work in counting mode.
+   */
+  private _allowCountingMode = false;
+
+  get allowCountingMode(): boolean {
+    return this._allowCountingMode
+  }
+
+  @Input() set allowCountingMode(allow: boolean) {
+    this._allowCountingMode = allow;
+    console.log('allow counting', this._allowCountingMode);
+    this.cd.detectChanges();
+  }
 
   /**
    * Gets or sets the day to plot.
