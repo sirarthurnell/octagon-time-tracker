@@ -130,7 +130,7 @@ export class TimeCalculation {
    * @param day Day.
    */
   private static adjustForCounting(day: Day): Checking[] {
-    const previousDayLastChecking = hasAny(day.previous.checkings)
+    const previousDayLastChecking = day.previous && hasAny(day.previous.checkings)
       ? getLast(TimeCalculation.orderAscending(day.previous.checkings))
       : null;
     const isPreviousDayLastDirectionIn =
