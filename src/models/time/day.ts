@@ -129,7 +129,7 @@ export class Day {
    * Gets the formatted total time.
    */
   getFormattedTotalTime(): string {
-    return this.calculateTotalTime().format(SHORT_TIME_FORMAT)
+    return this.calculateTotalTime().format(SHORT_TIME_FORMAT, { trim: false })
   }
 
   /**

@@ -1,6 +1,8 @@
 import * as moment from 'moment';
+import 'moment-duration-format';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { LONG_TIME_FORMAT, SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
 import { MONTH_NAMES } from '../../text-items/months';
 import { create2dArray } from '../array/array-extensions';
 import { Checking } from './checking';
@@ -10,8 +12,6 @@ import { DayInfo } from './day-info';
 import { DayOfWeek } from './day-of-week';
 import { TimeCalculation } from './time-calculation';
 import { Week } from './week';
-import 'moment-duration-format';
-import { LONG_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Represents a month.
@@ -315,7 +315,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return this.calculateWorkedAverageTime().format(LONG_TIME_FORMAT);
+    return this.calculateWorkedAverageTime().format(SHORT_TIME_FORMAT, { trim: false });
   }
 
   /**
@@ -339,7 +339,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedTotalTime(): string {
-    return this.calculateTotalTime().format(LONG_TIME_FORMAT);
+    return this.calculateTotalTime().format(LONG_TIME_FORMAT, { trim: false });
   }
 
   /**

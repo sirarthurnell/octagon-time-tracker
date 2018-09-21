@@ -1,9 +1,9 @@
 import * as moment from 'moment';
+import 'moment-duration-format';
+import { LONG_TIME_FORMAT, SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
+import { MONTH_NAMES } from '../../text-items/months';
 import { Day } from './day';
 import { TimeCalculation } from './time-calculation';
-import { MONTH_NAMES } from '../../text-items/months';
-import 'moment-duration-format';
-import { LONG_TIME_FORMAT } from '../../text-items/date-time-formats';
 
 /**
  * Represents a week.
@@ -81,7 +81,7 @@ export class Week {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return this.calculateWorkedAverageTime().format(LONG_TIME_FORMAT);
+    return this.calculateWorkedAverageTime().format(SHORT_TIME_FORMAT, { trim: false });
   }
 
   /**
@@ -121,7 +121,7 @@ export class Week {
    * Gets the formatted total time.
    */
   getFormattedWorkedTotalTime(): string {
-    return this.calculateTotalTime().format(LONG_TIME_FORMAT);
+    return this.calculateTotalTime().format(LONG_TIME_FORMAT, { trim: false });
   }
 
   /**

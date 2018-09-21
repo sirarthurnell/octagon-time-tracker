@@ -94,7 +94,7 @@ export class DayFormatter implements Formatter {
 
     return {
       direction: 'Chunk',
-      time: diff.format(SHORT_TIME_FORMAT)
+      time: diff.format(SHORT_TIME_FORMAT, { trim: false })
     };
   }
 

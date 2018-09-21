@@ -116,7 +116,7 @@ export class TimeGaugeComponent implements OnDestroy {
     this.stopBlinking();
 
     this.pathData = [];
-    this.totalWorkedTime = moment.duration(0).format(SHORT_TIME_FORMAT);
+    this.totalWorkedTime = moment.duration(0).format(SHORT_TIME_FORMAT, { trim: false });
     this.errorCondition = false;
     this.timeToSvgConverter = new TimeToSvgConverter(
       this.radius,
@@ -246,7 +246,7 @@ export class TimeGaugeComponent implements OnDestroy {
     const lastCheckingTime = getLast(this.adjustedCheckings);
     const diff = moment().diff(lastCheckingTime.dateTime);
     const totalTime = this.day.calculateTotalTime().add(diff);
-    this.totalWorkedTime = totalTime.format(SHORT_TIME_FORMAT);
+    this.totalWorkedTime = totalTime.format(SHORT_TIME_FORMAT, { trim: false });
   }
 
   /**
