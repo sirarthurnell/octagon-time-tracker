@@ -10,6 +10,7 @@ import { DayInfo } from './day-info';
 import { DayOfWeek } from './day-of-week';
 import { TimeCalculation } from './time-calculation';
 import { Week } from './week';
+import 'moment-duration-format';
 
 /**
  * Represents a month.
@@ -313,9 +314,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return moment
-      .utc(this.calculateWorkedAverageTime().as('milliseconds'))
-      .format('HH:mm');
+    return this.calculateWorkedAverageTime().format('hhh:mm');
   }
 
   /**
@@ -339,9 +338,7 @@ export class Month {
    * Gets the formatted total time.
    */
   getFormattedWorkedTotalTime(): string {
-    return moment
-      .utc(this.calculateTotalTime().as('milliseconds'))
-      .format('HHH:mm');
+    return this.calculateTotalTime().format('hhh:mm');
   }
 
   /**
