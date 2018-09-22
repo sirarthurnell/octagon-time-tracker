@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { getLocale } from './date-time-formats';
+import { getLocale, getLocalizedFirstDayOfWeek } from './date-time-formats';
 
 /**
  * Contains information about the day of
@@ -16,6 +16,7 @@ export interface DayOfWeek {
  */
 export class TimeNames {
   private static readonly MONTH_COUNT = 12;
+  private static readonly DAYS_OF_WEEK_COUNT = 7;
 
   /**
    * Gets the name of the month.
@@ -69,7 +70,7 @@ export class TimeNames {
    * Gets the days of the week.
    */
   static getDaysOfWeek(): DayOfWeek[] {
-    return [
+    const original = [
       { name: this.getDayOfWeekName(0).substr(0, 1), type: 'sunday' },
       { name: this.getDayOfWeekName(1).substr(0, 1), type: 'normal' },
       { name: this.getDayOfWeekName(2).substr(0, 1), type: 'normal' },
@@ -78,5 +79,13 @@ export class TimeNames {
       { name: this.getDayOfWeekName(5).substr(0, 1), type: 'normal' },
       { name: this.getDayOfWeekName(6).substr(0, 1), type: 'saturday' }
     ];
+
+    const reordered = [] as DayOfWeek[];
+    const firstDayOfWeek = getLocalizedFirstDayOfWeek();
+    for (let i = 0; i < this.DAYS_OF_WEEK_COUNT; i++) {
+      reordered.push(original[(i + firstDayOfWeek) % this.DAYS_OF_WEEK_COUNT]);
+    }
+
+    return reordered;
   }
 }
