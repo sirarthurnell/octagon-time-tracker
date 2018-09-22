@@ -4,7 +4,6 @@ import { DayOfWeek } from './day-of-week';
  * Contains operations with dates.
  */
 export class DateOperations {
-
   private constructor() {}
 
   /**
@@ -19,18 +18,31 @@ export class DateOperations {
   }
 
   /**
-   * Gets the offset in days at the start
+   * Gets the offset of days at the end
    * of the month.
    * @param year Year.
    * @param month Month.
    * @param day Day.
    * @param firstDayOfWeek First day of the week.
    */
-  static weekStartOffset(year: number, month: number, day: number, firstDayOfWeek: DayOfWeek): number {
+  static weekOffset(
+    year: number,
+    month: number,
+    day: number,
+    firstDayOfWeek: DayOfWeek
+  ): number {
     const dayOfWeek = new Date(year, month, day);
-    const startOffset = dayOfWeek.getDay() - firstDayOfWeek.valueOf();
+    const dayOfWeekNumber = dayOfWeek.getDay();
+    const firstDayOfWeekNumber = firstDayOfWeek.valueOf();
 
-    return startOffset;
+    if (
+      dayOfWeekNumber > firstDayOfWeekNumber ||
+      dayOfWeekNumber === firstDayOfWeekNumber
+    ) {
+      return dayOfWeekNumber - firstDayOfWeekNumber;
+    } else {
+      return 6 - dayOfWeekNumber;
+    }
   }
 
   /**
@@ -39,15 +51,30 @@ export class DateOperations {
    * @param month Month.
    * @param firstDayOfWeek First day of the week.
    */
-  static weeksInMonth(year: number, month: number, firstDayOfWeek: DayOfWeek): number {
+  static weeksInMonth(
+    year: number,
+    month: number,
+    firstDayOfWeek: DayOfWeek
+  ): number {
     const firstDay = 1;
-    const startOffset = DateOperations.weekStartOffset(year, month, firstDay, firstDayOfWeek);
+    const startOffset = DateOperations.weekOffset(
+      year,
+      month,
+      firstDay,
+      firstDayOfWeek
+    );
     const daysCount = DateOperations.daysInMonth(year, month);
 
     if (startOffset === 0 && daysCount % 7 === 0) {
-        return 4;
+      return 4;
     } else {
-        return DateOperations.countFirstDayOfWeekTimeInMonth(year, month, firstDayOfWeek) + 1;
+      return (
+        DateOperations.countFirstDayOfWeekTimeInMonth(
+          year,
+          month,
+          firstDayOfWeek
+        ) + 1
+      );
     }
   }
 
@@ -58,17 +85,21 @@ export class DateOperations {
    * @param month Month.
    * @param firstDayOfWeek First day of the week.
    */
-  private static countFirstDayOfWeekTimeInMonth(year: number, month: number, firstDayOfWeek: DayOfWeek): number {
-      const daysInMonth = DateOperations.daysInMonth(year, month);
-      let firstsCount = 0;
+  private static countFirstDayOfWeekTimeInMonth(
+    year: number,
+    month: number,
+    firstDayOfWeek: DayOfWeek
+  ): number {
+    const daysInMonth = DateOperations.daysInMonth(year, month);
+    let firstsCount = 0;
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const currentDay = new Date(year, month, day);
-        if (currentDay.getDay() === firstDayOfWeek.valueOf()) {
-            firstsCount++;
-        }
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDay = new Date(year, month, day);
+      if (currentDay.getDay() === firstDayOfWeek.valueOf()) {
+        firstsCount++;
       }
+    }
 
-      return firstsCount;
+    return firstsCount;
   }
 }

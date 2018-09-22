@@ -210,13 +210,13 @@ export class Month {
       this.yearNumber,
       this.monthNumber
     );
-    const startOffset = DateOperations.weekStartOffset(
+    const startOffset = DateOperations.weekOffset(
       this.yearNumber,
       this.monthNumber,
       firstDay,
       this.firstDayOfWeek
     );
-    const endOffset = DateOperations.weekStartOffset(
+    const endOffset = DateOperations.weekOffset(
       this.yearNumber,
       this.monthNumber,
       lastDay,

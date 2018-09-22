@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { Year } from '../../models/time/year';
-import { StorableMonth } from '../../models/storage/storable-month';
-import { Week } from '../../models/time/week';
 import { ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
+import { StorableMonth } from '../../models/storage/storable-month';
 import { Month } from '../../models/time/month';
-import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { Week } from '../../models/time/week';
+import { Year } from '../../models/time/year';
 import { ExportProvider } from '../../providers/export/export';
-import { getLocalizedTimeFormat, getLocalizedShortDateFormat } from '../../text-items/date-time-formats';
+import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { getLocalizedShortDateFormat, getLocalizedTimeFormat, getLocalizedFirstDayOfWeek } from '../../text-items/date-time-formats';
 
 @IonicPage()
 @Component({
@@ -140,5 +140,9 @@ export class MockPage {
    */
   getDateFormat(): string {
     return getLocalizedShortDateFormat();
+  }
+
+  getFirstOfWeek(): number {
+    return getLocalizedFirstDayOfWeek();
   }
 }

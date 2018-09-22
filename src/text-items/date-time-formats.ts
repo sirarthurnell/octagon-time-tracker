@@ -55,3 +55,14 @@ function getLocalizedFormat(formatKey: moment.LongDateFormatKey): string {
 
   return format;
 }
+
+/**
+ * Gets the first day of week based on the
+ * current locale data.
+ */
+export function getLocalizedFirstDayOfWeek(): number {
+  return moment()
+    .locale(getLocale())
+    .localeData()
+    .firstDayOfWeek();
+}

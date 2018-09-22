@@ -1,4 +1,5 @@
 import { DayOfWeek } from '../time/day-of-week';
+import { getLocalizedFirstDayOfWeek } from '../../text-items/date-time-formats';
 
 /**
  * Configurable settings.
@@ -15,7 +16,7 @@ export class Settings {
      */
     static getDefault(): Settings {
         return {
-            firstDayOfWeek: DayOfWeek.Sunday
+            firstDayOfWeek: getLocalizedFirstDayOfWeek() as DayOfWeek
         };
     }
 }
