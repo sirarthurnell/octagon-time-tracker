@@ -5,7 +5,7 @@ import { PreviousNextComponent } from '../../components/previous-next/previous-n
 import { Day } from '../../models/time/day';
 import { Week } from '../../models/time/week';
 import { StateProvider } from '../../providers/state/state';
-import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
+import { TimeNames, DayOfWeek } from '../../text-items/time-names';
 
 /**
  * Shows info about the specified week.
@@ -85,7 +85,14 @@ export class WeekPage {
    * Gets the days of the week.
    */
   getDaysOfWeek(): DayOfWeek[] {
-    return DAYS_OF_WEEK;
+    return TimeNames.getDaysOfWeek();
+  }
+
+  /**
+   * Text to show.
+   */
+  getWeekText(): string {
+    return `${this.week.name}, ${this.week.yearNumber}`;
   }
 
   /**

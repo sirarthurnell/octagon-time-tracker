@@ -1,3 +1,6 @@
+import * as moment from 'moment';
+import { getLocale } from '../../text-items/date-time-formats';
+
 /**
  * Direction of the time mark.
  */
@@ -40,6 +43,6 @@ export class Checking {
    * String representation of the checking.
    */
   toString(): string {
-    return this.dateTime.toLocaleString();
+    return moment(this.dateTime).locale(getLocale()).format('L LTS');
   }
 }

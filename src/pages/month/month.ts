@@ -1,12 +1,14 @@
-import { ChangeDetectorRef, Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { CssVariables } from '../../models/css/CssVariables';
 import { Day } from '../../models/time/day';
 import { Month } from '../../models/time/month';
 import { StateProvider } from '../../providers/state/state';
-import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
+import { getLocale } from '../../text-items/date-time-formats';
+import { DayOfWeek, TimeNames } from '../../text-items/time-names';
 
 /**
  * Shows info about the specified month.
@@ -27,6 +29,7 @@ export class MonthPage {
   month: Month;
 
   private changeSubscription: Subscription;
+  private forLocalization: Date;
 
   constructor(
     public navCtrl: NavController,
@@ -38,8 +41,15 @@ export class MonthPage {
 
   ionViewWillLoad() {
     this.changeSubscription = this.state.change$.subscribe(change => {
-      this.month = change.month;
-      this.cd.detectChanges();
+      if (change.month) {
+        this.month = change.month;
+        this.forLocalization = new Date(
+          this.month.yearNumber,
+          this.month.monthNumber + 1,
+          0
+        );
+        this.cd.detectChanges();
+      }
     });
   }
 
@@ -86,14 +96,16 @@ export class MonthPage {
    * Gets the name of the days.
    */
   getDaysOfWeek(): DayOfWeek[] {
-    return DAYS_OF_WEEK;
+    return TimeNames.getDaysOfWeek();
   }
 
   /**
    * Gets the name of the month.
    */
   getMonthName(): string {
-    return `${this.month.name} ${this.month.yearNumber}`;
+    return moment(this.forLocalization)
+      .locale(getLocale())
+      .format('MMMM YYYY');
   }
 
   /**

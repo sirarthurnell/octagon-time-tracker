@@ -24,7 +24,7 @@
   <!-- Week selector -->
   <previous-next *ngIf="week"
                  #previousNext
-                 [text]="week.name"
+                 [text]="getWeekText()"
                  (previous)="setPrevious()"
                  (next)="setNext()"
                  [textClass]="isThisWeek() ? 'current-time--inverted' : ''">

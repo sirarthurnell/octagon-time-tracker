@@ -9,7 +9,7 @@ import { Day } from '../../models/time/day';
 import { Month } from '../../models/time/month';
 import { Year } from '../../models/time/year';
 import { StateProvider } from '../../providers/state/state';
-import { DayOfWeek, DAYS_OF_WEEK } from '../../text-items/days-of-week';
+import { DayOfWeek, TimeNames } from '../../text-items/time-names';
 
 /**
  * Shows info about the specified year.
@@ -89,7 +89,7 @@ export class YearPage {
    * Gets the name of the days.
    */
   getDaysOfWeek(): DayOfWeek[] {
-    return DAYS_OF_WEEK;
+    return TimeNames.getDaysOfWeek();
   }
 
   /**

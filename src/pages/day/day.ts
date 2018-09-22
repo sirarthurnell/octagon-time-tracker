@@ -1,13 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  IonicPage,
-  ItemSliding,
-  ModalController,
-  NavController,
-  NavParams,
-  ToastController,
-  PopoverController
-} from 'ionic-angular';
+import { IonicPage, ItemSliding, ModalController, NavController, NavParams, PopoverController, ToastController } from 'ionic-angular';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
@@ -15,6 +8,7 @@ import { Checking, CheckingDirection } from '../../models/time/checking';
 import { Day } from '../../models/time/day';
 import { StateProvider } from '../../providers/state/state';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { getLocale } from '../../text-items/date-time-formats';
 
 /**
  * Shows info about the specified day.
@@ -88,7 +82,9 @@ export class DayPage {
    * Gets the text to display on previous next.
    */
   getDayText(): string {
-    return `${this.day.name} - ${this.day.asDate.toLocaleDateString()}`;
+    return moment(this.day.asDate)
+      .locale(getLocale())
+      .format('ddd[,] LL');
   }
 
   /**

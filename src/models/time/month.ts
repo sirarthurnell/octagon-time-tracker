@@ -3,7 +3,6 @@ import 'moment-duration-format';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { LONG_TIME_FORMAT, SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
-import { MONTH_NAMES } from '../../text-items/months';
 import { create2dArray } from '../array/array-extensions';
 import { Checking } from './checking';
 import { DateOperations } from './date-operations';
@@ -12,6 +11,7 @@ import { DayInfo } from './day-info';
 import { DayOfWeek } from './day-of-week';
 import { TimeCalculation } from './time-calculation';
 import { Week } from './week';
+import { TimeNames } from '../../text-items/time-names';
 
 /**
  * Represents a month.
@@ -79,9 +79,7 @@ export class Month {
   /**
    * Gets the name of the month.
    */
-  get name(): string {
-    return MONTH_NAMES[this.monthNumber];
-  }
+  readonly name: string;
 
   constructor(
     public readonly yearNumber: number,
@@ -90,6 +88,7 @@ export class Month {
     private readonly checkingsOfMonth: Checking[],
     private dayInfos: { [day: number]: DayInfo } = {}
   ) {
+    this.name = TimeNames.getMonthName(monthNumber);
     this.createDays();
     this.setPreviousNextDays();
   }

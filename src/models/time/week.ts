@@ -1,9 +1,12 @@
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { LONG_TIME_FORMAT, SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
-import { MONTH_NAMES } from '../../text-items/months';
+import {
+  LONG_TIME_FORMAT,
+  SHORT_TIME_FORMAT
+} from '../../text-items/date-time-formats';
 import { Day } from './day';
 import { TimeCalculation } from './time-calculation';
+import { TimeNames } from '../../text-items/time-names';
 
 /**
  * Represents a week.
@@ -15,17 +18,17 @@ export class Week {
   get name(): string {
     const firstDay = this.getFirstDay();
     const lastDay = this.getLastDay();
+    const firstDayMonthName = TimeNames.getMonthName(firstDay.monthNumber);
 
     if (firstDay.monthNumber === lastDay.monthNumber) {
-      return `${MONTH_NAMES[firstDay.monthNumber]} ${firstDay.dayNumber} - ${
+      return `${firstDayMonthName} ${firstDay.dayNumber} - ${
         lastDay.dayNumber
       }`;
     } else {
-      return `${MONTH_NAMES[firstDay.monthNumber].substr(0, 3)}. ${
+      const lastDayMonthName = TimeNames.getMonthName(lastDay.monthNumber);
+      return `${firstDayMonthName.substr(0, 3)}. ${
         firstDay.dayNumber
-      } - ${MONTH_NAMES[lastDay.monthNumber].substr(0, 3)}. ${
-        lastDay.dayNumber
-      }`;
+      } - ${lastDayMonthName.substr(0, 3)}. ${lastDay.dayNumber}`;
     }
   }
 
@@ -81,7 +84,9 @@ export class Week {
    * Gets the formatted total time.
    */
   getFormattedWorkedAverageTime(): string {
-    return this.calculateWorkedAverageTime().format(SHORT_TIME_FORMAT, { trim: false });
+    return this.calculateWorkedAverageTime().format(SHORT_TIME_FORMAT, {
+      trim: false
+    });
   }
 
   /**
@@ -103,9 +108,7 @@ export class Week {
    * Gets the number of days worked.
    */
   getDaysWorkedCount(): number {
-    const workedDays = this.days.filter(
-      day => day.isWorked()
-    );
+    const workedDays = this.days.filter(day => day.isWorked());
 
     return workedDays.length;
   }

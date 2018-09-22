@@ -1,12 +1,12 @@
-import { Checking } from './checking';
 import * as moment from 'moment';
-import { TimeCalculation } from './time-calculation';
-import { DayInfo } from './day-info';
+import 'moment-duration-format';
 import { Observable } from 'rxjs';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
-import { DAYS_OF_WEEK } from '../../text-items/days-of-week';
-import 'moment-duration-format';
 import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
+import { TimeNames } from '../../text-items/time-names';
+import { Checking } from './checking';
+import { DayInfo } from './day-info';
+import { TimeCalculation } from './time-calculation';
 
 /**
  * Represents a day.
@@ -30,10 +30,7 @@ export class Day {
   /**
    * Gets the name of the day.
    */
-  get name(): string {
-    const dayOfWeekNumber = this.asDate.getDay();
-    return DAYS_OF_WEEK[dayOfWeekNumber].name;
-  }
+  readonly name: string;
 
   constructor(
     public yearNumber: number,
@@ -46,6 +43,7 @@ export class Day {
     public info?: DayInfo
   ) {
     this.asDate = new Date(this.yearNumber, this.monthNumber, this.dayNumber);
+    this.name = TimeNames.getDayOfWeekName(this.asDate.getDay());
   }
 
   /**

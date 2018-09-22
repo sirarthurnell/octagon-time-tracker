@@ -20,22 +20,22 @@
       <button ion-item menuClose (click)="navigateTo('DayPage')">
         <ion-icon [name]="'clock'" item-start></ion-icon>
         <ion-label>Day</ion-label>
-        <ion-note item-end color="accent">{{ currentDayLabel }}</ion-note>
+        <ion-note item-end class="time-menu" color="accent">{{ currentDayLabel }}</ion-note>
       </button>
       <button ion-item menuClose (click)="navigateTo('WeekPage')">
         <ion-icon [name]="'calendar'" item-start></ion-icon>
         <ion-label>Week</ion-label>
-        <ion-note item-end color="accent">{{ currentWeekLabel }}</ion-note>
+        <ion-note item-end class="time-menu" color="accent">{{ currentWeekLabel }}</ion-note>
       </button>
       <button ion-item menuClose (click)="navigateTo('MonthPage')">
         <ion-icon [name]="'calendar'" item-start></ion-icon>
         <ion-label>Month</ion-label>
-        <ion-note item-end color="accent">{{ currentMonthLabel }}</ion-note>
+        <ion-note item-end class="time-menu" color="accent">{{ currentMonthLabel }}</ion-note>
       </button>
       <button ion-item menuClose (click)="navigateTo('YearPage')">
         <ion-icon [name]="'calendar'" item-start></ion-icon>
         <ion-label>Year</ion-label>
-        <ion-note item-end color="accent">{{ currentYearLabel }}</ion-note>
+        <ion-note item-end class="time-menu" color="accent">{{ currentYearLabel }}</ion-note>
       </button>
     </ion-list>
   </ion-content>
