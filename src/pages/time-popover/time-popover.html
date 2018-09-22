@@ -4,9 +4,10 @@
   <!-- Go to date -->
   <ion-item>
     <ion-label>Go to date</ion-label>
-    <ion-datetime displayFormat="MMM/DD/YYYY"
+    <ion-datetime [displayFormat]="displayFormat"
                   [(ngModel)]="dateToGo"
                   (ionCancel)="close()"
+                  [monthShortNames]="monthNames"
                   min="1900-01-01"
                   max="2199-12-31">
     </ion-datetime>

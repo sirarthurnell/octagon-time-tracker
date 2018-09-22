@@ -15,6 +15,8 @@ export interface DayOfWeek {
  * periods.
  */
 export class TimeNames {
+  private static readonly MONTH_COUNT = 12;
+
   /**
    * Gets the name of the month.
    * @param monthNumber Month number starting at 0.
@@ -25,6 +27,31 @@ export class TimeNames {
     return moment(forLocalization)
       .locale(getLocale())
       .format('MMMM');
+  }
+
+  /**
+   * Get the names of the months.
+   */
+  static getMonthNames(short = false): string[] {
+    const names = [] as string[];
+
+    for (let i = 0; i < this.MONTH_COUNT; i++) {
+      const monthName = short
+        ? this.getMonthName(i).substr(0, 3)
+        : this.getMonthName(i);
+
+      names.push(TimeNames.capitalize(monthName));
+    }
+
+    return names;
+  }
+
+  /**
+   * Capitalizes the specified string.
+   * @param str String to capitalize.
+   */
+  private static capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   /**

@@ -6,6 +6,8 @@ import { Day } from '../../models/time/day';
 import { ExportProvider } from '../../providers/export/export';
 import { StateProvider } from '../../providers/state/state';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
+import { TimeNames } from '../../text-items/time-names';
+import { getLocalizedShortDateFormat } from '../../text-items/date-time-formats';
 
 /**
  * Popover to export and navigate to date.
@@ -17,6 +19,8 @@ import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 })
 export class TimePopoverPage {
   private entity: any;
+  readonly monthNames: string[];
+  readonly displayFormat = getLocalizedShortDateFormat();
 
   /**
    * Checks if the entity passed is a day.
@@ -50,6 +54,7 @@ export class TimePopoverPage {
     this._dateToGo = this.state.daySnapshot.asDate;
     this.entity = this.navParams.data;
     this.isDay = this.entity instanceof Day;
+    this.monthNames = TimeNames.getMonthNames(true);
   }
 
   /**

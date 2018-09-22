@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ViewController
-} from 'ionic-angular';
-import { Checking, CheckingDirection } from '../../models/time/checking';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import * as moment from 'moment';
+import { Checking, CheckingDirection } from '../../models/time/checking';
 import { Day } from '../../models/time/day';
-import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
+import { getLocalizedTimeFormat } from '../../text-items/date-time-formats';
 
 /**
  * Create and edit checking page.
@@ -19,7 +14,7 @@ import { SHORT_TIME_FORMAT } from '../../text-items/date-time-formats';
   templateUrl: 'checking-modal.html'
 })
 export class CheckingModalPage {
-  readonly timeFormat = SHORT_TIME_FORMAT;
+  readonly timeFormat = getLocalizedTimeFormat();
 
   title = 'Checking';
 

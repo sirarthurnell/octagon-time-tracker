@@ -57,4 +57,12 @@
   <h1>Export:</h1>
   <button ion-button (click)="exportToExcel()">Export to Excel file</button>
   <button ion-button (click)="sendEmail()">Send by email</button>
+
+  <hr>
+
+  <!-- Formats -->
+  <h1>Formats:</h1>
+  <p>Time format: {{ getTimeFormat() }}</p>
+  <p>Short date format: {{ getDateFormat() }}</p>
+
 </ion-content>

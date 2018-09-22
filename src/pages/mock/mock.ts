@@ -9,6 +9,7 @@ import { ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
 import { Month } from '../../models/time/month';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { ExportProvider } from '../../providers/export/export';
+import { getLocalizedTimeFormat, getLocalizedShortDateFormat } from '../../text-items/date-time-formats';
 
 @IonicPage()
 @Component({
@@ -125,5 +126,19 @@ export class MockPage {
     ];
 
     return json;
+  }
+
+  /**
+   * Gets the time format to apply.
+   */
+  getTimeFormat(): string {
+    return getLocalizedTimeFormat();
+  }
+
+  /**
+   * Gets the short date format to apply.
+   */
+  getDateFormat(): string {
+    return getLocalizedShortDateFormat();
   }
 }

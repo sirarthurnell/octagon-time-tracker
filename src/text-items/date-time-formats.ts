@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 /**
  * Time for just one day.
  */
@@ -18,4 +20,38 @@ export function getLocale(): string {
   } else {
     return navigator.language;
   }
+}
+
+/**
+ * Returns the localized format applied to times.
+ */
+export function getLocalizedTimeFormat(): string {
+  return getLocalizedFormat('LT');
+}
+
+/**
+ * Returns the localized format applied to short dates.
+ */
+export function getLocalizedShortDateFormat(): string {
+  const somethingInsideBrackets = /\[[\s\S]*?\]/g;
+  const multipleSpaces = /\s+/g;
+  const format = getLocalizedFormat('ll')
+    .replace(somethingInsideBrackets, '')
+    .replace(multipleSpaces, ' ');
+
+  return format;
+}
+
+/**
+ * Gets the localized format corresponding to the
+ * specified key.
+ * @param formatKey Format key.
+ */
+function getLocalizedFormat(formatKey: moment.LongDateFormatKey): string {
+  const format = moment()
+    .locale(getLocale())
+    .localeData()
+    .longDateFormat(formatKey);
+
+  return format;
 }
