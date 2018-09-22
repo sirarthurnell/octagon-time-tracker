@@ -100,6 +100,7 @@ export class TimeGaugeComponent implements OnDestroy {
         break;
       case GaugeState.error:
         this.indicateError();
+        this.plotInfo();
         break;
       case GaugeState.showInfo:
         this.plotInfo();
