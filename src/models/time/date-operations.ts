@@ -12,7 +12,7 @@ export class DateOperations {
    * @param year Year.
    * @param month Month.
    */
-  static daysInMonth(year, month): number {
+  static daysInMonth(year: number, month: number): number {
     const date = new Date(year, month + 1, 0);
     return date.getDate();
   }
@@ -51,31 +51,20 @@ export class DateOperations {
    * @param month Month.
    * @param firstDayOfWeek First day of the week.
    */
-  static weeksInMonth(
-    year: number,
+  static weeksInMonth(year: number,
     month: number,
     firstDayOfWeek: DayOfWeek
-  ): number {
-    const firstDay = 1;
-    const startOffset = DateOperations.weekOffset(
-      year,
-      month,
-      firstDay,
-      firstDayOfWeek
-    );
-    const daysCount = DateOperations.daysInMonth(year, month);
+  ) {
+    let firstWeekEnd = 7 - DateOperations.weekOffset(year, month, 1, firstDayOfWeek);
+    let numDays = DateOperations.daysInMonth(year, month);
 
-    if (startOffset === 0 && daysCount % 7 === 0) {
-      return 4;
-    } else {
-      return (
-        DateOperations.countFirstDayOfWeekTimeInMonth(
-          year,
-          month,
-          firstDayOfWeek
-        ) + 1
-      );
+    let i = 1;
+    while (firstWeekEnd < numDays) {
+      firstWeekEnd += 7;
+      i++;
     }
+
+    return i;
   }
 
   /**

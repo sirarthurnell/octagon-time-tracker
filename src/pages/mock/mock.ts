@@ -10,6 +10,8 @@ import { Year } from '../../models/time/year';
 import { ExportProvider } from '../../providers/export/export';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { getLocalizedShortDateFormat, getLocalizedTimeFormat, getLocalizedFirstDayOfWeek } from '../../text-items/date-time-formats';
+import { DateOperations } from '../../models/time/date-operations';
+import { DayOfWeek } from '../../models/time/day-of-week';
 
 @IonicPage()
 @Component({
@@ -144,5 +146,10 @@ export class MockPage {
 
   getFirstOfWeek(): number {
     return getLocalizedFirstDayOfWeek();
+  }
+
+  checkDateOperation(): void {
+    const count = DateOperations.weeksInMonth(2010, 1, DayOfWeek.Monday);
+    console.log(count);
   }
 }
