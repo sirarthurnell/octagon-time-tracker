@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ViewChild
+} from '@angular/core';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  PopoverController
+} from 'ionic-angular';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
 import { create2dArray } from '../../models/array/array-extensions';
@@ -10,6 +20,7 @@ import { Month } from '../../models/time/month';
 import { Year } from '../../models/time/year';
 import { StateProvider } from '../../providers/state/state';
 import { DayOfWeek, TimeNames } from '../../text-items/time-names';
+import { ColorBlender } from '../../models/colors/color-blender';
 
 /**
  * Shows info about the specified year.
@@ -131,10 +142,12 @@ export class YearPage {
    * @param day Day.
    */
   getDayBackgroundColor(day: Day): string {
-    const timeAsPercent = day.getTotalTimeAsPercent();
-    const opacity = Math.floor((timeAsPercent / 100) * 255);
-    const opacityAsHex = opacity.toString(16);
-    const backgroundColor = CssVariables.workingTimeColor + opacityAsHex;
+    const darken = day.getTotalTimeAsPercent();
+    const moreDark = darken * 1.25;
+    const backgroundColor = ColorBlender.lighten(
+      CssVariables.workingTimeColor,
+      100 - moreDark
+    );
 
     return backgroundColor;
   }
@@ -145,7 +158,10 @@ export class YearPage {
    * control.
    */
   showPopover(event): void {
-    const popover = this.popoverCtrl.create('TimePopoverPage', this.year.checkings);
+    const popover = this.popoverCtrl.create(
+      'TimePopoverPage',
+      this.year.checkings
+    );
     popover.present({
       ev: event
     });
