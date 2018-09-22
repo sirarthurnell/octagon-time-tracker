@@ -40,9 +40,14 @@ export class CurrentDayPage {
   ionViewWillLoad() {
     this.changeSubscription = this.state.change$.subscribe(change => {
       this.day = change.day;
-
       if (this.day) {
-        this.manageButtonsState();
+
+        if(!change.day.isToday()) {
+          this.state.setToday().take(1).subscribe();
+        } else {
+          this.manageButtonsState();
+        }
+
       }
     });
   }

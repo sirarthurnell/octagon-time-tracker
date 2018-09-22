@@ -1,8 +1,8 @@
-import * as moment from "moment";
-import { Checking, CheckingDirection } from "./checking";
-import { Day } from "./day";
-import { getFirst, getLast, hasAny } from "../array/array-extensions";
-import { compareDates } from "./date-extensions";
+import * as moment from 'moment';
+import { Checking, CheckingDirection } from './checking';
+import { Day } from './day';
+import { getFirst, getLast, hasAny } from '../array/array-extensions';
+import { compareDates } from './date-extensions';
 
 /**
  * Types of checking adjustments.
@@ -113,13 +113,17 @@ export class TimeCalculation {
     let correctedCheckings: Checking[];
 
     if (noDuplicates.length === 0) {
-      correctedCheckings = TimeCalculation.adjustForCounting(day);
+      let adjustedForCounting = TimeCalculation.adjustForCounting(day);
+      correctedCheckings = adjustedForCounting;
     } else {
       correctedCheckings = TimeCalculation.adjustBeginningOfDay(
         day,
         noDuplicates
       );
-      correctedCheckings = TimeCalculation.adjustEndOfDay(day, noDuplicates);
+
+      let adjustedCheckings = TimeCalculation.adjustEndOfDay(day, noDuplicates);
+      let noOrphans = this.removeOrphans(adjustedCheckings);
+      correctedCheckings = noOrphans;
     }
 
     return correctedCheckings;
@@ -130,9 +134,10 @@ export class TimeCalculation {
    * @param day Day.
    */
   private static adjustForCounting(day: Day): Checking[] {
-    const previousDayLastChecking = day.previous && hasAny(day.previous.checkings)
-      ? getLast(TimeCalculation.orderAscending(day.previous.checkings))
-      : null;
+    const previousDayLastChecking =
+      day.previous && hasAny(day.previous.checkings)
+        ? getLast(TimeCalculation.orderAscending(day.previous.checkings))
+        : null;
     const isPreviousDayLastDirectionIn =
       previousDayLastChecking &&
       previousDayLastChecking.direction === CheckingDirection.In;
@@ -314,6 +319,24 @@ export class TimeCalculation {
     }
 
     return duplicatesRemoved;
+  }
+
+  /**
+   * Removes orphan entries.
+   * @param adjustedCheckings Previously adjusted checkings.
+   */
+  private static removeOrphans(adjustedCheckings: Checking[]): Checking[] {
+    const isFirstCheckingDirectionOut =
+      hasAny(adjustedCheckings) &&
+      adjustedCheckings[0].direction === CheckingDirection.Out;
+
+    if (isFirstCheckingDirectionOut) {
+      const copy = [].concat(adjustedCheckings);
+      copy.shift();
+      return copy;
+    } else {
+      return adjustedCheckings;
+    }
   }
 
   /**
