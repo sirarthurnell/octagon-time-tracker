@@ -203,23 +203,11 @@ export class Month {
    * arrays of days.
    */
   private createWeeksAsDays(): Day[][] {
-    const daysInWeekCount = 7;
-    const daysInWeekUpperIndex = daysInWeekCount - 1;
     const firstDay = 1;
-    const lastDay = DateOperations.daysInMonth(
-      this.yearNumber,
-      this.monthNumber
-    );
     const startOffset = DateOperations.weekOffset(
       this.yearNumber,
       this.monthNumber,
       firstDay,
-      this.firstDayOfWeek
-    );
-    const endOffset = DateOperations.weekOffset(
-      this.yearNumber,
-      this.monthNumber,
-      lastDay,
       this.firstDayOfWeek
     );
 
@@ -239,18 +227,19 @@ export class Month {
       ? previousDaysLength - startOffset
       : 0;
 
+    const weekCount = DateOperations.weeksInMonth(
+        this.yearNumber,
+        this.monthNumber,
+        this.firstDayOfWeek
+      );
+
     const endIndexExclusive = this.next
       ? previousDaysLength +
         this._days.length +
-        (daysInWeekUpperIndex - endOffset)
+        weekCount.lastDayOffset
       : this._days.length;
 
-    const weekCount = DateOperations.weeksInMonth(
-      this.yearNumber,
-      this.monthNumber,
-      this.firstDayOfWeek
-    );
-    const daysInWeeks: Day[][] = create2dArray<Day>(weekCount);
+    const daysInWeeks: Day[][] = create2dArray<Day>(weekCount.weekCount);
     let weekIndex = -1;
     let dayOfWeekIndex = 0;
     for (

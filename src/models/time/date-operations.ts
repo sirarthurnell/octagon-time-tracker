@@ -54,16 +54,22 @@ export class DateOperations {
   static weeksInMonth(year: number,
     month: number,
     firstDayOfWeek: DayOfWeek
-  ) {
+  ): { weekCount: number, lastDayOffset: number } {
     let firstWeekEnd = 7 - DateOperations.weekOffset(year, month, 1, firstDayOfWeek);
     let numDays = DateOperations.daysInMonth(year, month);
 
     let i = 1;
-    while (firstWeekEnd < numDays) {
-      firstWeekEnd += 7;
+    let end = firstWeekEnd;
+    while (end < numDays) {
+      end += 7;
       i++;
     }
 
-    return i;
+    let lastDay = new Date(year, month + 1, 0);
+    let offset = end - lastDay.getDate();
+    return {
+      weekCount: i,
+      lastDayOffset: offset
+    };
   }
 }
