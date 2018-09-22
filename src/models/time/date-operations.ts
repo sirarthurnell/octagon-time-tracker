@@ -66,29 +66,4 @@ export class DateOperations {
 
     return i;
   }
-
-  /**
-   * Counts the number of occurrences of
-   * days considered first day of the week.
-   * @param year Year.
-   * @param month Month.
-   * @param firstDayOfWeek First day of the week.
-   */
-  private static countFirstDayOfWeekTimeInMonth(
-    year: number,
-    month: number,
-    firstDayOfWeek: DayOfWeek
-  ): number {
-    const daysInMonth = DateOperations.daysInMonth(year, month);
-    let firstsCount = 0;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const currentDay = new Date(year, month, day);
-      if (currentDay.getDay() === firstDayOfWeek.valueOf()) {
-        firstsCount++;
-      }
-    }
-
-    return firstsCount;
-  }
 }
