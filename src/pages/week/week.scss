@@ -49,6 +49,7 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
     margin-left: calc((100% / 7) - #{$week-graph-bar-width} - ((100% / 7) - #{$week-graph-bar-width}) / 8);
     color: $week-graph-day-name-color;
     opacity: 0.5;
+    text-transform: uppercase;
   }
 
   &__average-line {

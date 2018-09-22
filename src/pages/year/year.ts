@@ -1,38 +1,28 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ViewChild
-} from '@angular/core';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  PopoverController
-} from 'ionic-angular';
-import { Subscription } from 'rxjs';
-import { PreviousNextComponent } from '../../components/previous-next/previous-next';
-import { create2dArray } from '../../models/array/array-extensions';
-import { CssVariables } from '../../models/css/CssVariables';
-import { Day } from '../../models/time/day';
-import { Month } from '../../models/time/month';
-import { Year } from '../../models/time/year';
-import { StateProvider } from '../../providers/state/state';
-import { DayOfWeek, TimeNames } from '../../text-items/time-names';
-import { ColorBlender } from '../../models/colors/color-blender';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild } from "@angular/core";
+import { ScreenOrientation } from "@ionic-native/screen-orientation";
+import { IonicPage, NavController, NavParams, PopoverController } from "ionic-angular";
+import { Subscription } from "rxjs";
+import { PreviousNextComponent } from "../../components/previous-next/previous-next";
+import { create2dArray } from "../../models/array/array-extensions";
+import { ColorBlender } from "../../models/colors/color-blender";
+import { CssVariables } from "../../models/css/CssVariables";
+import { Day } from "../../models/time/day";
+import { Month } from "../../models/time/month";
+import { Year } from "../../models/time/year";
+import { StateProvider } from "../../providers/state/state";
+import { DayOfWeek, TimeNames } from "../../text-items/time-names";
 
 /**
  * Shows info about the specified year.
  */
 @IonicPage()
 @Component({
-  selector: 'page-year',
-  templateUrl: 'year.html',
+  selector: "page-year",
+  templateUrl: "year.html",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YearPage {
-  @ViewChild('previousNext')
+  @ViewChild("previousNext")
   previousNext: PreviousNextComponent;
 
   /**
@@ -73,7 +63,16 @@ export class YearPage {
    * @param month Month to show.
    */
   showMonth(month: Month): void {
-    this.state.setMonth(month).subscribe(_ => this.navCtrl.push('MonthPage'));
+    this.state.setMonth(month).subscribe(_ => this.navCtrl.push("MonthPage"));
+  }
+
+  /**
+   * Sets and shows today.
+   */
+  showToday(): void {
+    this.state.setToday().subscribe(change => {
+    this.year = change.year;
+    });
   }
 
   /**
@@ -119,7 +118,7 @@ export class YearPage {
     let monthRows: Month[][];
     let monthsPerRow: number;
 
-    if (this.screenOrientation.type.indexOf('portrait') > -1) {
+    if (this.screenOrientation.type.indexOf("portrait") > -1) {
       monthsPerRow = 3;
     } else {
       monthsPerRow = 6;
@@ -159,7 +158,7 @@ export class YearPage {
    */
   showPopover(event): void {
     const popover = this.popoverCtrl.create(
-      'TimePopoverPage',
+      "TimePopoverPage",
       this.year.checkings
     );
     popover.present({
