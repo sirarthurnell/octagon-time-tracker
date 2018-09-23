@@ -35,14 +35,14 @@ export class WeekPage {
     private state: StateProvider
   ) {}
 
-  ionViewWillLoad() {
+  ionViewWillEnter() {
     this.changeSubscription = this.state.change$.subscribe(change => {
       this.week = change.week;
       this.cd.detectChanges();
     });
   }
 
-  ionViewWillUnload() {
+  ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
   }
 

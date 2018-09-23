@@ -41,13 +41,13 @@ export class DayPage {
     private storage: TimeStorageProvider
   ) {}
 
-  ionViewWillLoad() {
+  ionViewWillEnter() {
     this.changeSubscription = this.state.change$.subscribe(
       change => (this.day = change.day)
     );
   }
 
-  ionViewWillUnload() {
+  ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
   }
 

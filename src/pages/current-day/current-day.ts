@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { StateProvider } from '../../providers/state/state';
-import { Day } from '../../models/time/day';
 import { Subscription } from 'rxjs';
 import { TimeGaugeComponent } from '../../components/time-gauge/time-gauge.component';
-import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
-import { Checking, CheckingDirection } from '../../models/time/checking';
 import { getLast } from '../../models/array/array-extensions';
+import { Checking, CheckingDirection } from '../../models/time/checking';
+import { Day } from '../../models/time/day';
+import { StateProvider } from '../../providers/state/state';
+import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 
 /**
  * Current day page.
@@ -37,22 +37,23 @@ export class CurrentDayPage {
     private storage: TimeStorageProvider
   ) {}
 
-  ionViewWillLoad() {
+  ionViewWillEnter() {
     this.changeSubscription = this.state.change$.subscribe(change => {
       this.day = change.day;
       if (this.day) {
-
-        if(!change.day.isToday()) {
-          this.state.setToday().take(1).subscribe();
+        if (!change.day.isToday()) {
+          this.state
+            .setToday()
+            .take(1)
+            .subscribe();
         } else {
           this.manageButtonsState();
         }
-
       }
     });
   }
 
-  ionViewWillUnload() {
+  ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
   }
 
@@ -103,5 +104,12 @@ export class CurrentDayPage {
    */
   private refreshGauge(): void {
     this.gauge.refresh();
+  }
+
+  /**
+   * Goes to edit page.
+   */
+  goToEditDay(): void {
+    this.state.setDay(this.day).subscribe(_ => this.navCtrl.push('DayPage'));
   }
 }

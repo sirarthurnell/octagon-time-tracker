@@ -34,10 +34,18 @@
 */
 .saturday {
   color: $saturday-color !important;
+
+  &--inverted {
+    color: $white !important;
+  }
 }
 
 .sunday {
   color: $sunday-color !important;
+
+  &--inverted {
+    color: $white !important;
+  }
 }
 
 /*

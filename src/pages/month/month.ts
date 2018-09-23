@@ -39,7 +39,7 @@ export class MonthPage {
     private state: StateProvider
   ) {}
 
-  ionViewWillLoad() {
+  ionViewWillEnter() {
     this.changeSubscription = this.state.change$.subscribe(change => {
       if (change.month) {
         this.month = change.month;
@@ -53,7 +53,7 @@ export class MonthPage {
     });
   }
 
-  ionViewWillUnload() {
+  ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
   }
 

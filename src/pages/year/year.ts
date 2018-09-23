@@ -40,20 +40,20 @@ export class YearPage {
     public popoverCtrl: PopoverController,
     private cd: ChangeDetectorRef,
     private state: StateProvider
-  ) {
+  ) {}
+
+  ionViewWillEnter() {
+    this.changeSubscription = this.state.change$.subscribe(change => {
+      this.year = change.year;
+      this.cd.detectChanges();
+    });
+
     this.orientationSubscription = this.screenOrientation
       .onChange()
       .subscribe(_ => this.cd.detectChanges());
   }
 
-  ionViewWillLoad() {
-    this.changeSubscription = this.state.change$.subscribe(change => {
-      this.year = change.year;
-      this.cd.detectChanges();
-    });
-  }
-
-  ionViewWillUnload() {
+  ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
     this.orientationSubscription.unsubscribe();
   }

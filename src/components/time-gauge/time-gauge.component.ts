@@ -71,6 +71,7 @@ export class TimeGaugeComponent implements OnDestroy {
   boxDimesion = 100;
   innerGradientStart = (100 * (this.radius - this.strokeWidth)) / this.radius;
   totalWorkedTime = '';
+  gradientId = '';
   blink = false;
   errorCondition = false;
 
@@ -282,11 +283,19 @@ export class TimeGaugeComponent implements OnDestroy {
   }
 
   /**
+   * Sets a random id to the gradient to avoid id collisions.
+   */
+  private setGradientId(): void {
+    this.gradientId = 'inset' + Math.floor(Math.random() * 1000);
+  }
+
+  /**
    * Perform a refresh.
    */
   refresh(): void {
     setTimeout(() => {
       this.adjustedCheckings = TimeCalculation.adjustCheckings(this.day);
+      this.setGradientId();
       this.clear();
       this.plot();
       this.cd.detectChanges();

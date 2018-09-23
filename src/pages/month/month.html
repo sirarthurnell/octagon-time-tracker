@@ -8,10 +8,14 @@
       Month
     </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="showToday()">
+      <button ion-button
+              icon-only
+              (click)="showToday()">
         <ion-icon name="locate"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="showPopover($event)">
+      <button ion-button
+              icon-only
+              (click)="showPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
@@ -54,7 +58,9 @@
               class="month__day"
               [style.background]="!day.isToday() && !isSelectedDay(day) ? getDayBackgroundGradient(day) : ''"
               [class.sunday]="day.isSunday()"
+              [class.sunday--inverted]="day.isSunday() && day.isToday()"
               [class.saturday]="day.isSaturday()"
+              [class.saturday--inverted]="day.isSaturday() && day.isToday()"
               [class.month__day--other-month]="week.isFromPreviusNextMonth(day)"
               [class.current-time]="day.isToday()"
               [class.selected-day]="!day.isToday() && isSelectedDay(day) && !week.isFromPreviusNextMonth(day)">

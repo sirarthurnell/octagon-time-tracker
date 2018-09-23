@@ -2,7 +2,7 @@
   <svg class="time-gauge__view-box"
        [attr.viewBox]="'0' + ' ' + '0' + ' ' + (boxDimesion * resolution) + ' ' + (boxDimesion * resolution)">
     <defs>
-      <radialGradient id="inset">
+      <radialGradient [attr.id]="gradientId">
         <stop [attr.offset]="innerGradientStart + '%'"
               stop-color="transparent" />
         <stop [attr.offset]="innerGradientStart + '%'"
@@ -11,7 +11,7 @@
               [attr.stop-color]="errorCondition ? errorColor : normalColor" />
       </radialGradient>
     </defs>
-    <circle fill="url(#inset)"
+    <circle [attr.fill]="'url(#' + gradientId + ')'"
             [attr.cx]="radius * resolution"
             [attr.cy]="radius * resolution"
             [attr.r]="radius * resolution" />

@@ -1,16 +1,21 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
       Year
     </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="showToday()">
+      <button ion-button
+              icon-only
+              (click)="showToday()">
         <ion-icon name="locate"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="showPopover($event)">
+      <button ion-button
+              icon-only
+              (click)="showPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
@@ -21,28 +26,40 @@
 
 
   <!-- Year selector -->
-  <previous-next *ngIf="year" #previousNext [enableAnimations]="true" [showLoader]="false" [text]="year.yearNumber"
-    (previous)="setPrevious()" (next)="setNext()" [textClass]="year.isThisYear() ? 'current-time--inverted' : ''">
+  <previous-next *ngIf="year"
+                 #previousNext
+                 [enableAnimations]="true"
+                 [showLoader]="false"
+                 [text]="year.yearNumber"
+                 (previous)="setPrevious()"
+                 (next)="setNext()"
+                 [textClass]="year.isThisYear() ? 'current-time--inverted' : ''">
 
 
 
     <!-- Months grid -->
     <div class="year-grid">
 
-      <div class="year-grid__row" *ngFor="let monthRow of getRowsOfMonths()">
+      <div class="year-grid__row"
+           *ngFor="let monthRow of getRowsOfMonths()">
 
-        <div class="year-grid__col" *ngFor="let month of monthRow">
+        <div class="year-grid__col"
+             *ngFor="let month of monthRow">
 
 
           <!-- Month -->
-          <a href="javascript:void(0)" (click)="showMonth(month)" class="touch-link">
+          <a href="javascript:void(0)"
+             (click)="showMonth(month)"
+             class="touch-link">
             <table class="year-month">
 
 
               <!-- Month name -->
               <thead>
                 <tr>
-                  <td colspan="7" class="year-month__name" [class.current-time]="month.isThisMonth()">{{
+                  <td colspan="7"
+                      class="year-month__name"
+                      [class.current-time]="month.isThisMonth()">{{
                     getMonthName(month) }}</td>
                 </tr>
               </thead>
@@ -50,15 +67,24 @@
 
               <!-- Day of week names -->
               <tr>
-                <td *ngFor="let dayOfWeek of getDaysOfWeek()" class="year-month__day-of-week" [class.sunday]="dayOfWeek.type == 'sunday'"
-                  [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
+                <td *ngFor="let dayOfWeek of getDaysOfWeek()"
+                    class="year-month__day-of-week"
+                    [class.sunday]="dayOfWeek.type == 'sunday'"
+                    [class.saturday]="dayOfWeek.type == 'saturday'">{{ dayOfWeek.name }}</td>
               </tr>
 
 
               <!-- Actual day number -->
-              <tr *ngFor="let week of month.weeks" class="year-month__week">
-                <td *ngFor="let day of week.days" class="year-month__day" [style.background-color]="getDayBackgroundColor(day)"
-                  [class.sunday]="day.isSunday()" [class.saturday]="day.isSaturday()" [class.current-time]="day.isToday()">
+              <tr *ngFor="let week of month.weeks"
+                  class="year-month__week">
+                <td *ngFor="let day of week.days"
+                    class="year-month__day"
+                    [style.background-color]="getDayBackgroundColor(day)"
+                    [class.sunday]="day.isSunday()"
+                    [class.sunday--inverted]="day.isSunday() && day.isToday()"
+                    [class.saturday]="day.isSaturday()"
+                    [class.saturday--inverted]="day.isSaturday() && day.isToday()"
+                    [class.current-time]="day.isToday()">
                   {{ week.isFromPreviusNextMonth(day) ? '' : day.dayNumber }}
                 </td>
               </tr>
