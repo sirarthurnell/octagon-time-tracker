@@ -107,7 +107,7 @@ export class CurrentDayPage {
    * Refreshes the gauge.
    */
   private refreshGauge(): void {
-    if (this.day) {
+    if (this.gauge) {
       this.gauge.refresh();
     }
   }
