@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Day
+      {{ 'DAY.TITLE' | translate }}
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="showToday()">
@@ -45,7 +45,7 @@
       <ion-list class="checking-list">
 
         <ion-list-header>
-          Checkings
+          {{ 'DAY.CHECKINS' | translate }}
         </ion-list-header>
 
 
@@ -65,13 +65,13 @@
                     color="danger"
                     (click)="deleteChecking(slidingItem, checking)">
               <ion-icon name="trash"></ion-icon>
-              Delete
+              {{ 'DAY.DELETE' | translate }}
             </button>
             <button ion-button
                     color="secondary"
                     (click)="editChecking(slidingItem, checking)">
               <ion-icon name="create"></ion-icon>
-              Edit
+              {{ 'DAY.EDIT' | translate }}
             </button>
           </ion-item-options>
 

@@ -3,11 +3,13 @@
 
   <!-- Go to date -->
   <ion-item>
-    <ion-label>Go to date</ion-label>
+    <ion-label>{{ 'TIME_POPOVER.GOTO' | translate }}</ion-label>
     <ion-datetime [displayFormat]="displayFormat"
                   [(ngModel)]="dateToGo"
                   (ionCancel)="close()"
                   [monthShortNames]="monthNames"
+                  doneText="{{ 'GENERAL.ACCEPT' | translate }}"
+                  cancelText="{{ 'GENERAL.CANCEL' | translate }}"
                   min="1900-01-01"
                   max="2199-12-31">
     </ion-datetime>
@@ -18,14 +20,15 @@
   <!-- Export to excel -->
   <button ion-item menuClose (click)="exportToExcel()">
     <ion-icon [name]="'exit'" item-start></ion-icon>
-    <ion-label>Export to Excel</ion-label>
+    <ion-label>{{ 'TIME_POPOVER.EXPORT' | translate }}</ion-label>
   </button>
 
 
   <!-- Delete all checkings -->
   <button *ngIf="isDay" ion-item menuClose (click)="deleteAllCheckings()">
     <ion-icon [name]="'trash'" item-start></ion-icon>
-    <ion-label>Delete all checkings</ion-label>
+    <ion-label>{{ 'TIME_POPOVER.DELETE_ALL' | translate }}</ion-label>
   </button>
+
 
 </ion-list>

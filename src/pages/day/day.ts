@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, ItemSliding, ModalController, NavController, NavParams, PopoverController, ToastController } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
+import { IonicPage, ItemSliding, ModalController, PopoverController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PreviousNextComponent } from '../../components/previous-next/previous-next';
@@ -32,11 +33,10 @@ export class DayPage {
   private changeSubscription: Subscription;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public modalCtrl: ModalController,
+    private modalCtrl: ModalController,
     private toastCtrl: ToastController,
-    public popoverCtrl: PopoverController,
+    private popoverCtrl: PopoverController,
+    private translate: TranslateService,
     private state: StateProvider,
     private storage: TimeStorageProvider
   ) {}
@@ -125,23 +125,30 @@ export class DayPage {
     deletedChecking: Checking,
     deletedCheckingIndex: number
   ): void {
-    let toast = this.toastCtrl.create({
-      message: 'Checking deleted',
-      duration: 5000,
-      showCloseButton: true,
-      closeButtonText: 'Undo'
-    });
+    this.translate
+      .get(['DAY.CHECKIN_DELETED', 'DAY.UNDO'])
+      .take(1)
+      .subscribe(translations => {
+        console.log(translations);
 
-    toast.onDidDismiss((data, role) => {
-      if (role === 'close') {
-        this.day.checkings.splice(deletedCheckingIndex, 0, deletedChecking);
-        this.gauge.refresh();
-      }
+        let toast = this.toastCtrl.create({
+          message: translations['DAY.CHECKIN_DELETED'],
+          duration: 5000,
+          showCloseButton: true,
+          closeButtonText: translations['DAY.UNDO']
+        });
 
-      this.persist();
-    });
+        toast.onDidDismiss((data, role) => {
+          if (role === 'close') {
+            this.day.checkings.splice(deletedCheckingIndex, 0, deletedChecking);
+            this.gauge.refresh();
+          }
 
-    toast.present();
+          this.persist();
+        });
+
+        toast.present();
+      });
   }
 
   /**

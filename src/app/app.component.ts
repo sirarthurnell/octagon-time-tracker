@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { NavController, Platform } from 'ionic-angular';
 import { StateProvider } from '../providers/state/state';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Main component of the application.
@@ -28,17 +29,18 @@ export class MyApp {
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
+    private translate: TranslateService,
     private state: StateProvider
   ) {
     platform.ready().then(() => {
-      // Ionic bug with the status
-      // bar on Android.
+      // Ionic bug with Android's status bar.
       if (platform.is('android')) {
         statusBar.styleBlackOpaque();
       } else {
         statusBar.styleDefault();
       }
 
+      this.prepareTranslations();
       this.listenToStateChanges();
 
       splashScreen.hide();
@@ -47,6 +49,17 @@ export class MyApp {
 
   ionViewWillUnload() {
     this.changeSubscription.unsubscribe();
+  }
+
+  /**
+   * Prepares the translations.
+   */
+  private prepareTranslations(): void {
+    this.translate.addLangs(['en', 'es']);
+    this.translate.setDefaultLang('en');
+
+    const browserLang = this.translate.getBrowserLang();
+    this.translate.use(browserLang.match(/en|es/) ? browserLang : 'en');
   }
 
   /**

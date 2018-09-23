@@ -5,7 +5,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Month
+      {{ 'MONTH.TITLE' | translate }}
     </ion-title>
     <ion-buttons end>
       <button ion-button
@@ -88,16 +88,16 @@
           <table class="statistics">
             <tr>
               <td rowspan="3"
-                  class="statistics__title">Statistics</td>
-              <td class="statistics__label">Total</td>
+                  class="statistics__title">{{ 'STATISTICS.TITLE' | translate }}</td>
+              <td class="statistics__label">{{ 'STATISTICS.TOTAL' | translate }}</td>
               <td>{{ month.getFormattedWorkedTotalTime() }}</td>
             </tr>
             <tr>
-              <td class="statistics__label">Average / day</td>
+              <td class="statistics__label">{{ 'STATISTICS.AVERAGE' | translate }}</td>
               <td>{{ month.getFormattedWorkedAverageTime() }}</td>
             </tr>
             <tr>
-              <td class="statistics__label">Days worked</td>
+              <td class="statistics__label">{{ 'STATISTICS.DAYS_WORKED' | translate }}</td>
               <td>{{ month.getDaysWorkedCount() }}</td>
             </tr>
           </table>

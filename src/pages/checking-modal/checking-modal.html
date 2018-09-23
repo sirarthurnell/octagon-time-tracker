@@ -5,10 +5,10 @@
     <!-- Close button -->
     <ion-buttons end>
       <button ion-button
-              (click)="dismiss()">Close</button>
+              (click)="dismiss()">{{ 'CHECKIN_MODAL.CLOSE' | translate }}</button>
     </ion-buttons>
 
-    <ion-title>{{ title }}</ion-title>
+    <ion-title>{{ 'CHECKIN_MODAL.TITLE.' + mode | translate }} {{ title }}</ion-title>
 
   </ion-navbar>
 
@@ -16,15 +16,17 @@
 
 
 <ion-content padding>
-  <p>Modify the checking you want to add or edit here:</p>
+  <p>{{ 'CHECKIN_MODAL.MESSAGE' | translate }}</p>
 
   <ion-list>
 
 
     <!-- Time -->
     <ion-item>
-      <ion-label>Date</ion-label>
+      <ion-label>{{ 'CHECKIN_MODAL.DATE' | translate }}</ion-label>
       <ion-datetime [displayFormat]="timeFormat"
+                    doneText="{{ 'GENERAL.ACCEPT' | translate }}"
+                    cancelText="{{ 'GENERAL.CANCEL' | translate }}"
                     [(ngModel)]="selectedDate">
       </ion-datetime>
     </ion-item>
@@ -32,11 +34,13 @@
 
     <!-- Direction -->
     <ion-item>
-      <ion-label>Direction</ion-label>
+      <ion-label>{{ 'CHECKIN_MODAL.DIRECTION.TITLE' | translate }}</ion-label>
       <ion-select [(ngModel)]="checking.direction"
+                  okText="{{ 'GENERAL.ACCEPT' | translate }}"
+                  cancelText="{{ 'GENERAL.CANCEL' | translate }}"
                   multiple="false">
-        <ion-option [value]="directionIn">IN</ion-option>
-        <ion-option [value]="directionOut">OUT</ion-option>
+        <ion-option [value]="directionIn">{{ 'CHECKIN_MODAL.DIRECTION.IN' | translate }}</ion-option>
+        <ion-option [value]="directionOut">{{ 'CHECKIN_MODAL.DIRECTION.OUT' | translate }}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -45,7 +49,10 @@
 
 
   <!-- Accept button -->
-  <button ion-button margin-top float-right (click)="accept()">Accept</button>
+  <button ion-button
+          margin-top
+          float-right
+          (click)="accept()">{{ 'GENERAL.ACCEPT' | translate }}</button>
 
 
 </ion-content>

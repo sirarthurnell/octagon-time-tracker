@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavParams, ViewController } from 'ionic-angular';
+import {
+  AlertController,
+  IonicPage,
+  NavParams,
+  ViewController
+} from 'ionic-angular';
 import * as moment from 'moment';
 import { FormatterFactory } from '../../models/formatters/formatter-factory';
 import { Day } from '../../models/time/day';
@@ -8,6 +13,7 @@ import { StateProvider } from '../../providers/state/state';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
 import { TimeNames } from '../../text-items/time-names';
 import { getLocalizedShortDateFormat } from '../../text-items/date-time-formats';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Popover to export and navigate to date.
@@ -47,6 +53,7 @@ export class TimePopoverPage {
     private viewCtrl: ViewController,
     private navParams: NavParams,
     private alertCtrl: AlertController,
+    private translate: TranslateService,
     private exportProvider: ExportProvider,
     private storage: TimeStorageProvider,
     private state: StateProvider
@@ -73,22 +80,32 @@ export class TimePopoverPage {
    * if the user accepts.
    */
   deleteAllCheckings(): void {
-    const confirm = this.alertCtrl.create({
-      title: 'Delete all checkings?',
-      message: 'All checkings of this day will be removed. Are you sure?',
-      buttons: [
-        {
-          text: 'No',
-          handler: () => {}
-        },
-        {
-          text: 'Delete',
-          handler: () => this.deleteAll()
-        }
-      ]
-    });
+    this.translate
+      .get([
+        'TIME_POPOVER.DELETE_ALL_CONFIRM.TITLE',
+        'TIME_POPOVER.DELETE_ALL_CONFIRM.MESSAGE',
+        'TIME_POPOVER.DELETE_ALL_CONFIRM.NO',
+        'TIME_POPOVER.DELETE_ALL_CONFIRM.DELETE'
+      ])
+      .take(1)
+      .subscribe(translations => {
+        const confirm = this.alertCtrl.create({
+          title: translations['TIME_POPOVER.DELETE_ALL_CONFIRM.TITLE'],
+          message: translations['TIME_POPOVER.DELETE_ALL_CONFIRM.MESSAGE'],
+          buttons: [
+            {
+              text: translations['TIME_POPOVER.DELETE_ALL_CONFIRM.NO'],
+              handler: () => this.close()
+            },
+            {
+              text: translations['TIME_POPOVER.DELETE_ALL_CONFIRM.DELETE'],
+              handler: () => this.deleteAll()
+            }
+          ]
+        });
 
-    confirm.present();
+        confirm.present();
+      });
   }
 
   /**

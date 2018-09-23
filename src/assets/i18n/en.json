@@ -1,0 +1,63 @@
+{
+  "SIDEMENU": {
+    "TITLE": "Time"
+  },
+  "CURRENT_DAY": {
+    "TITLE": "Today",
+    "EDIT": "Edit",
+    "CHECK_IN": "Clock in",
+    "CHECK_OUT": "Clock out"
+  },
+  "DAY": {
+    "TITLE": "Day",
+    "CHECKINS": "Clock in / out entries",
+    "DELETE": "Delete",
+    "EDIT": "Modify",
+    "CHECKIN_DELETED": "Entry deleted",
+    "UNDO": "Undo"
+  },
+  "WEEK": {
+    "TITLE": "Week"
+  },
+  "MONTH": {
+    "TITLE": "Month"
+  },
+  "YEAR": {
+    "TITLE": "Year"
+  },
+  "STATISTICS": {
+    "TITLE": "Statistics",
+    "TOTAL": "Total",
+    "AVERAGE": "Average / day",
+    "DAYS_WORKED": "Worked days"
+  },
+  "TIME_POPOVER": {
+    "GOTO": "Go to date",
+    "EXPORT": "Export to Excel",
+    "DELETE_ALL": "Delete all",
+    "DELETE_ALL_CONFIRM": {
+      "TITLE": "Delete all entries?",
+      "MESSAGE": "All the entries of the day being edited will be deleted. Continue?",
+      "NO": "No",
+      "DELETE": "Delete"
+    }
+  },
+  "CHECKIN_MODAL": {
+    "TITLE": {
+      "EDITING": "Editing:",
+      "NEW": "New entry"
+    },
+    "CLOSE": "Close",
+    "MESSAGE": "Edit here the entry you want to add or modify:",
+    "DATE": "Date",
+    "DIRECTION": {
+      "TITLE": "Direction",
+      "IN": "In",
+      "OUT": "Out"
+    }
+  },
+  "GENERAL": {
+    "ACCEPT": "Accept",
+    "CANCEL": "Cancel"
+  }
+}

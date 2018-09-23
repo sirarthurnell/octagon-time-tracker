@@ -16,7 +16,8 @@ import { getLocalizedTimeFormat } from '../../text-items/date-time-formats';
 export class CheckingModalPage {
   readonly timeFormat = getLocalizedTimeFormat();
 
-  title = 'Checking';
+  title = '';
+  mode = '';
 
   checking: Checking;
   day: Day;
@@ -49,14 +50,16 @@ export class CheckingModalPage {
 
     if (checkingFromParams) {
       this.checking = checkingFromParams.clone();
-      this.title = 'Editing: ' + this.checking.toString();
+      this.mode = 'EDITING';
+      this.title = this.checking.toString();
     } else {
       const newDate = new Date();
       newDate.setFullYear(this.day.yearNumber);
       newDate.setMonth(this.day.monthNumber);
       newDate.setDate(this.day.dayNumber);
       this.checking = new Checking(newDate, CheckingDirection.In);
-      this.title = 'New checking';
+      this.mode = 'NEW';
+      this.title = '';
     }
   }
 

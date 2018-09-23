@@ -5,11 +5,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Today
+      {{ 'CURRENT_DAY.TITLE' | translate }}
     </ion-title>
     <ion-buttons end>
       <button ion-button (click)="goToEditDay()">
-        Edit
+        {{ 'CURRENT_DAY.EDIT' | translate }}
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -33,12 +33,12 @@
             color="working-time"
             [disabled]="!checkInButtonEnabled"
             class="button-in"
-            (click)="checkIn()">Check IN</button>
+            (click)="checkIn()">{{ 'CURRENT_DAY.CHECK_IN' | translate }}</button>
     <button ion-button
             color="resting-time"
             [disabled]="!checkOutButtonEnabled"
             class="button-out"
-            (click)="checkOut()">Check OUT</button>
+            (click)="checkOut()">{{ 'CURRENT_DAY.CHECK_OUT' | translate }}</button>
 
 
 

@@ -1,0 +1,63 @@
+{
+  "SIDEMENU": {
+    "TITLE": "Tiempo"
+  },
+  "CURRENT_DAY": {
+    "TITLE": "Hoy",
+    "EDIT": "Editar",
+    "CHECK_IN": "Entrada",
+    "CHECK_OUT": "Salida"
+  },
+  "DAY": {
+    "TITLE": "Día",
+    "CHECKINS": "Marcajes",
+    "DELETE": "Borrar",
+    "EDIT": "Editar",
+    "CHECKIN_DELETED": "Marcaje eliminado",
+    "UNDO": "Deshacer"
+  },
+  "WEEK": {
+    "TITLE": "Semana"
+  },
+  "MONTH": {
+    "TITLE": "Mes"
+  },
+  "YEAR": {
+    "TITLE": "Año"
+  },
+  "STATISTICS": {
+    "TITLE": "Estadísticas",
+    "TOTAL": "Total",
+    "AVERAGE": "Media / día",
+    "DAYS_WORKED": "D. trabajados"
+  },
+  "TIME_POPOVER": {
+    "GOTO": "Ir a fecha",
+    "EXPORT": "Exportar a Excel",
+    "DELETE_ALL": "Borrar todos",
+    "DELETE_ALL_CONFIRM": {
+      "TITLE": "¿Borrar todos los marcajes?",
+      "MESSAGE": "Todos los marcajes del día en edición serán eliminados. ¿Continuar?",
+      "NO": "No",
+      "DELETE": "Borrar"
+    }
+  },
+  "CHECKIN_MODAL": {
+    "TITLE": {
+      "EDITING": "Edo.:",
+      "NEW": "Nuevo marcaje"
+    },
+    "CLOSE": "Cerrar",
+    "MESSAGE": "Modifique aquí el marcaje que desea crear o editar:",
+    "DATE": "Fecha",
+    "DIRECTION": {
+      "TITLE": "Dirección",
+      "IN": "Entrada",
+      "OUT": "Salida"
+    }
+  },
+  "GENERAL": {
+    "ACCEPT": "Aceptar",
+    "CANCEL": "Cancelar"
+  }
+}
