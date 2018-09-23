@@ -53,6 +53,10 @@ export class CurrentDayPage {
     });
   }
 
+  ionViewDidEnter() {
+    this.refreshGauge();
+  }
+
   ionViewWillLeave() {
     this.changeSubscription.unsubscribe();
   }
@@ -103,7 +107,9 @@ export class CurrentDayPage {
    * Refreshes the gauge.
    */
   private refreshGauge(): void {
-    this.gauge.refresh();
+    if (this.day) {
+      this.gauge.refresh();
+    }
   }
 
   /**

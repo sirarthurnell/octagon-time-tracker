@@ -42,9 +42,9 @@ export class DayPage {
   ) {}
 
   ionViewWillEnter() {
-    this.changeSubscription = this.state.change$.subscribe(
-      change => (this.day = change.day)
-    );
+    this.changeSubscription = this.state.change$.subscribe(change => {
+      this.day = change.day;
+    });
   }
 
   ionViewWillLeave() {
@@ -112,7 +112,7 @@ export class DayPage {
 
     this.persist();
 
-    this.gauge.refresh();
+    this.refreshGauge();
     this.showUndoToast(checkingToDelete, index);
   }
 
@@ -129,8 +129,6 @@ export class DayPage {
       .get(['DAY.CHECKIN_DELETED', 'DAY.UNDO'])
       .take(1)
       .subscribe(translations => {
-        console.log(translations);
-
         let toast = this.toastCtrl.create({
           message: translations['DAY.CHECKIN_DELETED'],
           duration: 5000,
@@ -141,7 +139,7 @@ export class DayPage {
         toast.onDidDismiss((data, role) => {
           if (role === 'close') {
             this.day.checkings.splice(deletedCheckingIndex, 0, deletedChecking);
-            this.gauge.refresh();
+            this.refreshGauge();
           }
 
           this.persist();
@@ -163,7 +161,7 @@ export class DayPage {
         this.day.checkings.push(newChecking as Checking);
 
         this.persist();
-        this.gauge.refresh();
+        this.refreshGauge();
       }
     });
 
@@ -185,13 +183,22 @@ export class DayPage {
         checkingToEdit.direction = (checking as Checking).direction;
 
         this.persist();
-        this.gauge.refresh();
+        this.refreshGauge();
       }
 
       slidingItem.close();
     });
 
     checkingPage.present();
+  }
+
+  /**
+   * Refreshes the gauge if it's present already.
+   */
+  private refreshGauge(): void {
+    if (this.gauge) {
+      this.gauge.refresh();
+    }
   }
 
   /**
@@ -211,6 +218,6 @@ export class DayPage {
     popover.present({
       ev: event
     });
-    popover.onDidDismiss(() => this.gauge.refresh());
+    popover.onDidDismiss(() => this.refreshGauge());
   }
 }

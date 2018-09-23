@@ -1,9 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy
+} from '@angular/core';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { interval } from 'rxjs/observable/interval';
 import { getLast, hasAny } from '../../models/array/array-extensions';
-import { PathData, TimeToSvgConverter } from '../../models/svg/time-to-svg-converter';
+import {
+  PathData,
+  TimeToSvgConverter
+} from '../../models/svg/time-to-svg-converter';
 import { Checking, CheckingDirection } from '../../models/time/checking';
 import { isNowAfter, now } from '../../models/time/date-extensions';
 import { Day } from '../../models/time/day';
@@ -32,8 +41,10 @@ enum GaugeState {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimeGaugeComponent implements OnDestroy {
-  @Input() resolution = 1;
-  @Input() strokeWidth = 10;
+  @Input()
+  resolution = 1;
+  @Input()
+  strokeWidth = 10;
 
   /**
    * Gets or sets if the gauge is allowed to
@@ -42,10 +53,11 @@ export class TimeGaugeComponent implements OnDestroy {
   private _allowCountingMode = false;
 
   get allowCountingMode(): boolean {
-    return this._allowCountingMode
+    return this._allowCountingMode;
   }
 
-  @Input() set allowCountingMode(allow: boolean) {
+  @Input()
+  set allowCountingMode(allow: boolean) {
     this._allowCountingMode = allow;
     this.cd.detectChanges();
   }
@@ -85,6 +97,11 @@ export class TimeGaugeComponent implements OnDestroy {
 
   constructor(private cd: ChangeDetectorRef, private state: StateProvider) {}
 
+  ngOnInit(): void {
+    this.setGradientId();
+    this.cd.detectChanges();
+  }
+
   ngOnDestroy(): void {
     this.stopBlinking();
   }
@@ -95,7 +112,7 @@ export class TimeGaugeComponent implements OnDestroy {
   private plot(): void {
     const state = this.determineState();
 
-    switch(state) {
+    switch (state) {
       case GaugeState.empty:
         this.clear();
         break;
@@ -119,7 +136,9 @@ export class TimeGaugeComponent implements OnDestroy {
     this.stopBlinking();
 
     this.pathData = [];
-    this.totalWorkedTime = moment.duration(0).format(SHORT_TIME_FORMAT, { trim: false });
+    this.totalWorkedTime = moment
+      .duration(0)
+      .format(SHORT_TIME_FORMAT, { trim: false });
     this.errorCondition = false;
     this.timeToSvgConverter = new TimeToSvgConverter(
       this.radius,
@@ -142,17 +161,27 @@ export class TimeGaugeComponent implements OnDestroy {
    * should adopt.
    */
   private determineState(): GaugeState {
-    if(hasAny(this.adjustedCheckings)) {
-
+    if (hasAny(this.adjustedCheckings)) {
       const lastChecking = getLast(this.adjustedCheckings);
       const isLastDirectionIn = lastChecking.direction === CheckingDirection.In;
       const isToday = this.day.isToday();
       const isNowAfterLastChecking = isNowAfter(lastChecking.dateTime);
-      const inDirections = this.adjustedCheckings.filter(checking => checking.direction === CheckingDirection.In);
-      const outDirections = this.adjustedCheckings.filter(checking => checking.direction === CheckingDirection.Out);
-      const oneMoreInThanOutCount = inDirections.length === outDirections.length + 1;
+      const inDirections = this.adjustedCheckings.filter(
+        checking => checking.direction === CheckingDirection.In
+      );
+      const outDirections = this.adjustedCheckings.filter(
+        checking => checking.direction === CheckingDirection.Out
+      );
+      const oneMoreInThanOutCount =
+        inDirections.length === outDirections.length + 1;
 
-      if(isLastDirectionIn && isToday && isNowAfterLastChecking && oneMoreInThanOutCount && this.allowCountingMode) {
+      if (
+        isLastDirectionIn &&
+        isToday &&
+        isNowAfterLastChecking &&
+        oneMoreInThanOutCount &&
+        this.allowCountingMode
+      ) {
         return GaugeState.counting;
       } else if (isNowAfterLastChecking) {
         return GaugeState.showInfo;
@@ -222,9 +251,10 @@ export class TimeGaugeComponent implements OnDestroy {
    */
   private updateDayIfChanged(): void {
     if (!this.day.isToday()) {
-      this.state.setNextDay()
+      this.state
+        .setNextDay()
         .take(1)
-        .subscribe(change => this.day = change.day);
+        .subscribe(change => (this.day = change.day));
     }
   }
 
@@ -235,14 +265,19 @@ export class TimeGaugeComponent implements OnDestroy {
    * plotted.
    */
   private plotSegmentsMinus(amountToExclude: number): void {
-    for (let i = 0; i < this.adjustedCheckings.length - amountToExclude; i += 2) {
+    for (
+      let i = 0;
+      i < this.adjustedCheckings.length - amountToExclude;
+      i += 2
+    ) {
       const startChecking = this.adjustedCheckings[i];
       const endChecking = this.adjustedCheckings[i + 1];
 
-      const isStartDirectionIn = startChecking.direction === CheckingDirection.In;
-      const  classToApply = isStartDirectionIn
-          ? this.workingTimeClass
-          : this.restingTimeClass;
+      const isStartDirectionIn =
+        startChecking.direction === CheckingDirection.In;
+      const classToApply = isStartDirectionIn
+        ? this.workingTimeClass
+        : this.restingTimeClass;
 
       this.plotTime(startChecking.dateTime, endChecking.dateTime, classToApply);
     }
@@ -286,7 +321,7 @@ export class TimeGaugeComponent implements OnDestroy {
    * Sets a random id to the gradient to avoid id collisions.
    */
   private setGradientId(): void {
-    this.gradientId = 'inset' + Math.floor(Math.random() * 1000);
+    this.gradientId = 'inset' + Math.floor(Math.random() * 100000);
   }
 
   /**
@@ -295,7 +330,6 @@ export class TimeGaugeComponent implements OnDestroy {
   refresh(): void {
     setTimeout(() => {
       this.adjustedCheckings = TimeCalculation.adjustCheckings(this.day);
-      this.setGradientId();
       this.clear();
       this.plot();
       this.cd.detectChanges();
