@@ -213,26 +213,30 @@ export class PreviousNextComponent {
    * Emits the previous event.
    */
   emitPrevious(): void {
-    this.createAndPresentLoaderIfConfigured().then(() => {
-      if (this.enableAnimations && !this.animationInProgress) {
-        this.prepareAnimation();
-      }
+    if (!this.animationInProgress) {
+      this.createAndPresentLoaderIfConfigured().then(() => {
+        if (this.enableAnimations) {
+          this.prepareAnimation();
+        }
 
-      this.previous.emit();
-    });
+        this.previous.emit();
+      });
+    }
   }
 
   /**
    * Emits the next event.
    */
   emitNext(): void {
-    this.createAndPresentLoaderIfConfigured().then(() => {
-      if (this.enableAnimations && !this.animationInProgress) {
-        this.prepareAnimation();
-      }
+    if (!this.animationInProgress) {
+      this.createAndPresentLoaderIfConfigured().then(() => {
+        if (this.enableAnimations) {
+          this.prepareAnimation();
+        }
 
-      this.next.emit();
-    });
+        this.next.emit();
+      });
+    }
   }
 
   /**
