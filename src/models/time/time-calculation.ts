@@ -112,10 +112,12 @@ export class TimeCalculation {
     let noDuplicates = TimeCalculation.removeDuplicates(orderedCheckings);
     let correctedCheckings: Checking[];
 
-    if (noDuplicates.length === 0) {
-      let adjustedForCounting = TimeCalculation.adjustForCounting(day);
-      correctedCheckings = adjustedForCounting;
-    } else {
+    correctedCheckings = TimeCalculation.adjustBeginningOfDay(
+      day,
+      noDuplicates
+    );
+
+    if (noDuplicates.length > 0) {
       correctedCheckings = TimeCalculation.adjustBeginningOfDay(
         day,
         noDuplicates
@@ -127,30 +129,6 @@ export class TimeCalculation {
     }
 
     return correctedCheckings;
-  }
-
-  /**
-   * Adjust for possible counting process.
-   * @param day Day.
-   */
-  private static adjustForCounting(day: Day): Checking[] {
-    const previousDayLastChecking =
-      day.previous && hasAny(day.previous.checkings)
-        ? getLast(TimeCalculation.orderAscending(day.previous.checkings))
-        : null;
-    const isPreviousDayLastDirectionIn =
-      previousDayLastChecking &&
-      previousDayLastChecking.direction === CheckingDirection.In;
-    if (isPreviousDayLastDirectionIn) {
-      return [
-        new Checking(
-          new Date(day.yearNumber, day.monthNumber, day.dayNumber, 0, 0, 0, 0),
-          CheckingDirection.In
-        )
-      ];
-    } else {
-      return [];
-    }
   }
 
   /**
@@ -202,18 +180,38 @@ export class TimeCalculation {
     day: Day,
     correctedCheckings: Checking[]
   ): Checking[] {
-    const firstChecking = correctedCheckings[0];
-    const isFirstCheckingDirectionOut =
-      firstChecking.direction === CheckingDirection.Out;
-    const thereIsPreviousDayLastChecking =
-      day.previous && day.previous.checkings.length > 0;
-    const isPreviousDayLastCheckingDirectionIn = thereIsPreviousDayLastChecking
-      ? TimeCalculation.getFromEndWithDirection(
-          TimeCalculation.orderAscending(day.previous.checkings),
-          CheckingDirection.In
-        )
-      : null;
-    if (isFirstCheckingDirectionOut && isPreviousDayLastCheckingDirectionIn) {
+    if (hasAny(correctedCheckings)) {
+      const firstChecking = correctedCheckings[0];
+      const isFirstCheckingDirectionOut =
+        firstChecking.direction === CheckingDirection.Out;
+      const thereIsPreviousDayLastChecking =
+        day.previous && day.previous.checkings.length > 0;
+      const isPreviousDayLastCheckingDirectionIn = thereIsPreviousDayLastChecking
+        ? TimeCalculation.getFromEndWithDirection(
+            TimeCalculation.orderAscending(day.previous.checkings),
+            CheckingDirection.In
+          )
+        : null;
+      if (isFirstCheckingDirectionOut && isPreviousDayLastCheckingDirectionIn) {
+        correctedCheckings.unshift(
+          new Checking(
+            new Date(
+              day.yearNumber,
+              day.monthNumber,
+              day.dayNumber,
+              0,
+              0,
+              0,
+              0
+            ),
+            CheckingDirection.In
+          )
+        );
+      }
+    } else if (
+      day.isToday() &&
+      TimeCalculation.isLastDayLastCheckingDirectionIn(day)
+    ) {
       correctedCheckings.unshift(
         new Checking(
           new Date(day.yearNumber, day.monthNumber, day.dayNumber, 0, 0, 0, 0),
@@ -223,6 +221,19 @@ export class TimeCalculation {
     }
 
     return correctedCheckings;
+  }
+
+  /**
+   * Checks if the last checking of the last day
+   * is IN.
+   */
+  private static isLastDayLastCheckingDirectionIn(day: Day): boolean {
+    const lastDay = day.previous;
+    const lastDayLastChecking = getLast(lastDay.checkings);
+    const isLastDayLastCheckingDirectionIn =
+      lastDayLastChecking &&
+      lastDayLastChecking.direction === CheckingDirection.In;
+    return isLastDayLastCheckingDirectionIn;
   }
 
   /**
