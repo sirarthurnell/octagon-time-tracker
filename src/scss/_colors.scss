@@ -33,7 +33,7 @@ $time-gauge-resting-color: $resting-time;
 */
 $week-graph-background-color: transparent;
 $week-graph-bar-color: $working-time;
-$week-graph-average-color: darken($application-info, 7.5%);
+$week-graph-average-color: $application-info;
 $week-graph-day-name-color: $black;
 $week-graph-day-hours-color: $black;
 

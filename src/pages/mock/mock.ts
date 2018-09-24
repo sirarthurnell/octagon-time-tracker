@@ -1,26 +1,17 @@
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  LoadingController
-} from 'ionic-angular';
+import { IonicPage, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { ONE_MONTH_ONE_CHECKING, fillOneYear } from '../../mock/mock-data';
+import { fillOneYear, ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
 import { StorableMonth } from '../../models/storage/storable-month';
+import { DateOperations } from '../../models/time/date-operations';
+import { DayOfWeek } from '../../models/time/day-of-week';
 import { Month } from '../../models/time/month';
 import { Week } from '../../models/time/week';
 import { Year } from '../../models/time/year';
 import { ExportProvider } from '../../providers/export/export';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
-import {
-  getLocalizedShortDateFormat,
-  getLocalizedTimeFormat,
-  getLocalizedFirstDayOfWeek
-} from '../../text-items/date-time-formats';
-import { DateOperations } from '../../models/time/date-operations';
-import { DayOfWeek } from '../../models/time/day-of-week';
+import { getLocalizedFirstDayOfWeek, getLocalizedShortDateFormat, getLocalizedTimeFormat } from '../../text-items/date-time-formats';
 
 @IonicPage()
 @Component({

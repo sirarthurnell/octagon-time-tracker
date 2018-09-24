@@ -92,13 +92,15 @@ function fillYear(
 
       const startHour = 8;
       const endHour = startHour + 8;
+      const startMinutes = Math.floor(Math.random() * 30);
+      const endMinutes = Math.floor(Math.random() * 30);
       const startChecking = new Checking(
-        new Date(year.yearNumber, month.monthNumber, day.dayNumber, startHour),
+        new Date(year.yearNumber, month.monthNumber, day.dayNumber, startHour, startMinutes),
         CheckingDirection.In
       );
       const endChecking = new Checking(
-        new Date(year.yearNumber, month.monthNumber, day.dayNumber, endHour),
-        CheckingDirection.In
+        new Date(year.yearNumber, month.monthNumber, day.dayNumber, endHour, endMinutes),
+        CheckingDirection.Out
       );
 
       day.checkings.push(startChecking);

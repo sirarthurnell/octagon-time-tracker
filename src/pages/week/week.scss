@@ -56,13 +56,14 @@ $week-graph-bar-label-gap: $week-graph-bar-font-size * 2;
     position: absolute;
     border: 0.5px solid $week-graph-average-color;
     width: 100%;
-    top: 100% - 45%; //Controlar
+    top: 0%; //Controlar
   }
 
   &__average-label {
     position: absolute;
-    transform: translateY(-100%);
-    margin-left: 2%;
-    color: $week-graph-average-color;
+    margin-left: 1rem;
+    padding: 1px 5px;
+    color: $white;
+    background-color: $week-graph-average-color;
   }
 }

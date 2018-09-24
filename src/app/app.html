@@ -9,10 +9,10 @@
       <ion-list-header>
         {{ 'SIDEMENU.TITLE' | translate }}
       </ion-list-header>
-      <!-- <button ion-item menuClose (click)="navigateTo('MockPage')">
+      <button ion-item menuClose (click)="navigateTo('MockPage')">
         <ion-icon [name]="'settings'" item-start></ion-icon>
         <ion-label>Mock</ion-label>
-      </button> -->
+      </button>
       <button ion-item menuClose (click)="navigateTo('CurrentDayPage')">
         <ion-icon [name]="'timer'" item-start></ion-icon>
         <ion-label>{{ 'CURRENT_DAY.TITLE' | translate }}</ion-label>
@@ -23,7 +23,7 @@
         <ion-note item-end class="time-menu" color="accent">{{ currentDayLabel }}</ion-note>
       </button>
       <button ion-item menuClose (click)="navigateTo('WeekPage')">
-        <ion-icon [name]="'calendar'" item-start></ion-icon>
+        <ion-icon [name]="'podium'" item-start></ion-icon>
         <ion-label>{{ 'WEEK.TITLE' | translate }}</ion-label>
         <ion-note item-end class="time-menu" color="accent">{{ currentWeekLabel }}</ion-note>
       </button>

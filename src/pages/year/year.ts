@@ -142,7 +142,8 @@ export class YearPage {
    */
   getDayBackgroundColor(day: Day): string {
     const darken = day.getTotalTimeAsPercent();
-    const moreDark = darken * 1.25;
+    const darkeningFactor = 2.67;
+    const moreDark = darken * darkeningFactor;
     const backgroundColor = ColorBlender.lighten(
       CssVariables.workingTimeColor,
       100 - moreDark
