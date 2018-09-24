@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button
+            menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
@@ -55,8 +56,10 @@
 
   <!-- Export -->
   <h1>Export:</h1>
-  <button ion-button (click)="exportToExcel()">Export to Excel file</button>
-  <button ion-button (click)="sendEmail()">Send by email</button>
+  <button ion-button
+          (click)="exportToExcel()">Export to Excel file</button>
+  <button ion-button
+          (click)="sendEmail()">Send by email</button>
 
   <hr>
 
@@ -70,6 +73,14 @@
 
   <!-- Date operations -->
   <h1>Date operations:</h1>
-  <button ion-button (click)="checkDateOperation()">Date operation</button>
+  <button ion-button
+          (click)="checkDateOperation()">Date operation</button>
+
+  <hr>
+
+  <!-- Fill data -->
+  <h1>Fill one year:</h1>
+  <button ion-button
+          (click)="fillYear()">Fill one year</button>
 
 </ion-content>

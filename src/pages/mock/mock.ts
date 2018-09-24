@@ -1,15 +1,24 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  LoadingController
+} from 'ionic-angular';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { ONE_MONTH_ONE_CHECKING } from '../../mock/mock-data';
+import { ONE_MONTH_ONE_CHECKING, fillOneYear } from '../../mock/mock-data';
 import { StorableMonth } from '../../models/storage/storable-month';
 import { Month } from '../../models/time/month';
 import { Week } from '../../models/time/week';
 import { Year } from '../../models/time/year';
 import { ExportProvider } from '../../providers/export/export';
 import { TimeStorageProvider } from '../../providers/time-storage/time-storage';
-import { getLocalizedShortDateFormat, getLocalizedTimeFormat, getLocalizedFirstDayOfWeek } from '../../text-items/date-time-formats';
+import {
+  getLocalizedShortDateFormat,
+  getLocalizedTimeFormat,
+  getLocalizedFirstDayOfWeek
+} from '../../text-items/date-time-formats';
 import { DateOperations } from '../../models/time/date-operations';
 import { DayOfWeek } from '../../models/time/day-of-week';
 
@@ -26,8 +35,7 @@ export class MockPage {
   weeks: Week[] = [];
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
+    private loadingCtrl: LoadingController,
     private timeStorageProvider: TimeStorageProvider,
     private exportProvider: ExportProvider
   ) {}
@@ -101,8 +109,10 @@ export class MockPage {
    * Sends the exported data by email.
    */
   sendEmail(): void {
-    this.exportProvider
-      .sendExcelThroughEmail('mock-data', this.getExportData());
+    this.exportProvider.sendExcelThroughEmail(
+      'mock-data',
+      this.getExportData()
+    );
   }
 
   /**
@@ -144,12 +154,35 @@ export class MockPage {
     return getLocalizedShortDateFormat();
   }
 
+  /**
+   * Gets the localized first day of the week.
+   */
   getFirstOfWeek(): number {
     return getLocalizedFirstDayOfWeek();
   }
 
+  /**
+   * Tests date operations.
+   */
   checkDateOperation(): void {
     const count = DateOperations.weeksInMonth(2010, 1, DayOfWeek.Monday);
     console.log(count);
+  }
+
+  /**
+   * Fills and saves one year with data.
+   */
+  fillYear(): void {
+    const year = 2017;
+    const loader = this.loadingCtrl.create({
+      content: 'Please wait...',
+      showBackdrop: false
+    });
+
+    loader.present().then(() => {
+      fillOneYear(this.timeStorageProvider, year)
+        .take(1)
+        .subscribe(_ => loader.dismiss());
+    });
   }
 }
