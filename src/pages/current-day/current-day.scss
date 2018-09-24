@@ -22,6 +22,10 @@
   bottom: 10vmin;
   width: 35vmin;
 
+  @media screen and (max-device-width: 480px) and (orientation: landscape) {
+    width: 25vmin;
+  }
+
   @media screen and (orientation: landscape) {
     bottom: 50%;
     transform: translateY(50%);
